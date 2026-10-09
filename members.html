@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Our Chefs — Verified Members | UMBRELLAedible</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,900&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>body{font-family:'Plus Jakarta Sans',sans-serif;background:#FFF9F0}h1,h2{font-family:'Fraunces',serif}</style>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+</head>
+<body class="antialiased text-[#111]">
+<header class="sticky top-0 z-50 bg-[#FFF9F0]/90 backdrop-blur-xl border-b border-black/10">
+<div class="max-w-[1220px] mx-auto px-4 md:px-6 h-[64px] flex items-center justify-between">
+<a href="https://umbrellaedible.blogspot.com" class="flex items-center gap-2"><div class="w-9 h-9 rounded-full bg-black text-white flex items-center justify-center"><i class="fa-solid fa-utensils text-[12px]"></i></div><span class="font-black text-[20px]" style="font-family:Fraunces">UMBRELLAedible</span><span class="ml-2 px-2.5 py-1 rounded-full bg-[#111] text-white text-[9px] font-bold">VERIFIED CHEFS</span></a>
+<div class="flex gap-2"><a href="https://courageous-travesseiro-b31e7e.netlify.app/" class="h-9 px-4 rounded-full bg-[#111] text-white flex items-center gap-2 text-[13px] font-bold"><i class="fa-solid fa-crown text-[#FFD27A]"></i> Become a Chef</a></div>
+</div>
+</header>
+<section class="max-w-[1220px] mx-auto px-4 md:px-6 pt-12 pb-8">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div><div class="inline-flex px-3 py-1.5 rounded-full bg-black text-white text-[10px] font-bold tracking-widest">VERIFIED COMMUNITY • VIP FOUNDER CIRCLE</div><h1 class="mt-4 text-[52px] md:text-[64px] font-black leading-[0.85]">Meet our<br><span class="text-[#FF7A1A]">Verified Chefs.</span></h1><p class="mt-4 text-[14px] text-black/60 max-w-[520px]">Every chef verified manually. Purple crown = VIP personal badge — only founder can give.</p></div>
+<div class="flex gap-3"><div class="bg-white border border-black/10 rounded-[18px] px-5 py-4 flex items-center gap-4"><div class="w-10 h-10 rounded-full bg-[#FFD8A8] flex items-center justify-center"><i class="fa-solid fa-users"></i></div><div><p class="text-[11px] font-black opacity-40">TOTAL VERIFIED</p><p id="totalCount" class="font-black text-[20px] mt-1">0 Chefs</p></div></div><div class="bg-[#7C3AED] text-white rounded-[18px] px-5 py-4 flex items-center gap-4"><div class="w-10 h-10 rounded-full bg-white/15 flex items-center justify-center"><i class="fa-solid fa-crown text-[#FFD27A]"></i></div><div><p class="text-[11px] font-black text-white/60">VIP FOUNDER</p><p id="vipCount" class="font-black text-[20px] mt-1">0 VIP</p></div></div></div>
+</div>
+<div class="mt-8 flex gap-3"><div class="flex-1 relative"><i class="fa-solid fa-search absolute left-5 top-1/2 -translate-y-1/2 text-black/30"></i><input id="search" placeholder="Search chef by name, city, VIP..." class="w-full h-[48px] pl-12 pr-5 rounded-full bg-white border border-black/10 outline-none text-[14px]"/></div><select id="filterLevel" class="h-[48px] px-5 rounded-full bg-white border border-black/10 font-bold text-[14px]"><option value="">All Levels</option><option value="vip">💜 VIP Only</option><option>Home Cook</option><option>Professional Chef</option><option>Founder Team</option></select></div>
+</section>
+<section class="max-w-[1220px] mx-auto px-4 md:px-6 pb-20">
+<div id="loading" class="py-20 text-center"><div class="w-10 h-10 border-4 border-black/10 border-t-black rounded-full animate-spin mx-auto"></div><p class="mt-4 text-[13px] font-bold text-black/40">Loading verified chefs...</p><p class="mt-2 text-[11px] text-black/30">If stuck, check Firebase Rules</p></div>
+<div id="grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 hidden"></div>
+<div id="empty" class="hidden py-20 text-center bg-white border border-black/10 rounded-[24px]"><h3 class="font-black text-[18px]">No verified chefs yet</h3><p class="text-[13px] text-black/50 mt-2">Create one in Admin Panel → Add Member Direct</p><p id="debug" class="text-[11px] text-red-500 mt-4 font-mono"></p></div>
+</section>
+
+<script>
+var firebaseConfig = {
+  apiKey: "AIzaSyBNNodl0fWwQm42KAublAcSuFO3RQ8fwOE",
+  authDomain: "umbrellaedible.firebaseapp.com",
+  projectId: "umbrellaedible",
+  storageBucket: "umbrellaedible.firebasestorage.app",
+  messagingSenderId: "705948520770",
+  appId: "1:705948520770:web:30d2080cb4191b2881b8db"
+};
+firebase.initializeApp(firebaseConfig);
+var db = firebase.firestore();
+var allChefs=[];
+
+function render(list){
+ var grid=document.getElementById('grid');
+ var empty=document.getElementById('empty');
+ if(!list.length){grid.classList.add('hidden');empty.classList.remove('hidden');document.getElementById('totalCount').textContent='0 Chefs';document.getElementById('vipCount').textContent='0 VIP';return;}
+ document.getElementById('totalCount').textContent=list.length+' Chefs';
+ document.getElementById('vipCount').textContent=list.filter(c=>c.isVIP).length+' VIP';
+ var html='';
+ list.forEach(function(c){
+  var photo=c.photoUrl||'https://ui-avatars.com/api/?name='+encodeURIComponent(c.name||'Chef')+'&background=111&color=fff';
+  var sample=c.sampleImageUrl||'https://images.unsplash.com/photo-1490818387583-1baba5e638af?w=600';
+  var isVIP=c.isVIP===true;
+  html+=`<div class="bg-white border ${isVIP?'border-purple-500/40':'border-black/10'} rounded-[24px] overflow-hidden hover:shadow-xl hover:-translate-y-1 transition">
+   <div class="relative"><img src="${sample}" onerror="this.src='https://images.unsplash.com/photo-1490818387583-1baba5e638af?w=600'" class="w-full h-[180px] object-cover"/>
+   <div class="absolute top-3 left-3 flex gap-2"><span class="px-2.5 py-1 rounded-full bg-black text-white text-[10px] font-black"><i class='fa-solid fa-badge-check text-[#FFD27A]'></i> VERIFIED</span>${isVIP?`<span class="px-2.5 py-1 rounded-full bg-[#7C3AED] text-white text-[10px] font-black"><i class='fa-solid fa-crown text-[#FFD27A]'></i> ${c.vipBadge||'VIP'}</span>`:''}</div></div>
+   <div class="p-5"><div class="flex gap-3"><img src="${photo}" class="w-12 h-12 rounded-full object-cover border-2 ${isVIP?'border-purple-500':'border-black/10'}"/><div class="flex-1"><h3 class="font-black text-[16px]">${c.name||'Chef'} <i class='fa-solid fa-circle-check text-[#1DA1F2] text-[13px]'></i></h3><p class="text-[11px] text-black/50 font-bold">${c.level||''} • ${c.speciality||''} • ${c.location||''}</p></div></div>
+   <div class="mt-3 bg-[#F6F1E9] rounded-[14px] p-3"><p class="text-[10px] font-black opacity-40">SIGNATURE RECIPE</p><p class="font-black text-[13px] mt-1">${c.sampleRecipeTitle||'Chef Special'}</p></div>
+   <div class="mt-3 flex gap-2"><a href="${c.instagram||'#'}" target="_blank" class="flex-1 h-9 rounded-full bg-white border border-black/10 flex items-center justify-center gap-2 text-[12px] font-bold">Instagram</a><a href="https://umbrellaedible.blogspot.com/search?q=${encodeURIComponent(c.name||'')}" target="_blank" class="flex-1 h-9 rounded-full bg-[#111] text-white flex items-center justify-center gap-2 text-[12px] font-bold">Recipes</a></div></div></div>`;
+ });
+ document.getElementById('grid').innerHTML=html;
+ document.getElementById('grid').classList.remove('hidden');
+ document.getElementById('loading').classList.add('hidden');
+ document.getElementById('empty').classList.add('hidden');
+}
+
+// FIXED QUERY - NO orderBy, NO index needed
+db.collection('chef_applications').where('status','==','approved').onSnapshot(function(snap){
+ console.log("Fetched:", snap.size);
+ var list=[];
+ snap.forEach(function(doc){var d=doc.data(); d.id=doc.id; if(d.banned) return; list.push(d);});
+ // Sort in JS by createdAt if exists
+ list.sort(function(a,b){
+   var at = a.createdAt? (a.createdAt.seconds||0) : 0;
+   var bt = b.createdAt? (b.createdAt.seconds||0) : 0;
+   return bt - at;
+ });
+ allChefs=list;
+ document.getElementById('loading').classList.add('hidden');
+ if(!list.length){
+   document.getElementById('grid').classList.add('hidden');
+   document.getElementById('empty').classList.remove('hidden');
+   document.getElementById('debug').textContent = "Query returned 0. Check Firestore: collection=chef_applications where status==approved. Your added member may have status!=approved or banned=true";
+ } else {
+   applyFilters();
+ }
+}, function(err){
+ document.getElementById('loading').innerHTML = "<p style='color:red;font-weight:bold'>Firestore Error: "+err.message+"</p><p class='text-[11px] mt-2'>Go to Firebase Console → Firestore → Rules → allow read: if true</p>";
+ console.error(err);
+});
+
+function applyFilters(){
+ var q=(document.getElementById('search').value||'').toLowerCase();
+ var lvl=document.getElementById('filterLevel').value;
+ var filtered=allChefs.filter(function(c){
+  var mSearch=!q||(c.name||'').toLowerCase().includes(q)||(c.location||'').toLowerCase().includes(q)||(c.vipBadge||'').toLowerCase().includes(q);
+  var mLevel=true; if(lvl==='vip') mLevel=c.isVIP; else if(lvl) mLevel=c.level===lvl;
+  return mSearch&&mLevel;
+ });
+ render(filtered);
+}
+document.getElementById('search').addEventListener('input',applyFilters);
+document.getElementById('filterLevel').addEventListener('change',applyFilters);
+</script>
+</body>
+</html>

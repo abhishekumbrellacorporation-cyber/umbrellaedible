@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel — UMBRELLAedible | Founder Access</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>body{font-family:'Plus Jakarta Sans',system-ui;background:#080808;color:#fff}</style>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+</head>
+<body class="antialiased">
+<div class="max-w-[1320px] mx-auto px-4 md:px-6 py-6">
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+<div>
+<h1 class="text-[24px] md:text-[32px] font-black tracking-tight flex items-center gap-3"><span class="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center"><i class="fa-solid fa-crown text-[16px]"></i></span> Founder Admin — UMBRELLAedible</h1>
+<p class="text-[11px] text-white/40 mt-1">umbrellaedible • chef_applications • member_recipes • VIP + Universal Delete enabled</p>
+</div>
+<div class="flex flex-wrap items-center gap-2">
+<span id="count" class="px-3 py-1.5 rounded-full bg-white text-black text-[12px] font-bold">Loading...</span>
+<button onclick="openAddMemberModal()" class="px-4 py-1.5 rounded-full bg-[#FFD27A] text-black text-[12px] font-black flex items-center gap-2"><i class="fa-solid fa-user-plus"></i> Add Member Direct</button>
+<button onclick="openVIPInfo()" class="px-3 py-1.5 rounded-full bg-[#7C3AED] text-white text-[12px] font-bold">VIP Info</button>
+<a href="./members.html" target="_blank" class="px-3 py-1.5 rounded-full bg-[#FFD8A8] text-black text-[12px] font-bold">Members Page</a>
+<a href="./explore.html" target="_blank" class="px-3 py-1.5 rounded-full bg-[#111] border border-white/20 text-white text-[12px] font-bold">Explore</a>
+</div>
+</div>
+
+<div class="mt-6 grid grid-cols-2 md:grid-cols-8 gap-3">
+<div class="bg-[#111] border border-white/10 rounded-[16px] p-4"><p class="text-[10px] font-black text-white/40 tracking-widest">TOTAL CHEFS</p><p id="statTotal" class="text-[22px] font-black mt-1">0</p></div>
+<div class="bg-[#111] border border-white/10 rounded-[16px] p-4"><p class="text-[10px] font-black text-yellow-400/60 tracking-widest">PENDING</p><p id="statPending" class="text-[22px] font-black mt-1 text-yellow-400">0</p></div>
+<div class="bg-[#111] border border-white/10 rounded-[16px] p-4"><p class="text-[10px] font-black text-green-400/60 tracking-widest">VERIFIED</p><p id="statApproved" class="text-[22px] font-black mt-1 text-green-400">0</p></div>
+<div class="bg-[#111] border border-white/10 rounded-[16px] p-4"><p class="text-[10px] font-black text-purple-400/60 tracking-widest">VIP</p><p id="statVIP" class="text-[22px] font-black mt-1 text-purple-400">0</p></div>
+<div class="bg-[#111] border border-white/10 rounded-[16px] p-4"><p class="text-[10px] font-black text-red-400/60 tracking-widest">BANNED</p><p id="statBanned" class="text-[22px] font-black mt-1 text-red-400">0</p></div>
+<div class="bg-[#111] border border-white/10 rounded-[16px] p-4"><p class="text-[10px] font-black text-orange-400/60 tracking-widest">RECIPES TOTAL</p><p id="statRecipesTotal" class="text-[22px] font-black mt-1 text-orange-400">0</p></div>
+<div class="bg-[#111] border border-white/10 rounded-[16px] p-4"><p class="text-[10px] font-black text-yellow-400/60 tracking-widest">RECIPE PENDING</p><p id="statRecipesPending" class="text-[22px] font-black mt-1 text-yellow-400">0</p></div>
+<div class="bg-[#111] border border-white/10 rounded-[16px] p-4"><p class="text-[10px] font-black text-green-400/60 tracking-widest">RECIPE APPROVED</p><p id="statRecipesApproved" class="text-[22px] font-black mt-1 text-green-400">0</p></div>
+</div>
+
+<div class="mt-8 flex gap-2">
+<button onclick="switchTab('chefs')" id="tabChefs" class="px-5 py-2 rounded-full bg-white text-black text-[13px] font-black">👨‍🍳 Chefs Management</button>
+<button onclick="switchTab('recipes')" id="tabRecipes" class="px-5 py-2 rounded-full bg-[#111] border border-white/10 text-white/60 text-[13px] font-bold">🍲 Recipes Management (Universal Delete)</button>
+</div>
+
+<!-- CHEFS TAB -->
+<div id="chefsTab">
+<div class="mt-6 flex flex-col md:flex-row gap-3">
+<div class="flex-1 relative"><i class="fa-solid fa-search absolute left-4 top-1/2 -translate-y-1/2 text-white/20 text-[13px]"></i><input id="search" placeholder="Search name, email, city, speciality, VIP..." class="w-full h-[44px] pl-11 pr-4 rounded-full bg-[#111] border border-white/10 outline-none text-[13px]"/></div>
+<select id="filterStatus" class="h-[44px] px-4 rounded-full bg-[#111] border border-white/10 outline-none text-[13px] font-bold"><option value="">All Status</option><option value="pending">Pending</option><option value="approved">Verified</option><option value="vip">VIP Only</option><option value="banned">Banned</option><option value="rejected">Rejected</option></select>
+</div>
+<div id="list" class="mt-6 grid gap-4"></div>
+</div>
+
+<!-- RECIPES TAB -->
+<div id="recipesTab" class="hidden">
+<div class="mt-6 flex flex-col md:flex-row gap-3">
+<div class="flex-1 relative"><i class="fa-solid fa-search absolute left-4 top-1/2 -translate-y-1/2 text-white/20 text-[13px]"></i><input id="searchRecipes" placeholder="Search recipe title, chef name, email, cuisine..." class="w-full h-[44px] pl-11 pr-4 rounded-full bg-[#111] border border-white/10 outline-none text-[13px]"/></div>
+<select id="filterRecipeStatus" class="h-[44px] px-4 rounded-full bg-[#111] border border-white/10 outline-none text-[13px] font-bold"><option value="">All Recipes</option><option value="pending">Pending</option><option value="approved">Approved</option><option value="rejected">Rejected</option></select>
+</div>
+<div id="recipeList" class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+</div>
+
+</div>
+
+<!-- BAN MODAL -->
+<div id="banModal" class="fixed inset-0 z-[100] hidden"><div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="closeBanModal()"></div><div class="relative min-h-screen flex items-center justify-center p-4"><div class="bg-[#141414] border border-white/10 rounded-[24px] p-6 w-full max-w-[480px]"><h3 class="font-black text-[18px] flex items-center gap-2"><i class="fa-solid fa-ban text-red-400"></i> Ban Chef</h3><p id="banName" class="text-[12px] text-white/50 mt-1"></p><label class="block mt-5 text-[11px] font-black tracking-widest text-white/40">BAN DURATION *</label><select id="banDuration" class="mt-2 w-full h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px]"><option value="1">1 Day</option><option value="3">3 Days</option><option value="7" selected>7 Days</option><option value="30">30 Days</option><option value="90">90 Days</option><option value="365">1 Year</option><option value="permanent">Permanent Ban</option></select><label class="block mt-4 text-[11px] font-black tracking-widest text-white/40">BAN REASON *</label><textarea id="banReason" placeholder="e.g., Spam, copied content, abusive..." class="mt-2 w-full h-[90px] p-4 rounded-[16px] bg-[#0a0a0a] border border-white/10 outline-none text-[13px] resize-none"></textarea><div class="mt-5 flex gap-2"><button onclick="closeBanModal()" class="flex-1 h-11 rounded-full bg-[#222] text-white text-[13px] font-bold">Cancel</button><button onclick="confirmBan()" class="flex-1 h-11 rounded-full bg-red-500 text-black text-[13px] font-black">Confirm Ban</button></div></div></div></div>
+
+<!-- ADD MEMBER MODAL -->
+<div id="addModal" class="fixed inset-0 z-[100] hidden"><div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="closeAddMemberModal()"></div><div class="relative min-h-screen flex items-center justify-center p-4"><div class="bg-[#141414] border border-white/10 rounded-[24px] p-6 w-full max-w-[560px] max-h-[90vh] overflow-y-auto"><h3 class="font-black text-[18px] flex items-center gap-2"><i class="fa-solid fa-user-plus text-[#FFD27A]"></i> Add Member Direct</h3><div class="mt-5 grid grid-cols-1 md:grid-cols-2 gap-3"><input id="addName" placeholder="Full Name *" class="h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px]"/><input id="addEmail" placeholder="Email *" class="h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px]"/><input id="addPhone" placeholder="Phone" class="h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px]"/><input id="addLocation" placeholder="City, Country *" class="h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px]"/><input id="addSpeciality" placeholder="Speciality" class="h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px]"/><select id="addLevel" class="h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px]"><option>Home Cook</option><option>Professional Chef</option><option>Baker</option><option>Food Blogger</option><option>Student</option><option>Founder Team</option></select><input id="addPhotoUrl" placeholder="Profile Photo URL" class="md:col-span-2 h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px]"/><input id="addRecipeTitle" placeholder="Signature Recipe Title" class="md:col-span-2 h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px]"/><input id="addInstagram" placeholder="Instagram Link" class="md:col-span-2 h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px]"/></div><label class="mt-4 flex gap-2 items-center"><input type="checkbox" id="addVIPCheck" class="accent-purple-500"/><span class="text-[12px] font-bold">Make VIP Member</span></label><input id="addVIPBadge" placeholder="VIP Badge Text" class="mt-3 w-full h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-purple-500/30 outline-none text-[13px] hidden"/><div class="mt-5 flex gap-2"><button onclick="closeAddMemberModal()" class="flex-1 h-11 rounded-full bg-[#222] text-white text-[13px] font-bold">Cancel</button><button onclick="confirmAddMember()" class="flex-1 h-11 rounded-full bg-[#FFD27A] text-black text-[13px] font-black">Add as Chef → Verified</button></div></div></div></div>
+
+<!-- VIP MODAL -->
+<div id="vipModal" class="fixed inset-0 z-[100] hidden"><div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="closeVIPModal()"></div><div class="relative min-h-screen flex items-center justify-center p-4"><div class="bg-[#141414] border border-purple-500/30 rounded-[24px] p-6 w-full max-w-[460px]"><h3 class="font-black text-[18px] flex items-center gap-2"><i class="fa-solid fa-crown text-purple-400"></i> <span id="vipTitle">Make VIP</span></h3><p id="vipName" class="text-[12px] text-white/50 mt-1"></p><label class="block mt-5 text-[11px] font-black tracking-widest text-purple-300/60">VIP BADGE TEXT *</label><select id="vipBadgeSelect" onchange="document.getElementById('vipBadgeCustom').value=this.value" class="mt-2 w-full h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-purple-500/30 outline-none text-[13px]"><option>FOUNDER'S CIRCLE</option><option>FAMILY</option><option>OG CHEF</option><option>VIP CHEF</option><option>INNER CIRCLE</option><option>CLOSE FRIEND</option><option>CO-FOUNDER</option><option>CUSTOM</option></select><input id="vipBadgeCustom" placeholder="Or type custom badge" class="mt-3 w-full h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-purple-500/30 outline-none text-[13px]"/><label class="block mt-4 text-[11px] font-black tracking-widest text-white/40">VIP REASON</label><textarea id="vipReason" placeholder="Why VIP?" class="mt-2 w-full h-[80px] p-4 rounded-[16px] bg-[#0a0a0a] border border-white/10 outline-none text-[13px] resize-none"></textarea><div class="mt-5 flex gap-2"><button onclick="closeVIPModal()" class="flex-1 h-11 rounded-full bg-[#222] text-white text-[13px] font-bold">Cancel</button><button onclick="confirmVIP()" class="flex-1 h-11 rounded-full bg-[#7C3AED] text-white text-[13px] font-black">Confirm VIP Badge</button></div></div></div></div>
+
+<!-- DELETE RECIPE MODAL -->
+<div id="deleteRecipeModal" class="fixed inset-0 z-[110] hidden"><div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="closeDeleteRecipe()"></div><div class="relative min-h-screen flex items-center justify-center p-4"><div class="bg-[#141414] border border-red-500/30 rounded-[24px] p-6 w-full max-w-[420px]"><div class="w-12 h-12 rounded-full bg-red-500/20 text-red-500 flex items-center justify-center mx-auto"><i class="fa-solid fa-triangle-exclamation"></i></div><h3 class="mt-4 text-center font-black text-[18px]">Universal Delete — Any Recipe</h3><p id="deleteRecipeName" class="mt-2 text-center text-[13px] text-white/60">This will permanently delete this recipe from Firestore. Cannot be undone.</p><div class="mt-5 flex gap-2"><button onclick="closeDeleteRecipe()" class="flex-1 h-11 rounded-full bg-[#222] text-white text-[13px] font-bold">Cancel</button><button onclick="confirmDeleteRecipe()" class="flex-1 h-11 rounded-full bg-red-500 text-black text-[13px] font-black">DELETE FOREVER</button></div><p class="mt-3 text-[10px] text-white/30 text-center">Founder Universal Delete • No restriction</p></div></div></div>
+
+<script>
+var firebaseConfig = {
+  apiKey: "AIzaSyBNNodl0fWwQm42KAublAcSuFO3RQ8fwOE",
+  authDomain: "umbrellaedible.firebaseapp.com",
+  projectId: "umbrellaedible",
+  storageBucket: "umbrellaedible.firebasestorage.app",
+  messagingSenderId: "705948520770",
+  appId: "1:705948520770:web:30d2080cb4191b2881b8db"
+};
+firebase.initializeApp(firebaseConfig);
+var db = firebase.firestore();
+var allDocs=[]; var allRecipes=[]; var currentBanId=null; var currentVIPId=null; var currentDeleteRecipeId=null;
+
+function switchTab(tab){
+  if(tab==='chefs'){
+    document.getElementById('chefsTab').classList.remove('hidden');
+    document.getElementById('recipesTab').classList.add('hidden');
+    document.getElementById('tabChefs').className='px-5 py-2 rounded-full bg-white text-black text-[13px] font-black';
+    document.getElementById('tabRecipes').className='px-5 py-2 rounded-full bg-[#111] border border-white/10 text-white/60 text-[13px] font-bold';
+  } else {
+    document.getElementById('chefsTab').classList.add('hidden');
+    document.getElementById('recipesTab').classList.remove('hidden');
+    document.getElementById('tabChefs').className='px-5 py-2 rounded-full bg-[#111] border border-white/10 text-white/60 text-[13px] font-bold';
+    document.getElementById('tabRecipes').className='px-5 py-2 rounded-full bg-white text-black text-[13px] font-black';
+  }
+}
+
+db.collection('chef_applications').orderBy('createdAt','desc').onSnapshot(function(snap){
+  allDocs=[]; var stats={total:0, pending:0, approved:0, vip:0, banned:0, rejected:0};
+  var now = new Date();
+  snap.forEach(function(doc){
+    var d=doc.data(); d._id=doc.id;
+    if(d.banned && d.banUntil && d.banUntil.seconds){
+      var untilDate = new Date(d.banUntil.seconds*1000);
+      if(untilDate < now && d.banDuration!=='Permanent'){
+        db.collection('chef_applications').doc(doc.id).update({status:'pending', banned:false, banReason: firebase.firestore.FieldValue.delete(), banUntil: firebase.firestore.FieldValue.delete(), banDuration: firebase.firestore.FieldValue.delete(), autoUnbannedAt: firebase.firestore.FieldValue.serverTimestamp()});
+        d.banned=false; d.status='pending';
+      }
+    }
+    allDocs.push(d);
+    stats.total++; if(d.status==='pending') stats.pending++; if(d.status==='approved') stats.approved++; if(d.isVIP) stats.vip++; if(d.banned || d.status==='banned') stats.banned++; if(d.status==='rejected') stats.rejected++;
+  });
+  document.getElementById('statTotal').textContent=stats.total;
+  document.getElementById('statPending').textContent=stats.pending;
+  document.getElementById('statApproved').textContent=stats.approved;
+  document.getElementById('statVIP').textContent=stats.vip;
+  document.getElementById('statBanned').textContent=stats.banned;
+  document.getElementById('count').textContent=stats.total+' members';
+  applyFilters();
+});
+
+db.collection('member_recipes').orderBy('createdAt','desc').onSnapshot(function(snap){
+  allRecipes=[]; var statsTotal=0, statsPending=0, statsApproved=0;
+  snap.forEach(function(doc){
+    var d=doc.data(); d._id=doc.id; allRecipes.push(d);
+    statsTotal++; if(d.status==='pending') statsPending++; if(d.status==='approved') statsApproved++;
+  });
+  document.getElementById('statRecipesTotal').textContent=statsTotal;
+  document.getElementById('statRecipesPending').textContent=statsPending;
+  document.getElementById('statRecipesApproved').textContent=statsApproved;
+  applyRecipeFilters();
+});
+
+function applyFilters(){
+  var q=(document.getElementById('search').value||'').toLowerCase();
+  var fStatus=document.getElementById('filterStatus').value;
+  var filtered = allDocs.filter(function(d){
+    var searchMatch=!q || (d.name||'').toLowerCase().includes(q) || (d.email||'').toLowerCase().includes(q) || (d.isVIP?'vip':'').includes(q) || (d.vipBadge||'').toLowerCase().includes(q);
+    var statusMatch=true;
+    if(fStatus==='pending') statusMatch=d.status==='pending';
+    if(fStatus==='approved') statusMatch=d.status==='approved';
+    if(fStatus==='vip') statusMatch=d.isVIP===true;
+    if(fStatus==='banned') statusMatch=d.banned || d.status==='banned';
+    if(fStatus==='rejected') statusMatch=d.status==='rejected';
+    return searchMatch && statusMatch;
+  });
+  render(filtered);
+}
+
+function render(docs){
+  var listEl=document.getElementById('list');
+  if(!docs.length){ listEl.innerHTML='<div class="py-16 text-center bg-[#111] border border-white/10 rounded-[20px] text-white/40 text-[13px]">No members found</div>'; return; }
+  var html='';
+  docs.forEach(function(d){
+    var isBanned=d.banned || d.status==='banned'; var isVerified=d.verified && d.status==='approved'; var isVIP=d.isVIP===true;
+    var photo=d.photoUrl || 'https://ui-avatars.com/api/?name='+encodeURIComponent(d.name||'Chef')+'&background=111&color=fff';
+    var date=d.createdAt? new Date(d.createdAt.seconds*1000).toLocaleString() : 'just now';
+    var banInfo=''; if(isBanned){ var untilText=d.banUntil? new Date(d.banUntil.seconds*1000).toLocaleDateString() : 'Permanent'; banInfo=`<div class="mt-3 p-3 rounded-[12px] bg-red-500/10 border border-red-500/20"><p class="text-[11px] font-black text-red-400">BANNED (${d.banDuration||''}) — Until: ${untilText}</p><p class="text-[11px] text-white/60">Reason: ${d.banReason||''}</p></div>`; }
+    var vipInfo=''; if(isVIP){ vipInfo=`<div class="mt-3 p-3 rounded-[12px] bg-purple-500/10 border border-purple-500/30 flex items-center gap-2"><i class="fa-solid fa-crown text-purple-400"></i><div><p class="text-[11px] font-black text-purple-300">${d.vipBadge||'VIP'}</p><p class="text-[10px] text-white/50">${d.vipReason||'Founder VIP'}</p></div></div>`; }
+    html+=`<div class="bg-[#111] border ${isVIP?'border-purple-500/40':isBanned?'border-red-500/30':isVerified?'border-green-500/30':'border-white/10'} rounded-[20px] p-5">
+      <div class="flex flex-col md:flex-row justify-between gap-3">
+        <div class="flex gap-3 flex-1 min-w-0"><img src="${photo}" class="w-14 h-14 rounded-full object-cover border border-white/10 shrink-0"/><div class="min-w-0 flex-1"><div class="flex items-center gap-2 flex-wrap"><b class="text-[15px]">${d.name||''}</b>${isVerified?'<span class="px-2 py-0.5 rounded-full bg-green-500 text-black text-[10px] font-black"><i class="fa-solid fa-badge-check"></i> VERIFIED</span>':''}${isVIP?`<span class="px-2.5 py-0.5 rounded-full bg-[#7C3AED] text-white text-[10px] font-black flex items-center gap-1"><i class="fa-solid fa-crown text-[#FFD27A]"></i> ${d.vipBadge||'VIP'}</span>`:''}${isBanned?'<span class="px-2 py-0.5 rounded-full bg-red-500 text-black text-[10px] font-black">BANNED</span>':`<span class="px-2 py-0.5 rounded-full ${d.status==='pending'?'bg-yellow-500/20 text-yellow-400':'bg-white/10 text-white/50'} text-[10px] font-bold uppercase">${d.status||'pending'}</span>`}</div><p class="text-[11px] text-white/40 mt-1 break-all">${d.email||''} • ${d.location||''} • ${date}</p>${vipInfo}${banInfo}</div></div>
+        <div class="flex md:flex-col gap-2 shrink-0"><button onclick="toggleVerify('${d._id}', ${d.verified?'false':'true'})" class="h-9 px-4 rounded-full ${isVerified?'bg-[#222] text-white':'bg-green-500 text-black'} text-[11px] font-black"><i class="fa-solid fa-badge-check"></i> ${isVerified?'Revoke Badge':'Give Verify'}</button><button onclick="openVIPModal('${d._id}','${(d.name||'').replace(/'/g,'')}','${d.isVIP?1:0}')" class="h-9 px-4 rounded-full ${isVIP?'bg-[#222] text-white':'bg-[#7C3AED] text-white'} text-[11px] font-bold"><i class="fa-solid fa-crown"></i> ${isVIP?'Edit/Remove VIP':'Make VIP'}</button>${isBanned?`<button onclick="unban('${d._id}')" class="h-9 px-4 rounded-full bg-white text-black text-[11px] font-black">Unban</button>`:`<button onclick="openBanModal('${d._id}','${(d.name||'').replace(/'/g,'')}')" class="h-9 px-4 rounded-full bg-red-500/20 border border-red-500/30 text-red-400 text-[11px] font-bold"><i class="fa-solid fa-ban"></i> Ban</button>`}</div>
+      </div>
+      <div class="mt-4 flex flex-wrap gap-2"><button onclick="approve('${d._id}')" class="h-8 px-3 rounded-full bg-white text-black text-[11px] font-bold">Approve</button><button onclick="deleteMember('${d._id}','${(d.name||'').replace(/'/g,'')}')" class="h-8 px-3 rounded-full bg-red-500 text-black text-[11px] font-black"><i class="fa-solid fa-trash"></i> Delete Chef</button><span class="text-[10px] text-white/20 font-mono ml-auto">${d._id}</span></div>
+    </div>`;
+  });
+  listEl.innerHTML=html;
+}
+
+function applyRecipeFilters(){
+  var q=(document.getElementById('searchRecipes').value||'').toLowerCase();
+  var f=document.getElementById('filterRecipeStatus').value;
+  var filtered = allRecipes.filter(function(r){
+    var matchSearch=!q || (r.title||'').toLowerCase().includes(q) || (r.chefName||'').toLowerCase().includes(q) || (r.chefEmail||'').toLowerCase().includes(q) || (r.cuisine||'').toLowerCase().includes(q);
+    var matchStatus=true;
+    if(f==='pending') matchStatus=r.status==='pending';
+    if(f==='approved') matchStatus=r.status==='approved';
+    if(f==='rejected') matchStatus=r.status==='rejected';
+    return matchSearch && matchStatus;
+  });
+  renderRecipes(filtered);
+}
+
+function renderRecipes(list){
+  var el=document.getElementById('recipeList');
+  if(!list.length){ el.innerHTML='<div class="col-span-3 py-16 text-center bg-[#111] border border-white/10 rounded-[20px] text-white/40 text-[13px]">No recipes found</div>'; return; }
+  var html='';
+  list.forEach(function(r){
+    var statusColor=r.status==='approved'?'bg-green-500 text-black':r.status==='rejected'?'bg-red-500 text-black':'bg-yellow-500 text-black';
+    var date=r.createdAt? new Date(r.createdAt.seconds*1000).toLocaleString() : 'now';
+    html+=`<div class="bg-[#111] border border-white/10 rounded-[20px] overflow-hidden hover:border-white/20 transition">
+      <div class="relative"><img src="${r.imageUrl}" onerror="this.src='https://images.unsplash.com/photo-1490818387583-1baba5e638af?w=600'" class="w-full h-[160px] object-cover"/><span class="absolute top-3 left-3 px-2.5 py-1 rounded-full ${statusColor} text-[10px] font-black uppercase">${r.status}</span>${r.isVIP?`<span class="absolute top-3 right-3 px-2 py-1 rounded-full bg-[#7C3AED] text-white text-[9px] font-black"><i class="fa-solid fa-crown text-[#FFD27A]"></i> ${r.vipBadge||'VIP'}</span>`:''}</div>
+      <div class="p-4">
+        <h3 class="font-black text-[14px] leading-tight line-clamp-2">${r.title}</h3>
+        <p class="text-[11px] text-white/50 mt-1">${r.cuisine||''} • ${r.veg||''} • ${r.cookTime||''} • ${r.difficulty||''}</p>
+        <div class="mt-3 flex items-center gap-2"><img src="${r.chefPhoto||'https://ui-avatars.com/api/?name=Chef'}" class="w-7 h-7 rounded-full"/><div><p class="text-[12px] font-bold">${r.chefName||'Unknown Chef'}</p><p class="text-[10px] text-white/40">${r.chefEmail||''} • ${date}</p></div></div>
+        <div class="mt-3 bg-[#0a0a0a] rounded-[12px] p-3"><p class="text-[10px] font-black text-white/40">INGREDIENTS</p><p class="text-[11px] text-white/70 mt-1 line-clamp-3 whitespace-pre-wrap">${(r.ingredients||'').substring(0,150)}</p></div>
+        <div class="mt-3 flex flex-wrap gap-2">
+          <button onclick="approveRecipe('${r._id}')" class="h-8 px-3 rounded-full bg-white text-black text-[11px] font-bold">Approve</button>
+          <button onclick="rejectRecipe('${r._id}')" class="h-8 px-3 rounded-full bg-[#222] text-white text-[11px] font-bold">Reject</button>
+          <button onclick="openDeleteRecipe('${r._id}','${(r.title||'').replace(/'/g,'')}')" class="h-8 px-3 rounded-full bg-red-500 text-black text-[11px] font-black flex items-center gap-1"><i class="fa-solid fa-trash-can"></i> Delete ANY Post</button>
+        </div>
+        <p class="mt-3 text-[9px] font-mono text-white/20 break-all">${r._id}</p>
+      </div>
+    </div>`;
+  });
+  el.innerHTML=html;
+}
+
+function approve(id){ db.collection('chef_applications').doc(id).update({status:'approved', verified:true, banned:false}); }
+function toggleVerify(id,give){ if(give){ db.collection('chef_applications').doc(id).update({status:'approved', verified:true, banned:false}); } else { if(confirm('Revoke verify badge?')) db.collection('chef_applications').doc(id).update({verified:false, status:'pending'}); } }
+function openBanModal(id,name){ currentBanId=id; document.getElementById('banName').textContent=name+' ('+id+')'; document.getElementById('banModal').classList.remove('hidden'); }
+function closeBanModal(){ document.getElementById('banModal').classList.add('hidden'); currentBanId=null; }
+function confirmBan(){ var reason=document.getElementById('banReason').value.trim(); var duration=document.getElementById('banDuration').value; if(!reason){ alert('Enter reason'); return; } var banUntil=null; var durationText=''; if(duration!=='permanent'){ var days=parseInt(duration); var until=new Date(); until.setDate(until.getDate()+days); banUntil=firebase.firestore.Timestamp.fromDate(until); durationText=days+' days'; } else durationText='Permanent'; db.collection('chef_applications').doc(currentBanId).update({status:'banned', banned:true, banReason:reason, banDuration:durationText, banUntil:banUntil||null, bannedAt: firebase.firestore.FieldValue.serverTimestamp(), verified:false, isVIP:false}).then(()=>{closeBanModal();}); }
+function unban(id){ db.collection('chef_applications').doc(id).update({status:'pending', banned:false, banReason: firebase.firestore.FieldValue.delete(), banUntil: firebase.firestore.FieldValue.delete(), banDuration: firebase.firestore.FieldValue.delete()}); }
+function deleteMember(id,name){ if(confirm('DELETE '+name+' permanently?')){ if(prompt('Type DELETE')==='DELETE'){ db.collection('chef_applications').doc(id).delete(); } } }
+function openAddMemberModal(){ document.getElementById('addModal').classList.remove('hidden'); }
+function closeAddMemberModal(){ document.getElementById('addModal').classList.add('hidden'); }
+document.getElementById('addVIPCheck').addEventListener('change', function(){ document.getElementById('addVIPBadge').classList.toggle('hidden',!this.checked); });
+function confirmAddMember(){ var name=document.getElementById('addName').value.trim(); var email=document.getElementById('addEmail').value.trim().toLowerCase(); var location=document.getElementById('addLocation').value.trim(); if(!name||!email||!location){ alert('Name, Email, Location required'); return; } var isVIP=document.getElementById('addVIPCheck').checked; var vipBadge=document.getElementById('addVIPBadge').value.trim() || "FOUNDER'S CIRCLE"; var data={ name:name, email:email, phone:document.getElementById('addPhone').value.trim(), location:location, speciality:document.getElementById('addSpeciality').value.trim()||'Founder Team', level:document.getElementById('addLevel').value, photoUrl:document.getElementById('addPhotoUrl').value.trim(), sampleRecipeTitle:document.getElementById('addRecipeTitle').value.trim()||'Founder Special', instagram:document.getElementById('addInstagram').value.trim(), status:'approved', verified:true, banned:false, createdAt: firebase.firestore.Timestamp.now(), project:'umbrellaedible', source:'founder-direct-add', addedBy:'founder', isVIP:isVIP, vipBadge:isVIP?vipBadge:null, vipReason:isVIP?'Added directly by Founder':null }; db.collection('chef_applications').add(data).then(function(){ alert('Member added as Verified Chef!'+(isVIP?' With VIP Badge: '+vipBadge:'')); closeAddMemberModal(); }); }
+function openVIPModal(id,name,isVIP){ currentVIPId=id; document.getElementById('vipName').textContent=name+' ('+id+')'; document.getElementById('vipTitle').textContent=isVIP==='1'?'Edit / Remove VIP':'Make VIP Member'; document.getElementById('vipModal').classList.remove('hidden'); }
+function closeVIPModal(){ document.getElementById('vipModal').classList.add('hidden'); currentVIPId=null; }
+function confirmVIP(){ var badge=document.getElementById('vipBadgeCustom').value.trim() || document.getElementById('vipBadgeSelect').value; var reason=document.getElementById('vipReason').value.trim()||'Founder VIP'; if(!badge){ alert('Enter VIP badge'); return; } db.collection('chef_applications').doc(currentVIPId).update({isVIP:true, vipBadge:badge.toUpperCase(), vipReason:reason, vipGivenAt: firebase.firestore.FieldValue.serverTimestamp(), status:'approved', verified:true, banned:false}).then(()=>{ closeVIPModal(); alert('VIP Badge Given: '+badge); }); }
+function openVIPInfo(){ alert('VIP BADGE: Personal badge only Founder can give. Not shown as Become VIP in blog.'); }
+document.getElementById('search').addEventListener('input', applyFilters);
+document.getElementById('filterStatus').addEventListener('change', applyFilters);
+document.getElementById('searchRecipes').addEventListener('input', applyRecipeFilters);
+document.getElementById('filterRecipeStatus').addEventListener('change', applyRecipeFilters);
+
+// RECIPE ACTIONS - UNIVERSAL DELETE
+function approveRecipe(id){ db.collection('member_recipes').doc(id).update({status:'approved', approvedAt: firebase.firestore.FieldValue.serverTimestamp()}); }
+function rejectRecipe(id){ if(confirm('Reject this recipe?')) db.collection('member_recipes').doc(id).update({status:'rejected'}); }
+function openDeleteRecipe(id,title){ currentDeleteRecipeId=id; document.getElementById('deleteRecipeName').textContent='Delete "'+title+'"? This will permanently delete from database. Founder Universal Delete - any chef\'s post can be deleted.'; document.getElementById('deleteRecipeModal').classList.remove('hidden'); }
+function closeDeleteRecipe(){ currentDeleteRecipeId=null; document.getElementById('deleteRecipeModal').classList.add('hidden'); }
+function confirmDeleteRecipe(){ if(!currentDeleteRecipeId) return; db.collection('member_recipes').doc(currentDeleteRecipeId).delete().then(()=>{ closeDeleteRecipe(); alert('Recipe deleted forever — Universal Delete executed.'); }).catch(e=>{ alert('Delete failed: '+e.message); }); }
+</script>
+</body>
+</html>
