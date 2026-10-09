@@ -1,7 +1,6 @@
 
 
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,136 +12,157 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
 :root{--gold:#C9A86A;--gold2:#F2D9A0;--bone:#F5F1E8;--ink:#0A0A0B}
-body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--ink);color:var(--bone);-webkit-font-smoothing:antialiased}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--ink);color:var(--bone)}
 .serif{font-family:'Bodoni Moda',serif}
 .instrument{font-family:'Instrument Serif',serif}
 .gold-text{background:linear-gradient(100deg,var(--gold2),var(--gold),#E8C77A,var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.noise::before{content:'';position:fixed;inset:0;pointer-events:none;opacity:0.03;z-index:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.noise::before{content:'';position:fixed;inset:0;pointer-events:none;opacity:0.03;z-index:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 .card{transition:all.3s ease}
 .card:hover{transform:translateY(-4px)}
 </style>
 </head>
-<body class="noise relative">
-<!-- HEADER - FIXED CLICKABLE LOGO -->
-<header class="sticky top-0 z-50 backdrop-blur-[24px] bg-[#0A0A0B]/80 border-b border-white/[0.06]">
+<body class="noise">
+<header class="sticky top-0 z-50 backdrop-blur-[24px] bg-[#0A0A0B]/80 border-b border-white/10">
 <div class="max-w-[1280px] mx-auto px-4 md:px-6 h-[72px] flex items-center justify-between">
 <a href="https://umbrellaedible.blogspot.com" class="flex items-center gap-3 no-underline">
 <div class="w-10 h-10 rounded-full bg-[#F5F1E8] text-black flex items-center justify-center"><i class="fa-solid fa-utensils text-[13px]"></i></div>
-<div>
-<p class="serif font-black text-[16px] leading-none tracking-tight text-white">UMBRELLAedible</p>
-<p class="text-[8px] tracking-[0.22em] text-white/30 font-bold mt-[3px]">MAISON • MMXXVI</p>
-</div>
-<span class="hidden md:flex ml-3 px-3 py-1 rounded-full border border-[#C9A86A]/30 text-[#C9A86A] text-[9px] font-black tracking-widest">EXPLORE • LUXURY</span>
+<div><p class="serif font-black text-[16px] leading-none text-white">UMBRELLAedible</p><p class="text-[8px] tracking-[0.22em] text-white/30 font-bold mt-[3px]">MAISON • MMXXVI</p></div>
 </a>
 <div class="flex items-center gap-2">
-<a href="https://umbrellaedible-2ln.pages.dev/members" class="h-9 px-4 rounded-full bg-white/10 border border-white/10 flex items-center gap-2 text-[12px] font-bold"><span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>Chefs</a>
-<a href="https://courageous-travesseiro-b31e7e.netlify.app/" class="h-9 px-5 rounded-full bg-[#F5F1E8] text-black text-[12px] font-black"><i class="fa-solid fa-crown text-[10px] mr-1"></i> Join</a>
+<span id="count" class="text-[10px] px-3 py-1 rounded-full bg-white/10 border border-white/10">Loading...</span>
+<a href="https://courageous-travesseiro-b31e7e.netlify.app/" class="h-9 px-5 rounded-full bg-[#F5F1E8] text-black text-[12px] font-black"><i class="fa-solid fa-plus"></i> Upload</a>
 </div>
 </div>
 </header>
 
-<main class="relative z-10 max-w-[1280px] mx-auto px-4 md:px-6 py-12">
-<div class="flex items-end justify-between mb-10">
-<div>
-<p class="text-[11px] tracking-[0.2em] text-[#C9A86A] font-black">MAISON COLLECTION</p>
-<h1 class="serif text-[42px] md:text-[56px] font-black leading-[0.9] mt-3">Explore <span class="instrument font-normal italic gold-text">Recipes</span></h1>
+<main class="max-w-[1280px] mx-auto px-4 md:px-6 py-10 relative z-10">
+<div class="text-center mb-10">
+<h1 class="serif text-[44px] md:text-[72px] font-black leading-[0.9]"><span class="gold-text">Explore</span><br><span class="instrument italic font-normal">Recipes</span></h1>
+<p class="mt-4 text-white/50 text-[13px]">Live from Firebase • Uploaded via Chef Panel</p>
+<div class="mt-6 flex justify-center gap-2">
+<input id="search" placeholder="Search recipes..." class="h-11 w-[280px] px-4 rounded-full bg-white/5 border border-white/10 text-[13px] outline-none focus:border-[#C9A86A]/50"/>
 </div>
-<p class="hidden md:block text-[13px] text-white/40 max-w-[280px]">Recipes uploaded via Member Panel. Click to expand full content.</p>
 </div>
 
-<!-- GRID - DYNAMIC FROM MEMBER PANEL -->
-<div id="grid" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
-<div id="empty" class="hidden text-center py-20 text-white/40">No recipes yet. Upload from Member Panel.</div>
+<div id="grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+<!-- Firebase recipes injected here -->
+</div>
+
+<div id="empty" class="hidden text-center py-20 text-white/40">No recipes found in Firebase yet. Upload from member panel.</div>
 </main>
 
-<!-- EXPANDED MODAL - SHOWS FULL MEMBER UPLOAD -->
+<!-- EXPAND MODAL -->
 <div id="modal" class="fixed inset-0 z-[999] hidden">
-<div class="absolute inset-0 bg-black/85 backdrop-blur-[16px]" onclick="closeModal()"></div>
-<div class="relative max-w-[840px] mx-auto mt-[3vh] mb-[3vh] max-h-[94vh] overflow-y-auto bg-[#121214] border border-white/10 rounded-[28px]">
-<div id="modalContent" class="p-7 md:p-10"></div>
+<div class="absolute inset-0 bg-black/80 backdrop-blur-[16px]" onclick="closeModal()"></div>
+<div class="relative max-w-[780px] mx-auto mt-[3vh] max-h-[94vh] overflow-auto bg-[#121214] border border-white/10 rounded-[24px]">
+<div class="sticky top-0 z-10 p-6 bg-[#121214] border-b border-white/10 flex justify-between items-start">
+<div><p class="text-[10px] tracking-[0.2em] text-[#C9A86A] font-black" id="mCategory">MAISON</p><h2 id="mTitle" class="serif text-[28px] font-black mt-1">Title</h2><p id="mChef" class="text-[12px] text-white/40 mt-1"></p></div>
+<button onclick="closeModal()" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+</div>
+<div class="p-6 md:p-8">
+<img id="mImg" class="w-full h-[320px] object-cover rounded-[16px] mb-6 hidden"/>
+<div class="grid grid-cols-3 gap-3 mb-6">
+<div class="p-3 rounded-xl bg-white/[0.04] border border-white/10 text-center"><p class="text-[10px] text-white/40">TIME</p><p id="mTime" class="font-bold text-[13px]">--</p></div>
+<div class="p-3 rounded-xl bg-white/[0.04] border border-white/10 text-center"><p class="text-[10px] text-white/40">DIFFICULTY</p><p id="mDiff" class="font-bold text-[13px]">--</p></div>
+<div class="p-3 rounded-xl bg-white/[0.04] border border-white/10 text-center"><p class="text-[10px] text-white/40">SERVES</p><p id="mServe" class="font-bold text-[13px]">--</p></div>
+</div>
+<h3 class="font-black text-[12px] tracking-widest mb-3">INGREDIENTS</h3>
+<div id="mIng" class="text-[13px] leading-relaxed text-white/70 whitespace-pre-wrap mb-6"></div>
+<h3 class="font-black text-[12px] tracking-widest mb-3">FULL METHOD</h3>
+<div id="mSteps" class="text-[13px] leading-relaxed text-white/70 whitespace-pre-wrap"></div>
+</div>
 </div>
 </div>
 
-<script>
-// FETCH RECIPES FROM MEMBER PANEL STORAGE
-function getRecipes(){
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, getDocs, orderBy, query } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+// TODO: REPLACE WITH YOUR FIREBASE CONFIG FROM MEMBER PANEL
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "XXXX",
+  appId: "XXXX"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+let allRecipes = [];
+
+async function loadFirebase(){
   try{
-    const local = JSON.parse(localStorage.getItem('umbrella_recipes') || '[]');
-    const member = JSON.parse(localStorage.getItem('maison_recipes') || '[]');
-    const all = [...local,...member];
-    if(all.length) return all;
-  }catch(e){}
-  // Fallback sample if member panel empty
-  return [
-    {id:1, title:"Butter Chicken Maison", chef:"Chef Aanya", time:"45m", image:"https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=800", description:"Creamy tomato, cashew, tandoori legacy recipe", ingredients:["500g chicken","200ml cream","Tomato puree","Cashew paste","Garam masala"], steps:["Marinate chicken 4hrs","Grill till charred","Make makhani gravy","Finish with cream & kasuri methi"], story:"Uploaded via Member Panel - Maison style"},
-  ];
+    const q = query(collection(db, "recipes"), orderBy("createdAt","desc"));
+    const snap = await getDocs(q);
+    allRecipes = [];
+    snap.forEach(doc=>{
+      allRecipes.push({id:doc.id,...doc.data()});
+    });
+    // fallback collection names
+    if(allRecipes.length===0){
+      const q2 = await getDocs(collection(db, "umbrella_recipes"));
+      q2.forEach(d=> allRecipes.push({id:d.id,...d.data()}));
+    }
+    render(allRecipes);
+  }catch(e){
+    console.error(e);
+    document.getElementById('grid').innerHTML = `<p class='text-red-400 col-span-3'>Firebase error: ${e.message} — check config & rules. Set rules to allow read.</p>`;
+  }
 }
 
-function render(){
+function render(list){
   const grid = document.getElementById('grid');
-  const recipes = getRecipes();
-  if(!recipes.length){document.getElementById('empty').classList.remove('hidden'); return;}
-  grid.innerHTML = recipes.map(r=>`
-    <div onclick='openRecipe(${JSON.stringify(r).replace(/'/g,"&#39;")})' class="card cursor-pointer group rounded-[22px] overflow-hidden bg-white/[0.04] border border-white/[0.06] hover:border-[#C9A86A]/30">
-      <div class="h-[200px] overflow-hidden relative">
-        <img src="${r.image || 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800'}" class="w-full h-full object-cover group-hover:scale-[1.05] transition duration-500"/>
-        <div class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur text-[9px] font-black tracking-widest text-white border border-white/10">${r.chef || 'MAISON CHEF'}</div>
+  document.getElementById('count').innerText = `${list.length} Recipes`;
+  if(list.length===0){ document.getElementById('empty').classList.remove('hidden'); grid.innerHTML=''; return; }
+  document.getElementById('empty').classList.add('hidden');
+  grid.innerHTML = list.map(r=>`
+    <div onclick='openModal("${r.id}")' class="card cursor-pointer group rounded-[22px] overflow-hidden bg-white/[0.04] border border-white/10 hover:border-[#C9A86A]/30">
+      <div class="h-[200px] bg-white/[0.03] overflow-hidden relative">
+        ${r.imageUrl || r.image? `<img src="${r.imageUrl||r.image}" class="w-full h-full object-cover group-hover:scale-105 transition"/>` : `<div class="w-full h-full flex items-center justify-center text-white/20"><i class="fa-solid fa-utensils text-3xl"></i></div>`}
+        <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur text-[10px] font-bold">${r.category||r.cuisine||'MAISON'}</span>
       </div>
       <div class="p-5">
-        <h3 class="serif text-[20px] font-bold leading-tight">${r.title}</h3>
-        <p class="text-[12px] text-white/50 mt-2 line-clamp-2">${r.description || ''}</p>
-        <div class="mt-4 flex items-center justify-between">
-          <span class="text-[11px] text-white/30"><i class="fa-regular fa-clock mr-1"></i> ${r.time || '30m'}</span>
-          <span class="text-[11px] font-black tracking-widest text-[#C9A86A]">EXPAND →</span>
-        </div>
+        <h3 class="serif font-black text-[18px] leading-tight line-clamp-2">${r.title||r.name||'Untitled'}</h3>
+        <p class="text-[11px] text-white/40 mt-2">By ${r.chefName||r.author||'Verified Chef'} • ${r.cookTime||r.time||'--'} min</p>
+        <p class="text-[12px] text-white/50 mt-3 line-clamp-2">${r.description||r.shortDesc||''}</p>
+        <div class="mt-4 h-8 px-3 rounded-full bg-[#F5F1E8] text-black text-[11px] font-black inline-flex items-center gap-2">View Full <i class="fa-solid fa-arrow-right text-[10px]"></i></div>
       </div>
     </div>
   `).join('');
 }
 
-function openRecipe(r){
-  if(typeof r === 'string') r = JSON.parse(r);
-  document.getElementById('modalContent').innerHTML = `
-    <div class="flex justify-between items-start gap-4">
-      <div>
-        <p class="text-[10px] tracking-[0.22em] text-[#C9A86A] font-black">${r.chef || 'MAISON CHEF'} • ${r.time || ''}</p>
-        <h2 class="serif text-[36px] md:text-[44px] font-black leading-[0.9] mt-3">${r.title}</h2>
-        <p class="instrument italic text-[18px] text-white/60 mt-3">${r.description || ''}</p>
-      </div>
-      <button onclick="closeModal()" class="w-10 h-10 rounded-full bg-white/10 border border-white/10 flex items-center justify-center shrink-0"><i class="fa-solid fa-xmark"></i></button>
-    </div>
-    ${r.image? `<img src="${r.image}" class="w-full h-[360px] object-cover rounded-[18px] mt-8 border border-white/10"/>` : ''}
-    <div class="grid md:grid-cols-[260px_1fr] gap-8 mt-8">
-      <div>
-        <h4 class="text-[11px] tracking-[0.2em] font-black text-[#C9A86A] mb-4">INGREDIENTS</h4>
-        <ul class="space-y-2">
-          ${(r.ingredients||[]).map(i=>`<li class="text-[13px] text-white/70 flex gap-2"><span class="text-[#C9A86A]">•</span> ${i}</li>`).join('')}
-        </ul>
-      </div>
-      <div>
-        <h4 class="text-[11px] tracking-[0.2em] font-black text-[#C9A86A] mb-4">METHOD — AS UPLOADED</h4>
-        <div class="space-y-3">
-          ${(r.steps||[]).map((s,idx)=>`<div class="flex gap-3"><span class="w-6 h-6 rounded-full bg-[#C9A86A]/20 text-[#C9A86A] text-[11px] font-black flex items-center justify-center shrink-0 mt-0.5">${idx+1}</span><p class="text-[14px] leading-relaxed text-white/70">${s}</p></div>`).join('')}
-        </div>
-        ${r.story? `<div class="mt-8 p-5 rounded-[16px] bg-[#C9A86A]/10 border border-[#C9A86A]/20"><p class="text-[11px] tracking-widest font-black text-[#C9A86A] mb-2">CHEF'S NOTE</p><p class="text-[13px] italic text-white/60">${r.story}</p></div>` : ''}
-      </div>
-    </div>
-    <div class="mt-10 flex gap-3">
-      <a href="https://umbrellaedible.blogspot.com" class="h-11 px-6 rounded-full bg-[#F5F1E8] text-black font-black text-[12px] flex items-center justify-center"><i class="fa-solid fa-arrow-left mr-2"></i> Back to Maison</a>
-      <button onclick="closeModal()" class="h-11 px-6 rounded-full bg-white/10 border border-white/10 font-bold text-[12px]">Close</button>
-    </div>
-  `;
+window.openModal = (id)=>{
+  const r = allRecipes.find(x=>x.id===id);
+  if(!r) return;
+  document.getElementById('mTitle').innerText = r.title||r.name;
+  document.getElementById('mCategory').innerText = r.category||r.cuisine||'MAISON RECIPE';
+  document.getElementById('mChef').innerText = `By ${r.chefName||r.author||'Chef'} • ${new Date(r.createdAt?.seconds*1000||Date.now()).toLocaleDateString()}`;
+  document.getElementById('mTime').innerText = r.cookTime||r.time||'--';
+  document.getElementById('mDiff').innerText = r.difficulty||'Medium';
+  document.getElementById('mServe').innerText = r.serves||r.servings||'2';
+  document.getElementById('mIng').innerText = r.ingredients||r.ing||'No ingredients listed';
+  document.getElementById('mSteps').innerText = r.instructions||r.steps||r.method||r.fullContent||'Full content as uploaded via member panel will appear here.';
+  const img = document.getElementById('mImg');
+  if(r.imageUrl||r.image){ img.src = r.imageUrl||r.image; img.classList.remove('hidden'); } else img.classList.add('hidden');
   document.getElementById('modal').classList.remove('hidden');
   document.body.style.overflow='hidden';
 }
-function closeModal(){
+window.closeModal = ()=>{
   document.getElementById('modal').classList.add('hidden');
   document.body.style.overflow='';
 }
-render();
-// Auto-refresh if member panel uploads new recipe in other tab
-window.addEventListener('storage', render);
+
+document.getElementById('search').addEventListener('input', e=>{
+  const v = e.target.value.toLowerCase();
+  render(allRecipes.filter(r=> (r.title||r.name||'').toLowerCase().includes(v) || (r.description||'').toLowerCase().includes(v) ));
+});
+
+loadFirebase();
 </script>
 </body>
 </html>
+
 
