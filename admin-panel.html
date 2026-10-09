@@ -241,5 +241,6 @@ function openDeleteRecipe(id,title){ currentDeleteRecipeId=id; document.getEleme
 function closeDeleteRecipe(){ currentDeleteRecipeId=null; document.getElementById('deleteRecipeModal').classList.add('hidden'); }
 function confirmDeleteRecipe(){ if(!currentDeleteRecipeId) return; db.collection('member_recipes').doc(currentDeleteRecipeId).delete().then(()=>{ closeDeleteRecipe(); alert('Recipe deleted forever — Universal Delete executed.'); }).catch(e=>{ alert('Delete failed: '+e.message); }); }
 </script>
+<div class='footer wrap'>Founded by <span style='background: linear-gradient(90deg, #FF6A00, #FFB800); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight:900;'>Abhishek Ganguly</span> - UMBRELLAedible 2026</div>
 </body>
 </html>
