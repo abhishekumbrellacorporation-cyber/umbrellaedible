@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,24 +17,22 @@
 <div class="bg-[#111] border border-white/10 rounded-[32px] p-8">
 <div class="w-12 h-12 rounded-full bg-white text-black flex items-center justify-center mx-auto"><i class="fa-solid fa-crown"></i></div>
 <h1 class="mt-5 text-center font-black text-[24px]">Founder Login</h1>
-<p class="mt-2 text-center text-[12px] text-white/40">Enter founder email — system will check Firebase first</p>
+<p class="mt-2 text-center text-[12px] text-white/40">Email-only check from Firebase</p>
 
 <div class="mt-8 space-y-3">
-<input id="email" type="email" placeholder="Founder Email — e.g., abhishek@umbrellaedible.com" class="w-full h-[48px] px-5 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px]"/>
-<p id="error" class="hidden text-[12px] text-red-400 bg-red-500/10 border border-red-500/20 rounded-[14px] p-3"></p>
+<input id="email" type="email" placeholder="Founder Email" value="abhishek.umbrellacorporation@gmail.com" class="w-full h-[48px] px-5 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px]"/>
+<p id="error" class="hidden text-[12px] text-red-400 bg-red-500/10 border border-red-500/20 rounded-[14px] p-3 whitespace-pre-wrap"></p>
 <p id="success" class="hidden text-[12px] text-green-400 bg-green-500/10 border border-green-500/20 rounded-[14px] p-3"></p>
-
 <button onclick="login()" id="loginBtn" class="w-full h-[48px] rounded-full bg-[#FFD27A] text-black font-black text-[13px] flex items-center justify-center gap-2"><i class="fa-solid fa-crown"></i> Check & Enter Console</button>
-
-<p class="text-center text-[10px] text-white/20">No password needed — verified by Firebase database<br>Only emails added in admin can login</p>
+<p class="text-center text-[10px] text-white/20">No password needed</p>
 </div>
 
 <div class="mt-8 pt-6 border-t border-white/10">
 <p class="text-[10px] font-black tracking-widest text-white/30">AUTHORIZED FOUNDERS FROM FIREBASE</p>
-<div id="founderList" class="mt-3 space-y-2 text-[11px] text-white/50">Loading from Firebase...</div>
+<div id="founderList" class="mt-3 space-y-2 text-[11px] text-white/50">Loading...</div>
+<button onclick="fixMyEmail()" class="mt-3 w-full h-9 rounded-full bg-[#222] border border-white/10 text-[11px] font-bold">🔧 Fix: Add my email to Firebase now</button>
 </div>
 </div>
-<p class="mt-4 text-center text-[11px] text-white/20">UMBRELLAedible 2026 • Founder Only Access</p>
 </div>
 
 <script>
@@ -41,24 +40,52 @@ var firebaseConfig = { apiKey: "AIzaSyBNNodl0fWwQm42KAublAcSuFO3RQ8fwOE", authDo
 firebase.initializeApp(firebaseConfig);
 var db = firebase.firestore();
 
-// CHECK EXISTING SESSION
-var existing = localStorage.getItem('umbrella_founder_email');
-if(existing){
-  document.getElementById('email').value = existing;
-}
+// SUPER ADMIN - ALWAYS ALLOWED - NO FIREBASE NEEDED
+var SUPER_ADMINS = [
+  "abhishek.umbrellacorporation@gmail.com",
+  "abhishek@umbrellaedible.com",
+  "abhishekganguly@umbrellaedible.com",
+  "umbrellaedible@gmail.com",
+  "abhishekganguly2006@gmail.com"
+].map(e=>e.toLowerCase());
 
 function loadFounders(){
   db.collection('config').doc('founders').get().then(doc=>{
-    var list = doc.exists && doc.data().emails? doc.data().emails : [];
-    // Also get from chef_applications where role is Founder
+    var list = doc.exists && doc.data().emails? doc.data().emails : SUPER_ADMINS;
     db.collection('chef_applications').where('role','in',['Founder','Co-Founder']).get().then(snap=>{
       snap.forEach(d=>{ var em=d.data().email; if(em &&!list.map(x=>x.toLowerCase()).includes(em.toLowerCase())) list.push(em); });
-      if(!list.length) list = ["abhishek.umbrellacorporation@gmail.com"];
-      document.getElementById('founderList').innerHTML = list.map(e=>`<div class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>${e}</div>`).join('');
-    });
-  });
+      if(!list.length) list = SUPER_ADMINS;
+      document.getElementById('founderList').innerHTML = list.map(e=>`<div class="flex items-center gap-2"><span class="w-1.5 h-1.5 ${SUPER_ADMINS.includes(e.toLowerCase())?'bg-[#FFD27A]':'bg-green-500'} rounded-full"></span>${e} ${SUPER_ADMINS.includes(e.toLowerCase())?'<span class="px-1.5 py-0.5 rounded bg-[#FFD27A]/20 text-[#FFD27A] text-[9px]">SUPER</span>':''}</div>`).join('');
+    }).catch(()=>{ document.getElementById('founderList').innerHTML = list.map(e=>`<div>${e}</div>`).join(''); });
+  }).catch(()=>{ document.getElementById('founderList').innerHTML = SUPER_ADMINS.map(e=>`<div>${e} (SUPER)</div>`).join(''); });
 }
 loadFounders();
+
+function fixMyEmail(){
+  var email = "abhishek.umbrellacorporation@gmail.com";
+  db.collection('config').doc('founders').set({emails: SUPER_ADMINS}, {merge:true}).then(()=>{
+    return db.collection('chef_applications').where('email','==',email).get();
+  }).then(snap=>{
+    if(snap.empty){
+      return db.collection('chef_applications').add({
+        name: "Abhishek Ganguly",
+        email: email,
+        role: "Founder",
+        founderRole: "Founder",
+        level: "Founder Team",
+        designation: "Founder",
+        status: "approved",
+        verified: true,
+        banned: false,
+        isVIP: true,
+        vipBadge: "FOUNDER",
+        location: "Bhopal",
+        photoUrl: "",
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    }
+  }).then(()=>{ alert('✅ Fixed! Your email added to Firebase. Now click Login.'); loadFounders(); }).catch(e=>alert('Error: '+e.message));
+}
 
 function showError(msg){ var el=document.getElementById('error'); el.textContent=msg; el.classList.remove('hidden'); document.getElementById('success').classList.add('hidden'); }
 function showSuccess(msg){ var el=document.getElementById('success'); el.textContent=msg; el.classList.remove('hidden'); document.getElementById('error').classList.add('hidden'); }
@@ -66,59 +93,56 @@ function showSuccess(msg){ var el=document.getElementById('success'); el.textCon
 function login(){
   var email=document.getElementById('email').value.trim().toLowerCase();
   if(!email){ showError('Enter founder email'); return; }
-  if(!email.includes('@')){ showError('Enter valid email'); return; }
+  document.getElementById('loginBtn').innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Checking...';
 
-  document.getElementById('loginBtn').innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Checking Firebase...';
+  // SUPER ADMIN BYPASS - CHECK FIRST BEFORE FIREBASE
+  if(SUPER_ADMINS.includes(email)){
+    localStorage.setItem('umbrella_founder_email', email);
+    localStorage.setItem('umbrella_founder_name', 'Abhishek Ganguly');
+    localStorage.setItem('umbrella_founder_id', 'super_admin');
+    localStorage.setItem('umbrella_founder_role', 'Founder');
+    localStorage.setItem('umbrella_founder_login_time', Date.now().toString());
+    // Auto-add to Firebase for future
+    db.collection('config').doc('founders').set({emails: SUPER_ADMINS}, {merge:true});
+    showSuccess('✅ SUPER ADMIN verified! Redirecting...');
+    setTimeout(()=>{ window.location.href='https://umbrellaedible-2ln.pages.dev/admin.html'; }, 600);
+    return;
+  }
 
-  // STEP 1: CHECK IN config/founders
+  // Normal check
   db.collection('config').doc('founders').get().then(function(doc){
-    var allowed = doc.exists && doc.data().emails? doc.data().emails.map(e=>e.toLowerCase()) : [];
-
-    // STEP 2: ALSO CHECK IN chef_applications WHERE ROLE IS FOUNDER
+    var allowed = doc.exists && doc.data().emails? doc.data().emails.map(e=>e.toLowerCase()) : SUPER_ADMINS;
     db.collection('chef_applications').where('email','==',email).get().then(function(snap){
-      var isFounderInDB = false;
-      var founderData = null;
+      var isFounderInDB = false; var founderData = null;
       if(!snap.empty){
         snap.forEach(function(d){
           var data=d.data();
           var role=(data.role||data.founderRole||'').toLowerCase();
           if(role.includes('founder') || data.level==='Founder Team' || allowed.includes(email)){
-            isFounderInDB=true;
-            founderData={id:d.id,...data};
+            isFounderInDB=true; founderData={id:d.id,...data};
           }
         });
       }
       var isInConfig = allowed.includes(email);
-
-      // FINAL CHECK - Same as member login logic
       if(isInConfig || isFounderInDB){
-        // CHECK IF BANNED
         if(founderData && (founderData.banned || founderData.status==='banned')){
-          showError('This founder account is banned: '+(founderData.banReason||''));
-          document.getElementById('loginBtn').innerHTML='<i class="fa-solid fa-crown"></i> Check & Enter Console';
-          return;
+          showError('Banned: '+(founderData.banReason||'')); document.getElementById('loginBtn').innerHTML='<i class="fa-solid fa-crown"></i> Check & Enter Console'; return;
         }
-        // SUCCESS - Save session like member login
         localStorage.setItem('umbrella_founder_email', email);
         localStorage.setItem('umbrella_founder_name', founderData? founderData.name : email.split('@')[0]);
-        localStorage.setItem('umbrella_founder_id', founderData? founderData._id || founderData.id : 'config_founder');
+        localStorage.setItem('umbrella_founder_id', founderData? founderData.id : 'config_founder');
         localStorage.setItem('umbrella_founder_role', founderData? (founderData.role||'Founder') : 'Founder');
         localStorage.setItem('umbrella_founder_login_time', Date.now().toString());
-
-        showSuccess('✅ Founder verified from Firebase! Redirecting to console...');
-        setTimeout(function(){
-          window.location.href = 'https://umbrellaedible-2ln.pages.dev/admin.html';
-        }, 800);
+        showSuccess('✅ Founder verified! Redirecting...');
+        setTimeout(function(){ window.location.href='https://umbrellaedible-2ln.pages.dev/admin.html'; }, 600);
       } else {
-        showError('❌ Email not found in Firebase. This email is not registered as founder.\n\nAsk main founder to add you in Admin Panel > Add Chef > Founder Team\nor add email in Firestore config/founders');
+        showError('❌ Email not found.\nClick "Fix: Add my email to Firebase now" button below, then try again.');
         document.getElementById('loginBtn').innerHTML='<i class="fa-solid fa-crown"></i> Check & Enter Console';
       }
     });
-  }).catch(function(e){
-    showError('Firebase error: '+e.message);
-    document.getElementById('loginBtn').innerHTML='<i class="fa-solid fa-crown"></i> Check & Enter Console';
   });
 }
 </script>
 </body>
 </html>
+
