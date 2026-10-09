@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Founder Login — UMBRELLAedible</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>body{font-family:'Plus Jakarta Sans',sans-serif;background:#080808;color:#fff}</style>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+<div class="w-full max-w-[420px]">
+<div class="bg-[#111] border border-white/10 rounded-[32px] p-8">
+<div class="w-12 h-12 rounded-full bg-white text-black flex items-center justify-center mx-auto"><i class="fa-solid fa-crown"></i></div>
+<h1 class="mt-5 text-center font-black text-[24px]">Founder Login</h1>
+<p class="mt-2 text-center text-[12px] text-white/40">Only authorized founders can access admin panel</p>
+
+<div class="mt-8 space-y-3">
+<input id="email" type="email" placeholder="Founder Email" class="w-full h-[48px] px-5 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px]"/>
+<div class="relative"><input id="password" type="password" placeholder="Password" class="w-full h-[48px] px-5 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px]"/><button onclick="togglePass()" class="absolute right-4 top-1/2 -translate-y-1/2 text-white/30"><i class="fa-solid fa-eye"></i></button></div>
+<p id="error" class="hidden text-[12px] text-red-400 bg-red-500/10 border border-red-500/20 rounded-[12px] p-3"></p>
+<button onclick="login()" id="loginBtn" class="w-full h-[48px] rounded-full bg-white text-black font-black text-[13px] hover:bg-[#FFD27A] transition flex items-center justify-center gap-2"><i class="fa-solid fa-right-to-bracket"></i> Login to Console</button>
+<p class="text-center text-[11px] text-white/30">Forgot? Contact main founder to reset</p>
+</div>
+
+<div class="mt-8 pt-6 border-t border-white/10">
+<p class="text-[10px] font-black tracking-widest text-white/30">AUTHORIZED FOUNDERS</p>
+<div id="founderList" class="mt-3 space-y-2 text-[11px] text-white/50"></div>
+</div>
+</div>
+<p class="mt-4 text-center text-[11px] text-white/20">UMBRELLAedible 2026 • Founder Only Access</p>
+</div>
+
+<script>
+var firebaseConfig = { apiKey: "AIzaSyBNNodl0fWwQm42KAublAcSuFO3RQ8fwOE", authDomain: "umbrellaedible.firebaseapp.com", projectId: "umbrellaedible", storageBucket: "umbrellaedible.firebasestorage.app", messagingSenderId: "705948520770", appId: "1:705948520770:web:30d2080cb4191b2881b8db" };
+firebase.initializeApp(firebaseConfig);
+var auth = firebase.auth();
+var db = firebase.firestore();
+
+// CONFIG — ADD YOUR FOUNDER EMAILS HERE
+var ALLOWED_FOUNDERS = [
+  "abhishek@umbrellaedible.com",
+  "abhishekganguly@umbrellaedible.com",
+  "umbrellaedible@gmail.com"
+  // add co-founder email here
+];
+
+db.collection('config').doc('founders').get().then(doc=>{
+  var list = doc.exists && doc.data().emails? doc.data().emails : ALLOWED_FOUNDERS;
+  document.getElementById('founderList').innerHTML = list.map(e=>`<div class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>${e}</div>`).join('');
+});
+
+auth.onAuthStateChanged(function(user){
+  if(user){
+    // Check if allowed
+    db.collection('config').doc('founders').get().then(doc=>{
+      var allowed = doc.exists && doc.data().emails? doc.data().emails : ALLOWED_FOUNDERS;
+      if(allowed.map(x=>x.toLowerCase()).includes(user.email.toLowerCase())){
+        window.location.href = './admin.html';
+      } else {
+        showError('This email is not authorized as founder. Contact main founder.');
+        auth.signOut();
+      }
+    });
+  }
+});
+
+function togglePass(){ var p=document.getElementById('password'); p.type = p.type==='password'?'text':'password'; }
+function showError(msg){ var el=document.getElementById('error'); el.textContent=msg; el.classList.remove('hidden'); }
+function login(){
+  var email=document.getElementById('email').value.trim().toLowerCase();
+  var pass=document.getElementById('password').value;
+  if(!email||!pass){ showError('Enter email and password'); return; }
+  document.getElementById('loginBtn').innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Checking...';
+  auth.signInWithEmailAndPassword(email,pass).then(function(cred){
+    // allowed check done in onAuthStateChanged
+  }).catch(function(err){
+    showError(err.message);
+    document.getElementById('loginBtn').innerHTML='<i class="fa-solid fa-right-to-bracket"></i> Login to Console';
+  });
+}
+</script>
+</body>
+</html>
