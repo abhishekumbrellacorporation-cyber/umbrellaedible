@@ -1,240 +1,151 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Become a Chef — UMBRELLAedible | Umbrella Edible</title>
+<title>Become a Chef — Maison UMBRELLAedible</title>
 <script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,900&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,700;6..96,900&family=Plus+Jakarta+Sans:wght@400;500;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-body{font-family:'Plus Jakarta Sans',sans-serif;background:#FFF9F0}
-h1,h2{font-family:'Fraunces',serif}
-@media(max-width:640px){
-.hero-h1{font-size:34px!important;line-height:0.9!important}
-.hero-img{height:300px!important}
-}
+:root{--gold:#C9A86A;--gold2:#F2D9A0;--bone:#F5F1E8;--ink:#08070A}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--ink);color:var(--bone)}
+.serif{font-family:'Bodoni Moda',serif}
+.instrument{font-family:'Instrument Serif',serif}
+.gold-text{background:linear-gradient(100deg,var(--gold2),var(--gold),#E8C77A,var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.glass{background:rgba(255,255,255,0.06);backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,0.08)}
+.input-lux{width:100%;height:48px;padding:0 20px;border-radius:999px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);outline:none;color:var(--bone);font-size:13px;transition:all.3s}
+.input-lux:focus{background:rgba(255,255,255,0.09);border-color:var(--gold)}
+.textarea-lux{width:100%;padding:18px 20px;border-radius:20px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);outline:none;color:var(--bone);font-size:13px;resize:none;transition:all.3s}
+.textarea-lux:focus{background:rgba(255,255,255,0.09);border-color:var(--gold)}
+.noise::before{content:'';position:fixed;inset:0;pointer-events:none;opacity:0.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 </style>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 </head>
-<body class="antialiased text-[#111]">
+<body class="antialiased noise selection:bg-[#C9A86A] selection:text-black">
 
-<header class="sticky top-0 z-50 bg-[#FFF9F0]/90 backdrop-blur-xl border-b border-black/10">
-<div class="max-w-[1120px] mx-auto px-4 md:px-6 h-[64px] md:h-[70px] flex items-center justify-between gap-3">
-<a href="https://umbrellaedible.blogspot.com" class="flex items-center gap-2 md:gap-3 min-w-0">
-<div class="w-8 h-8 md:w-9 md:h-9 rounded-full bg-black text-white flex items-center justify-center shrink-0"><i class="fa-solid fa-utensils text-[12px] md:text-[13px]"></i></div>
-<span class="font-black text-[18px] md:text-[20px] tracking-tight truncate" style="font-family:Fraunces">UMBRELLAedible</span>
-<span class="hidden lg:inline ml-2 px-2.5 py-1 rounded-full bg-[#111] text-white text-[9px] font-bold tracking-widest">OPEN FOR ALL • NO LOGIN TO READ</span>
-</a>
-<div class="flex items-center gap-2 md:gap-3 shrink-0">
-<span class="hidden md:flex items-center gap-2 text-[11px] font-bold text-black/50"><span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span> Live</span>
-<a href="https://umbrellaedible.blogspot.com" class="h-8 md:h-9 px-3 md:px-4 rounded-full bg-white border border-black/10 flex items-center gap-2 text-[12px] md:text-[13px] font-bold whitespace-nowrap"><i class="fa-solid fa-arrow-left text-[10px] md:text-[11px]"></i> <span class="hidden sm:inline">Recipes</span><span class="sm:hidden">Back</span></a>
-</div>
+<header class="sticky top-0 z-50 bg-[#08070A]/70 backdrop-blur-[30px] border-b border-white/10">
+<div class="max-w-[1120px] mx-auto px-4 md:px-6 h-[68px] flex items-center justify-between">
+<a href="https://umbrellaedible.blogspot.com" class="flex items-center gap-3"><div class="w-9 h-9 rounded-full bg-white text-black flex items-center justify-center"><i class="fa-solid fa-utensils text-[12px]"></i></div><span class="font-black text-[18px] tracking-tight serif">UMBRELLAedible</span><span class="hidden md:inline ml-3 px-3 py-1 rounded-full border border-white/15 text-[9px] font-bold tracking-widest text-white/60">MAISON • NOIR</span></a>
+<div class="flex items-center gap-2"><span class="hidden md:flex items-center gap-2 text-[11px] font-bold text-white/40"><span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span> LIVE</span><a href="https://umbrellaedible.blogspot.com" class="h-9 px-4 rounded-full bg-white text-black flex items-center gap-2 text-[12px] font-bold"><i class="fa-solid fa-arrow-left text-[10px]"></i> Recipes</a></div>
 </div>
 </header>
 
-<section class="max-w-[1120px] mx-auto px-4 md:px-6 pt-8 md:pt-12 pb-8 grid md:grid-cols-12 gap-6 md:gap-8">
+<section class="max-w-[1120px] mx-auto px-4 md:px-6 pt-10 md:pt-16 pb-8 grid md:grid-cols-12 gap-8">
 <div class="md:col-span-7">
-<div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-black text-white text-[10px] md:text-[11px] font-bold tracking-widest"><i class="fa-solid fa-crown text-[#FFD27A]"></i> BECOME A CHEF • VERIFIED</div>
-<h1 class="hero-h1 mt-4 md:mt-5 text-[36px] sm:text-[44px] md:text-[68px] font-black leading-[0.85] tracking-tight">Your recipes.<br><span class="text-[#FF7A1A]">Your name.</span><br>Your legacy.</h1>
-<p class="mt-4 md:mt-5 text-[14px] md:text-[15px] leading-[24px] md:leading-[26px] text-black/60 max-w-[500px]">UMBRELLAedible is open — anyone can read without login. To post, become a verified chef. Your application saves to Firebase <b>umbrellaedible → chef_applications</b> and we invite you as Blogger Author in 24 hours.</p>
-<div class="mt-6 md:mt-7 grid grid-cols-1 sm:grid-cols-3 gap-3">
-<div class="bg-[#111] text-white rounded-[18px] p-4 flex sm:block items-center justify-between gap-3"><div><p class="text-[10px] font-black text-white/40 tracking-widest">APPROVAL</p><p class="mt-1 font-black text-[13px]">24 Hours</p><p class="text-[11px] text-white/60">Badge + Post access</p></div><span class="sm:hidden w-8 h-8 rounded-full bg-white/10 flex items-center justify-center"><i class="fa-solid fa-clock text-[12px]"></i></span></div>
+<div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white text-black text-[10px] font-black tracking-widest"><i class="fa-solid fa-crown text-[#C9A86A]"></i> BECOME A CHEF • VERIFIED ATELIER</div>
+<h1 class="mt-6 serif text-[38px] md:text-[64px] font-black leading-[0.85] tracking-tight">Your recipes.<br><span class="gold-text">Your name.</span><br><span class="instrument font-normal italic text-[36px] md:text-[58px] text-white/80">Your legacy.</span></h1>
+<p class="mt-5 text-[13px] leading-6 text-white/50 max-w-[480px]">Open to read. Invite-only to post. Application saved to <b class="text-white/80">umbrellaedible → chef_applications</b>. Reviewed in 24 hours by Founder.</p>
+<div class="mt-8 grid grid-cols-3 gap-3 max-w-[460px]">
+<div class="glass rounded-[18px] p-4"><p class="text-[9px] font-black tracking-widest text-white/30">PROJECT</p><p class="mt-1 font-black text-[12px]">umbrellaedible</p><p class="text-[10px] text-white/40">Firestore live</p></div>
+<div class="glass rounded-[18px] p-4"><p class="text-[9px] font-black tracking-widest text-white/30">COLLECTION</p><p class="mt-1 font-black text-[12px]">chef_applications</p><p class="text-[10px] text-white/40">auto-saved</p></div>
+<div class="bg-white text-black rounded-[18px] p-4"><p class="text-[9px] font-black tracking-widest text-black/40">APPROVAL</p><p class="mt-1 font-black text-[12px]">24 Hours</p><p class="text-[10px] text-black/50">Badge + Post</p></div>
 </div>
 </div>
 <div class="md:col-span-5">
-<div class="bg-white rounded-[24px] md:rounded-[32px] border border-black/10 p-2 md:p-3 shadow-[0_20px_60px_rgba(0,0,0,0.08)] md:shadow-[0_30px_80px_rgba(0,0,0,0.12)]">
-<img src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=900" class="hero-img w-full h-[300px] md:h-[420px] object-cover rounded-[16px] md:rounded-[22px]"/>
-<div class="p-3 md:p-4 flex items-center justify-between gap-2">
-<div class="flex items-center gap-2 md:gap-3 min-w-0"><div class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-[#FFF1E0] flex items-center justify-center shrink-0"><i class="fa-solid fa-check text-[12px] md:text-[14px]"></i></div><div class="min-w-0"><p class="font-black text-[13px] md:text-[14px] leading-tight truncate">1,247+ chefs already</p><p class="text-[10px] md:text-[11px] text-black/50 truncate">Open community • Verified only</p></div></div><span class="px-2 md:px-3 py-1 rounded-full bg-[#FFD8A8] text-[9px] md:text-[10px] font-black shrink-0">VERIFIED</span>
-</div>
+<div class="rounded-[28px] border border-white/10 p-2 bg-white/5 backdrop-blur-xl">
+<img src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=900" class="w-full h-[360px] object-cover rounded-[20px]"/>
+<div class="p-4 flex items-center justify-between"><div class="flex items-center gap-3"><div class="w-9 h-9 rounded-full bg-white text-black flex items-center justify-center"><i class="fa-solid fa-check text-[12px]"></i></div><div><p class="font-black text-[13px]">1,247+ chefs</p><p class="text-[10px] text-white/40">Verified only</p></div></div><span class="px-3 py-1 rounded-full bg-[#F2D9A0] text-black text-[9px] font-black">VERIFIED</span></div>
 </div>
 </div>
 </section>
 
-<section class="max-w-[1120px] mx-auto px-4 md:px-6 pb-8">
-<div class="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
-<div class="bg-white border border-black/10 rounded-[20px] md:rounded-[24px] p-5 md:p-6"><div class="w-10 h-10 md:w-11 md:h-11 rounded-full bg-[#111] text-white flex items-center justify-center"><i class="fa-solid fa-id-badge text-[14px]"></i></div><h3 class="mt-3 md:mt-4 text-[16px] md:text-[17px] font-black">Eligibility</h3><ul class="mt-2 md:mt-3 text-[12px] md:text-[13px] leading-6 text-black/60 space-y-1"><li>✓ Age 18+</li><li>✓ Any level - home cook to pro</li><li>✓ 1 original recipe + own photo</li><li>✓ Valid Email, Phone, City</li></ul></div>
-<div class="bg-[#FFD8A8] border border-black/10 rounded-[20px] md:rounded-[24px] p-5 md:p-6"><div class="w-10 h-10 md:w-11 md:h-11 rounded-full bg-black text-white flex items-center justify-center"><i class="fa-solid fa-scale-balanced text-[14px]"></i></div><h3 class="mt-3 md:mt-4 text-[16px] md:text-[17px] font-black">Rules & Quality</h3><ul class="mt-2 md:mt-3 text-[12px] md:text-[13px] leading-6 text-black/70 space-y-1"><li>✗ No copy-paste</li><li>✓ Your own photo, 800px+</li><li>✓ Full ingredients + steps</li><li>✓ No spam / AI recipes</li></ul></div>
-<div class="bg-black text-white rounded-[20px] md:rounded-[24px] p-5 md:p-6"><div class="w-10 h-10 md:w-11 md:h-11 rounded-full bg-white text-black flex items-center justify-center"><i class="fa-solid fa-rocket text-[14px]"></i></div><h3 class="mt-3 md:mt-4 text-[16px] md:text-[17px] font-black">After Approval</h3><ul class="mt-2 md:mt-3 text-[12px] md:text-[13px] leading-6 text-white/60 space-y-1"><li>✓ Verified Chef Badge</li><li>✓ Blogger Author invite</li><li>✓ Profile on every recipe</li><li>✓ Unlimited posts</li></ul></div>
+<section class="max-w-[1120px] mx-auto px-4 md:px-6 pb-10">
+<div class="grid md:grid-cols-3 gap-4">
+<div class="glass rounded-[22px] p-6"><div class="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center"><i class="fa-solid fa-id-badge"></i></div><h3 class="mt-4 font-black text-[14px] serif">Eligibility</h3><ul class="mt-3 text-[12px] leading-6 text-white/50"><li>✓ Age 18+</li><li>✓ Any level</li><li>✓ 1 original recipe</li><li>✓ Email, Phone, City</li></ul></div>
+<div class="rounded-[22px] p-6 bg-[#F5F1E8] text-black"><div class="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center"><i class="fa-solid fa-scale-balanced"></i></div><h3 class="mt-4 font-black text-[14px] serif">Rules & Quality</h3><ul class="mt-3 text-[12px] leading-6 text-black/60"><li>✗ No copy-paste</li><li>✓ Own photo 800px+</li><li>✓ Full ingredients + steps</li><li>✓ No AI spam</li></ul></div>
+<div class="glass rounded-[22px] p-6 border-[#C9A86A]/20"><div class="w-10 h-10 rounded-full bg-[#C9A86A] text-black flex items-center justify-center"><i class="fa-solid fa-rocket"></i></div><h3 class="mt-4 font-black text-[14px] serif gold-text">After Approval</h3><ul class="mt-3 text-[12px] leading-6 text-white/50"><li>✓ Maison Badge</li><li>✓ Blogger Author invite</li><li>✓ Profile on recipe</li><li>✓ Unlimited posts</li></ul></div>
 </div>
 </section>
 
-<section class="max-w-[1120px] mx-auto px-4 md:px-6 pb-16 md:pb-24">
-<div class="bg-white border border-black/10 rounded-[24px] md:rounded-[32px] shadow-[0_20px_80px_rgba(0,0,0,0.06)] overflow-hidden">
-<div class="px-5 md:px-10 py-5 md:py-7 border-b border-black/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-<div><h2 class="text-[22px] md:text-[28px] font-black leading-none">Chef Application Form</h2><p class="mt-2 text-[12px] md:text-[13px] text-black/50">All * required. Saves to Firebase live.</p></div>
-<div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-50 border border-green-200 text-[11px] font-bold text-green-700 w-fit"><span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span> Connected to umbrellaedible</div>
+<section class="max-w-[1120px] mx-auto px-4 md:px-6 pb-24">
+<div class="rounded-[28px] border border-white/10 bg-[#0E0E10]/80 backdrop-blur-xl overflow-hidden">
+<div class="px-6 md:px-10 py-6 border-b border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+<div><h2 class="serif text-[22px] md:text-[26px] font-black">Chef Application Form</h2><p class="text-[11px] text-white/40 mt-1">All * required • Luxury review • Saves live</p></div>
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-500/10 border border-green-500/20 text-[11px] font-bold text-green-400 w-fit"><span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span> Connected to umbrellaedible</div>
 </div>
 
-<form id="chefForm" class="p-5 md:p-10 grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
-<h3 class="md:col-span-2 text-[11px] font-black tracking-[0.15em] text-black/40 mt-2">PERSONAL INFORMATION</h3>
-<input id="name" required placeholder="Full Name *" class="w-full h-[48px] md:h-[52px] px-5 md:px-6 rounded-full bg-[#F6F1E9] border border-black/5 outline-none text-[14px] font-semibold"/>
-<input id="email" required type="email" placeholder="Email Address *" class="w-full h-[48px] md:h-[52px] px-5 md:px-6 rounded-full bg-[#F6F1E9] border border-black/5 outline-none text-[14px]"/>
-<input id="phone" required placeholder="Phone / WhatsApp *" class="w-full h-[48px] md:h-[52px] px-5 md:px-6 rounded-full bg-[#F6F1E9] border border-black/5 outline-none text-[14px]"/>
-<input id="location" required placeholder="City, State, Country *" class="w-full h-[48px] md:h-[52px] px-5 md:px-6 rounded-full bg-[#F6F1E9] border border-black/5 outline-none text-[14px]"/>
-<h3 class="md:col-span-2 text-[11px] font-black tracking-[0.15em] text-black/40 mt-6">CHEF PROFILE</h3>
-<input id="experience" required placeholder="Cooking Experience * — e.g., 3 years home cook" class="md:col-span-2 w-full h-[48px] md:h-[52px] px-5 md:px-6 rounded-full bg-[#F6F1E9] border border-black/5 outline-none text-[14px]"/>
-<div class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 md:col-span-2">
-<input id="speciality" required placeholder="Speciality * — e.g., Indian, Baking" class="w-full h-[48px] md:h-[52px] px-5 md:px-6 rounded-full bg-[#F6F1E9] border border-black/5 outline-none text-[14px]"/>
-<select id="level" required class="w-full h-[48px] md:h-[52px] px-5 md:px-6 rounded-full bg-[#F6F1E9] border border-black/5 outline-none text-[14px]"><option value="">Your Level *</option><option>Home Cook</option><option>Baker</option><option>Professional Chef</option><option>Food Blogger</option><option>Student</option></select>
+<form id="chefForm" class="p-6 md:p-10 grid grid-cols-1 md:grid-cols-2 gap-4">
+<h3 class="md:col-span-2 text-[10px] font-black tracking-[0.2em] text-white/30 mt-2">PERSONAL INFORMATION</h3>
+<input id="name" required placeholder="Full Name *" class="input-lux font-bold"/>
+<input id="email" required type="email" placeholder="Email Address *" class="input-lux"/>
+<input id="phone" required placeholder="Phone / WhatsApp *" class="input-lux"/>
+<input id="location" required placeholder="City, State, Country *" class="input-lux"/>
+<h3 class="md:col-span-2 text-[10px] font-black tracking-[0.2em] text-white/30 mt-6">CHEF PROFILE</h3>
+<input id="experience" required placeholder="Cooking Experience * — e.g., 3 years home cook" class="md:col-span-2 input-lux"/>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:col-span-2">
+<input id="speciality" required placeholder="Speciality * — e.g., Indian, Baking" class="input-lux"/>
+<select id="level" required class="input-lux"><option value="" style="background:#111">Your Level *</option><option style="background:#111">Home Cook</option><option style="background:#111">Baker</option><option style="background:#111">Professional Chef</option><option style="background:#111">Food Blogger</option><option style="background:#111">Student</option></select>
 </div>
-<input id="instagram" placeholder="Instagram Link (optional)" class="md:col-span-2 w-full h-[48px] md:h-[52px] px-5 md:px-6 rounded-full bg-[#F6F1E9] border border-black/5 outline-none text-[14px]"/>
-<input id="photoUrl" required placeholder="Your Profile Photo URL * — use imgur.com" class="md:col-span-2 w-full h-[48px] md:h-[52px] px-5 md:px-6 rounded-full bg-[#F6F1E9] border border-black/5 outline-none text-[14px]"/>
-<h3 class="md:col-span-2 text-[11px] font-black tracking-[0.15em] text-black/40 mt-6">SAMPLE RECIPE (To verify your skill)</h3>
-<input id="sampleRecipeTitle" required placeholder="Sample Recipe Title * — e.g., My Special Biryani" class="md:col-span-2 w-full h-[48px] md:h-[52px] px-5 md:px-6 rounded-full bg-[#F6F1E9] border border-black/5 outline-none text-[14px] font-bold"/>
-<input id="sampleImageUrl" required placeholder="Sample Recipe Photo URL * — Your own clicked photo" class="md:col-span-2 w-full h-[48px] md:h-[52px] px-5 md:px-6 rounded-full bg-[#F6F1E9] border border-black/5 outline-none text-[14px]"/>
-<div class="md:col-span-2 grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
-<input id="cookTime" required placeholder="Cook Time * — e.g., 45 mins" class="w-full h-[48px] md:h-[52px] px-5 md:px-6 rounded-full bg-[#F6F1E9] border border-black/5 outline-none text-[14px]"/>
-<input id="servings" required placeholder="Servings * — e.g., 4 people" class="w-full h-[48px] md:h-[52px] px-5 md:px-6 rounded-full bg-[#F6F1E9] border border-black/5 outline-none text-[14px]"/>
-<select id="veg" required class="w-full h-[48px] md:h-[52px] px-5 md:px-6 rounded-full bg-[#F6F1E9] border border-black/5 outline-none text-[14px]"><option value="">Veg / Non-Veg *</option><option>Veg</option><option>Non-Veg</option><option>Vegan</option><option>Egg</option></select>
+<input id="instagram" placeholder="Instagram Link (optional)" class="md:col-span-2 input-lux"/>
+<input id="photoUrl" required placeholder="Your Profile Photo URL * — use imgur.com" class="md:col-span-2 input-lux"/>
+<h3 class="md:col-span-2 text-[10px] font-black tracking-[0.2em] text-white/30 mt-6">SAMPLE RECIPE (To verify your skill)</h3>
+<input id="sampleRecipeTitle" required placeholder="Sample Recipe Title * — e.g., My Special Biryani" class="md:col-span-2 input-lux font-bold"/>
+<input id="sampleImageUrl" required placeholder="Sample Recipe Photo URL * — Your own clicked photo" class="md:col-span-2 input-lux"/>
+<div class="md:col-span-2 grid grid-cols-1 sm:grid-cols-3 gap-4">
+<input id="cookTime" required placeholder="Cook Time * — e.g., 45 mins" class="input-lux"/>
+<input id="servings" required placeholder="Servings * — e.g., 4 people" class="input-lux"/>
+<select id="veg" required class="input-lux"><option value="" style="background:#111">Veg / Non-Veg *</option><option style="background:#111">Veg</option><option style="background:#111">Non-Veg</option><option style="background:#111">Vegan</option><option style="background:#111">Egg</option></select>
 </div>
-<textarea id="ingredients" required placeholder="Ingredients List * — min 50 characters" class="md:col-span-2 w-full h-[110px] p-5 md:p-6 rounded-[20px] md:rounded-[24px] bg-[#F6F1E9] border border-black/5 outline-none text-[14px] resize-none"></textarea>
-<textarea id="steps" required placeholder="Full Steps / Method * — min 100 characters" class="md:col-span-2 w-full h-[140px] md:h-[150px] p-5 md:p-6 rounded-[20px] md:rounded-[24px] bg-[#F6F1E9] border border-black/5 outline-none text-[14px] resize-none"></textarea>
-<textarea id="whyJoin" required placeholder="Why do you want to join UMBRELLAedible as Chef? *" class="md:col-span-2 w-full h-[90px] p-5 md:p-6 rounded-[20px] md:rounded-[24px] bg-[#F6F1E9] border border-black/5 outline-none text-[14px] resize-none"></textarea>
+<textarea id="ingredients" required placeholder="Ingredients List * — min 50 characters" class="md:col-span-2 textarea-lux h-[110px]"></textarea>
+<textarea id="steps" required placeholder="Full Steps / Method * — min 100 characters" class="md:col-span-2 textarea-lux h-[140px]"></textarea>
+<textarea id="whyJoin" required placeholder="Why do you want to join UMBRELLAedible as Chef? *" class="md:col-span-2 textarea-lux h-[90px]"></textarea>
 
-<!-- ORIGINAL CONFIRM CHECKBOX -->
-<label class="md:col-span-2 mt-3 md:mt-4 flex gap-3 p-4 rounded-[16px] md:rounded-[18px] bg-[#FFF6E8] border border-[#FFD8A8]/50 cursor-pointer">
-<input type="checkbox" id="agree" required class="mt-1 w-4 h-4 accent-black shrink-0"/>
-<span class="text-[11px] md:text-[12px] leading-[18px] text-black/70"><b class="text-black">I confirm:</b> I am 18+, my recipe & photos are original and owned by me, I agree to open community rules, and I consent to store my application in Firebase umbrellaedible.</span>
+<label class="md:col-span-2 mt-2 flex gap-3 p-4 rounded-[16px] bg-white/[0.04] border border-white/10 cursor-pointer">
+<input type="checkbox" id="agree" required class="mt-1 w-4 h-4 accent-white shrink-0"/>
+<span class="text-[11px] leading-[18px] text-white/60"><b class="text-white">I confirm:</b> I am 18+, my recipe & photos are original and owned by me, I agree to open community rules, and I consent to store my application in Firebase umbrellaedible.</span>
 </label>
 
-<!-- NEW MANDATORY POLICIES CHECKBOX - SUBMIT WON'T WORK WITHOUT THIS -->
-<label class="md:col-span-2 mt-3 flex gap-3 p-4 rounded-[16px] md:rounded-[18px] bg-[#FFF9F0] border border-black/10 cursor-pointer" style="border: 1.5px solid #111;">
-<input type="checkbox" id="policyAgree" required class="mt-1 w-4 h-4 accent-black shrink-0"/>
-<span class="text-[11px] md:text-[12px] leading-[18px] text-black/80"><b class="text-black">I have read and agree to <a href="/members/policies.html" target="_blank" style="text-decoration:underline; font-weight:800; color:#FF6A00;">Membership Policies, Code of Conduct & Privacy Policy</a> *</b><br>Your profile will be manually reviewed by our team.</span>
+<label class="md:col-span-2 flex gap-3 p-4 rounded-[16px] bg-[#C9A86A]/10 border border-[#C9A86A]/30 cursor-pointer">
+<input type="checkbox" id="policyAgree" required class="mt-1 w-4 h-4 accent-[#C9A86A] shrink-0"/>
+<span class="text-[11px] leading-[18px] text-white/80"><b class="text-white">I have read and agree to <a href="/members/policies.html" target="_blank" style="text-decoration:underline; font-weight:800; color:#F2D9A0;">Membership Policies, Code of Conduct & Privacy Policy</a> *</b><br>Your profile will be manually reviewed by our team.</span>
 </label>
 
-<!-- SUBMIT BUTTON + CENTERED TEXT WRAPPER -->
-<div class="md:col-span-2 w-full flex flex-col items-center justify-center mt-4 md:mt-6">
-<button type="submit" id="submitBtn" disabled class="w-full h-[52px] md:h-[56px] rounded-full bg-[#111] text-white font-black text-[14px] md:text-[15px] hover:bg-black flex items-center justify-center gap-2 md:gap-3 disabled:opacity-40 disabled:cursor-not-allowed transition-opacity">
-<span id="btnText" class="flex items-center gap-2"><span>Submit Application</span></span>
+<div class="md:col-span-2 w-full flex flex-col items-center justify-center mt-4">
+<button type="submit" id="submitBtn" disabled class="w-full h-[52px] rounded-full bg-white text-black font-black text-[14px] flex items-center justify-center gap-3 disabled:opacity-40 disabled:cursor-not-allowed transition">
+<span id="btnText">Submit Application</span>
 <span id="btnLoader" class="hidden flex items-center gap-2"><i class="fa-solid fa-spinner fa-spin"></i> Saving...</span>
 </button>
-
-<div style="width:100%; text-align:center; margin-top:14px;">
-  <p style="font-size:11px; color:#666; line-height:1.5; text-align:center; margin:0 auto; max-width:360px;">
-    By submitting the application, you agree to our
-    <a href="/members/policies.html" style="text-decoration:underline; font-weight:700; color:#111;">Membership Policies, Code of Conduct & Privacy Policy</a>.
-    Your profile will be manually reviewed by our team.
-  </p>
+<p style="font-size:11px; color:rgba(255,255,255,0.4); line-height:1.5; text-align:center; margin-top:14px; max-width:360px;">
+By submitting, you agree to our <a href="/members/policies.html" style="text-decoration:underline; font-weight:700; color:#F2D9A0;">Membership Policies</a>. Your profile will be manually reviewed.
+</p>
 </div>
-</div>
-
-<p id="status" class="md:col-span-2 text-center text-[13px] font-bold mt-3 px-2 break-words"></p>
+<p id="status" class="md:col-span-2 text-center text-[12px] font-bold mt-3"></p>
 </form>
 </div>
 </section>
 
-<div id="successModal" class="fixed inset-0 z-[100] hidden"><div class="absolute inset-0 bg-black/60 backdrop-blur-md"></div><div class="relative min-h-screen flex items-center justify-center p-4"><div class="bg-white rounded-[24px] md:rounded-[32px] p-6 md:p-8 max-w-[480px] w-full text-center"><div class="w-16 h-16 md:w-20 md:h-20 rounded-full bg-green-100 text-green-600 flex items-center justify-center mx-auto text-[28px] md:text-[32px]"><i class="fa-solid fa-check"></i></div><h3 class="mt-4 md:mt-5 font-black text-[22px] md:text-[26px]">Application Sent!</h3><p class="mt-2 md:mt-3 text-[13px] md:text-[14px] text-black/60">Saved in Firebase → umbrellaedible → chef_applications → status pending. We will email you within 24 hours.</p><p id="docIdShow" class="mt-3 text-[10px] md:text-[11px] font-mono bg-[#F6F1E9] p-2 rounded-full break-all"></p><button onclick="document.getElementById('successModal').classList.add('hidden')" class="mt-5 md:mt-6 w-full h-12 rounded-full bg-black text-white font-bold">Done</button></div></div></div>
+<div id="successModal" class="fixed inset-0 z-[100] hidden"><div class="absolute inset-0 bg-black/70 backdrop-blur-xl"></div><div class="relative min-h-screen flex items-center justify-center p-4"><div class="bg-[#F5F1E8] rounded-[28px] p-8 max-w-[460px] w-full text-center text-black"><div class="w-16 h-16 rounded-full bg-black text-white flex items-center justify-center mx-auto text-[24px]"><i class="fa-solid fa-check"></i></div><h3 class="mt-5 serif font-black text-[24px]">Application Sent!</h3><p class="mt-2 text-[13px] text-black/60">Saved in Firebase → umbrellaedible → chef_applications → status pending. We will email you within 24 hours.</p><p id="docIdShow" class="mt-3 text-[10px] font-mono bg-black/5 p-2 rounded-full break-all"></p><button onclick="document.getElementById('successModal').classList.add('hidden')" class="mt-6 w-full h-12 rounded-full bg-black text-white font-bold">Done</button></div></div></div>
 
 <script>
-var firebaseConfig = {
-  apiKey: "AIzaSyBNNodl0fWwQm42KAublAcSuFO3RQ8fwOE",
-  authDomain: "umbrellaedible.firebaseapp.com",
-  projectId: "umbrellaedible",
-  storageBucket: "umbrellaedible.firebasestorage.app",
-  messagingSenderId: "705948520770",
-  appId: "1:705948520770:web:30d2080cb4191b2881b8db",
-  measurementId: "G-81SD7V8JLX"
-};
+var firebaseConfig = { apiKey: "AIzaSyBNNodl0fWwQm42KAublAcSuFO3RQ8fwOE", authDomain: "umbrellaedible.firebaseapp.com", projectId: "umbrellaedible", storageBucket: "umbrellaedible.firebasestorage.app", messagingSenderId: "705948520770", appId: "1:705948520770:web:30d2080cb4191b2881b8db" };
 firebase.initializeApp(firebaseConfig);
 var db = firebase.firestore();
-
-// DISABLE BUTTON UNTIL POLICIES CHECKED
 var agreeCheck = document.getElementById('agree');
 var policyCheck = document.getElementById('policyAgree');
 var submitBtn = document.getElementById('submitBtn');
-function updateButtonState(){
-  if(agreeCheck.checked && policyCheck.checked){
-    submitBtn.disabled = false;
-    submitBtn.style.opacity = "1";
-  } else {
-    submitBtn.disabled = true;
-    submitBtn.style.opacity = "0.4";
-  }
-}
+function updateButtonState(){ if(agreeCheck.checked && policyCheck.checked){ submitBtn.disabled=false; submitBtn.style.opacity="1"; } else { submitBtn.disabled=true; submitBtn.style.opacity="0.4"; } }
 agreeCheck.addEventListener('change', updateButtonState);
 policyCheck.addEventListener('change', updateButtonState);
 updateButtonState();
-
 document.getElementById('chefForm').addEventListener('submit', function(e){
   e.preventDefault();
-
-  // EXTRA CHECK - POLICIES MUST BE MARKED
-  if(!document.getElementById('policyAgree').checked){
-    document.getElementById('status').textContent='❌ You must agree to Membership Policies to submit';
-    document.getElementById('status').style.color='red';
-    return;
-  }
-  if(!document.getElementById('agree').checked){
-    document.getElementById('status').textContent='❌ Please confirm original content';
-    document.getElementById('status').style.color='red';
-    return;
-  }
-
-  var btnText = document.getElementById('btnText');
-  var btnLoader = document.getElementById('btnLoader');
-  var status = document.getElementById('status');
-  var btn = document.getElementById('submitBtn');
-  btnText.classList.add('hidden');
-  btnLoader.classList.remove('hidden');
-  btnLoader.classList.add('flex');
-  btn.disabled=true;
-  status.textContent='';
-  var ingredients = document.getElementById('ingredients').value.trim();
-  var steps = document.getElementById('steps').value.trim();
-  if(ingredients.length < 50){ status.textContent='Ingredients too short (50+ chars)'; status.style.color='red'; btnText.classList.remove('hidden'); btnLoader.classList.add('hidden'); btnLoader.classList.remove('flex'); btn.disabled=false; updateButtonState(); return; }
-  if(steps.length < 100){ status.textContent='Steps too short (100+ chars)'; status.style.color='red'; btnText.classList.remove('hidden'); btnLoader.classList.add('hidden'); btnLoader.classList.remove('flex'); btn.disabled=false; updateButtonState(); return; }
+  if(!document.getElementById('policyAgree').checked){ document.getElementById('status').textContent='❌ You must agree to Membership Policies to submit'; document.getElementById('status').style.color='#F2D9A0'; return; }
+  if(!document.getElementById('agree').checked){ document.getElementById('status').textContent='❌ Please confirm original content'; document.getElementById('status').style.color='#F2D9A0'; return; }
+  var btnText=document.getElementById('btnText'); var btnLoader=document.getElementById('btnLoader'); var status=document.getElementById('status'); var btn=document.getElementById('submitBtn');
+  btnText.classList.add('hidden'); btnLoader.classList.remove('hidden'); btnLoader.classList.add('flex'); btn.disabled=true; status.textContent='';
+  var ingredients=document.getElementById('ingredients').value.trim(); var steps=document.getElementById('steps').value.trim();
+  if(ingredients.length<50){ status.textContent='Ingredients too short (50+ chars)'; status.style.color='#F2D9A0'; btnText.classList.remove('hidden'); btnLoader.classList.add('hidden'); btn.disabled=false; updateButtonState(); return; }
+  if(steps.length<100){ status.textContent='Steps too short (100+ chars)'; status.style.color='#F2D9A0'; btnText.classList.remove('hidden'); btnLoader.classList.add('hidden'); btn.disabled=false; updateButtonState(); return; }
   db.collection('chef_applications').add({
-    name: document.getElementById('name').value.trim(),
-    email: document.getElementById('email').value.trim().toLowerCase(),
-    phone: document.getElementById('phone').value.trim(),
-    location: document.getElementById('location').value.trim(),
-    experience: document.getElementById('experience').value.trim(),
-    speciality: document.getElementById('speciality').value.trim(),
-    level: document.getElementById('level').value,
-    instagram: document.getElementById('instagram').value.trim(),
-    photoUrl: document.getElementById('photoUrl').value.trim(),
-    sampleRecipeTitle: document.getElementById('sampleRecipeTitle').value.trim(),
-    sampleImageUrl: document.getElementById('sampleImageUrl').value.trim(),
-    cookTime: document.getElementById('cookTime').value.trim(),
-    servings: document.getElementById('servings').value.trim(),
-    veg: document.getElementById('veg').value,
-    ingredients: ingredients,
-    steps: steps,
-    whyJoin: document.getElementById('whyJoin').value.trim(),
-    agreedToPolicies: true,
-    status: "pending",
-    verified: false,
-    createdAt: firebase.firestore.Timestamp.now(),
-    project: "umbrellaedible",
-    source: "chic-croissant-465645.netlify.app"
-  }).then(function(docRef){
-    document.getElementById('docIdShow').textContent = 'Doc ID: ' + docRef.id;
-    document.getElementById('successModal').classList.remove('hidden');
-    document.getElementById('chefForm').reset();
-    status.style.color='green';
-    status.textContent = '✓ Saved! ID: ' + docRef.id;
-    btnText.classList.remove('hidden');
-    btnLoader.classList.add('hidden');
-    btnLoader.classList.remove('flex');
-    btn.disabled=false;
-    updateButtonState();
-  }).catch(function(err){
-    status.style.color='red';
-    status.textContent = 'Error: ' + err.message + ' — Fix Firestore Rules';
-    btnText.classList.remove('hidden');
-    btnLoader.classList.add('hidden');
-    btnLoader.classList.remove('flex');
-    btn.disabled=false;
-    updateButtonState();
-  });
+    name:document.getElementById('name').value.trim(), email:document.getElementById('email').value.trim().toLowerCase(), phone:document.getElementById('phone').value.trim(), location:document.getElementById('location').value.trim(), experience:document.getElementById('experience').value.trim(), speciality:document.getElementById('speciality').value.trim(), level:document.getElementById('level').value, instagram:document.getElementById('instagram').value.trim(), photoUrl:document.getElementById('photoUrl').value.trim(), sampleRecipeTitle:document.getElementById('sampleRecipeTitle').value.trim(), sampleImageUrl:document.getElementById('sampleImageUrl').value.trim(), cookTime:document.getElementById('cookTime').value.trim(), servings:document.getElementById('servings').value.trim(), veg:document.getElementById('veg').value, ingredients:ingredients, steps:steps, whyJoin:document.getElementById('whyJoin').value.trim(), agreedToPolicies:true, status:"pending", verified:false, createdAt:firebase.firestore.Timestamp.now()
+  }).then(function(docRef){ document.getElementById('docIdShow').textContent='Doc ID: '+docRef.id; document.getElementById('successModal').classList.remove('hidden'); document.getElementById('chefForm').reset(); status.style.color='#C9A86A'; status.textContent='✓ Saved! ID: '+docRef.id; btnText.classList.remove('hidden'); btnLoader.classList.add('hidden'); btn.disabled=false; updateButtonState(); }).catch(function(err){ status.style.color='#F2D9A0'; status.textContent='Error: '+err.message; btnText.classList.remove('hidden'); btnLoader.classList.add('hidden'); btn.disabled=false; updateButtonState(); });
 });
 </script>
- <div class='footer wrap' style="text-align:center; width:100%; display:flex; justify-content:center; align-items:center; padding:20px 0; font-size:11px; color:#666; letter-spacing:0.3px;">
-  Founded by <span style="color:#FF6A00; font-weight:800; margin:0 4px;">Abhishek Ganguly</span> - UMBRELLAedible 2026
-</div>
+<div class="text-center py-8 text-[11px] text-white/30">Founded by <span class="text-[#F2D9A0] font-black">Abhishek Ganguly</span> — Maison UMBRELLAedible 2026</div>
 </body>
 </html>
+
