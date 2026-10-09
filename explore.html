@@ -1,5 +1,5 @@
 
-
+  
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,213 +11,94 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
 :root{--gold:#C9A86A;--gold2:#F2D9A0;--bone:#F5F1E8;--ink:#0A0A0B;--paper:#F5F1E8}
-body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--ink);color:var(--bone)}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--ink);color:var(--bone);-webkit-font-smoothing:antialiased}
 .serif{font-family:'Bodoni Moda',serif}
 .instrument{font-family:'Instrument Serif',serif}
 .gold-text{background:linear-gradient(100deg,var(--gold2),var(--gold),#E8C77A,var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.noise::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");opacity:0.03;pointer-events:none;z-index:1}
-.masonry{column-count:3;column-gap:16px}@media(max-width:1024px){.masonry{column-count:2}}@media(max-width:640px){.masonry{column-count:1}}
-.card{break-inside:avoid}
-.luxury-card{background:var(--paper);border-radius:20px;overflow:hidden;position:relative;transition:all.5s cubic-bezier(0.16,1,0.3,1);border:1px solid rgba(0,0,0,0.08)}
-.luxury-card:hover{transform:translateY(-6px);box-shadow:0 24px 60px rgba(0,0,0,0.5),0 0 0 1px rgba(201,168,106,0.2)}
-.luxury-card-member{background:linear-gradient(180deg,#121212 0%,#0A0A0B 100%);border:1px solid rgba(201,168,106,0.2);border-radius:20px;overflow:hidden}
-.gold-line{height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
-.seal-gold{width:28px;height:28px;border-radius:50%;background:radial-gradient(circle at 30% 30%,var(--gold2),var(--gold));border:1.5px solid var(--gold2);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 12px rgba(201,168,106,0.4), inset 0 1px 2px rgba(255,255,255,0.6)}
-.seal-ink{width:28px;height:28px;border-radius:50%;background:#0A0A0B;border:1.5px solid var(--gold);display:flex;align-items:center;justify-content:center}
+.noise::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");opacity:0.03;pointer-events:none;z-index:9999}
+.hairline{height:1px;background:linear-gradient(90deg,transparent,rgba(201,168,106,0.3),transparent)}
+.card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);transition:0.3s}
+.card:hover{transform:translateY(-4px);border-color:rgba(201,168,106,0.25);box-shadow:0 20px 40px rgba(0,0,0,0.4)}
 </style>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 </head>
-<body class="antialiased noise selection:bg-[#C9A86A] selection:text-black">
+<body class="noise">
 
-<div class="fixed inset-0 pointer-events-none">
-<div class="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[500px] bg-[#C9A86A]/10 rounded-full blur-[120px]"></div>
-<div class="absolute bottom-0 right-0 w-[600px] h-[600px] bg-[#7C3AED]/8 rounded-full blur-[100px]"></div>
-</div>
-
-<header class="sticky top-0 z-50 backdrop-blur-[24px] bg-[#0A0A0B]/80 border-b border-white/10">
+<header class="sticky top-0 z-50 backdrop-blur-[24px] bg-[#0A0A0B]/80 border-b border-white/[0.06]">
 <div class="max-w-[1280px] mx-auto px-4 md:px-6 h-[72px] flex items-center justify-between gap-3">
-<a href="https://umbrellaedible.blogspot.com" class="flex items-center gap-3">
-<div class="w-10 h-10 rounded-full bg-[#F5F1E8] text-black flex items-center justify-center"><i class="fa-solid fa-utensils text-[13px]"></i></div>
-<a href="https://umbrellaedible.blogspot.com/" style="text-decoration:none; display:block;">
-  <div>
-    <p class="serif font-black text-[16px] leading-none tracking-tight text-white">UMBRELLAedible</p>
-    <p class="text-[8px] tracking-[0.22em] text-white/30 font-bold mt-[3px]">MAISON • MMXXVI</p>
-  </div>
-</a>
+<a href="https://umbrellaedible.blogspot.com/" class="flex items-center gap-3 no-underline cursor-pointer">
+<div class="w-10 h-10 rounded-full bg-[#F5F1E8] text-black flex items-center justify-center shrink-0"><i class="fa-solid fa-utensils text-[13px]"></i></div>
+<div>
+<p class="serif font-black text-[16px] leading-none tracking-tight text-white">UMBRELLAedible</p>
+<p class="text-[8px] tracking-[0.22em] text-white/30 font-bold mt-[3px]">MAISON • MMXXVI</p>
+</div>
 <span class="hidden md:flex ml-3 px-3 py-1 rounded-full border border-[#C9A86A]/30 text-[#C9A86A] text-[9px] font-black tracking-widest">EXPLORE • LUXURY</span>
 </a>
 <div class="flex items-center gap-2">
-<a href="https://umbrellaedible-2ln.pages.dev/members" class="h-9 px-4 rounded-full bg-white/10 border border-white/10 flex items-center gap-2 text-[12px] font-bold backdrop-blur"><span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>Chefs</a>
-<a href="https://courageous-travesseiro-b31e7e.netlify.app/" class="h-9 px-5 rounded-full bg-[#F5F1E8] text-black flex items-center gap-2 text-[12px] font-black hover:bg-[#C9A86A] transition"><i class="fa-solid fa-crown text-[10px]"></i> Join</a>
+<a href="https://umbrellaedible-2ln.pages.dev/members.html" class="h-9 px-4 rounded-full bg-white/[0.06] border border-white/10 flex items-center gap-2 text-[12px] font-bold backdrop-blur hover:bg-white/[0.10] transition"><span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>Chefs</a>
+<a href="https://umbrellaedible-2ln.pages.dev/membership.html" class="h-9 px-5 rounded-full bg-[#F5F1E8] text-black flex items-center gap-2 text-[12px] font-black hover:bg-[#C9A86A] transition"><i class="fa-solid fa-crown text-[10px]"></i> Join</a>
 </div>
 </div>
 </header>
 
-<section class="relative max-w-[1280px] mx-auto px-4 md:px-6 pt-12 md:pt-16 pb-8">
-<div class="flex flex-col lg:flex-row gap-8 justify-between">
-<div class="max-w-[640px]">
-<div class="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur text-[10px] font-black tracking-[0.15em]"><span class="w-2 h-2 rounded-full bg-[#C9A86A] animate-pulse"></span> MAISON ARCHIVE • BLOGGER + MEMBER • <span class="gold-text">VERIFIED</span></div>
-<h1 class="mt-6 serif text-[52px] md:text-[76px] font-black leading-[0.85] tracking-[-0.03em]">Explore.<br><span class="instrument italic font-normal gold-text">Taste.</span><br>Cook.</h1>
-<p class="mt-4 text-[13px] leading-6 text-white/40 max-w-[380px]">A curated archive of recipes from our verified collective and the original Blogger kitchen. No ads. No clutter. Just food.</p>
-
-<div class="mt-8 relative max-w-[520px] group"><i class="fa-solid fa-magnifying-glass absolute left-5 top-1/2 -translate-y-1/2 text-[#C9A86A]/50 group-focus-within:text-[#C9A86A] transition"></i><input id="search" placeholder="Search biryani, pasta, vegan, chef..." class="w-full h-[54px] pl-12 pr-[90px] rounded-full bg-[#F5F1E8] text-black border border-[#C9A86A]/20 outline-none text-[14px] font-bold placeholder:text-black/30 shadow-[0_10px_40px_rgba(0,0,0,0.3)]"/><button onclick="doSearch()" class="absolute right-2 top-1/2 -translate-y-1/2 h-[40px] px-6 rounded-full bg-black text-white text-[11px] font-black tracking-widest hover:bg-[#111] transition">SEARCH</button></div>
-
-<div class="mt-5 flex flex-wrap gap-2">
-<button onclick="filterCat('all')" class="cat-btn h-8 px-4 rounded-full bg-[#F5F1E8] text-black text-[11px] font-black tracking-widest" data-cat="all">ALL</button>
-<button onclick="filterCat('Veg')" class="cat-btn h-8 px-4 rounded-full bg-white/10 border border-white/10 text-[11px] font-bold text-white/70 hover:bg-white/15" data-cat="Veg">🌱 VEG</button>
-<button onclick="filterCat('Non-Veg')" class="cat-btn h-8 px-4 rounded-full bg-white/10 border border-white/10 text-[11px] font-bold text-white/70" data-cat="Non-Veg">🍗 NON-VEG</button>
-<button onclick="filterCat('Member')" class="cat-btn h-8 px-4 rounded-full bg-[#C9A86A]/20 border border-[#C9A86A]/30 text-[#C9A86A] text-[11px] font-black" data-cat="Member">MEMBER</button>
-<button onclick="filterCat('Blogger')" class="cat-btn h-8 px-4 rounded-full bg-white/10 border border-white/10 text-[11px] font-bold text-white/70" data-cat="Blogger">BLOGGER</button>
-<button onclick="filterCat('Indian')" class="cat-btn h-8 px-4 rounded-full bg-white/10 border border-white/10 text-[11px] font-bold text-white/70" data-cat="Indian">INDIAN</button>
-<button onclick="filterCat('Italian')" class="cat-btn h-8 px-4 rounded-full bg-white/10 border border-white/10 text-[11px] font-bold text-white/70" data-cat="Italian">ITALIAN</button>
-</div>
+<main class="max-w-[1280px] mx-auto px-4 md:px-6 pt-12 pb-24">
+<div class="mb-10">
+<p class="text-[10px] tracking-[0.2em] text-[#C9A86A] font-bold mb-3">NO LOGIN TO READ • MAISON VERIFIED</p>
+<h1 class="serif font-[900] text-[48px] md:text-[72px] leading-[0.85] tracking-[-0.03em]">Explore<br><span class="gold-text instrument italic font-normal">Recipes.</span></h1>
+<p class="text-white/50 text-[14px] leading-6 max-w-[440px] mt-4">Curated luxury journal. Filter by taste, time, and technique. All recipes from verified chefs only.</p>
 </div>
 
-<div class="lg:w-[340px]">
-<div class="backdrop-blur-2xl bg-white/5 border border-white/10 rounded-[24px] p-5 sticky top-[90px]">
-<div class="flex items-center justify-between"><h3 class="font-black text-[11px] tracking-[0.15em] flex items-center gap-2"><span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span> LIVE CHEFS</h3><a href="./members.html" class="text-[10px] font-black tracking-widest text-[#C9A86A]">VIEW ALL →</a></div>
-<div class="gold-line mt-4 mb-4"></div>
-<div id="miniChefs" class="space-y-3"><div class="h-12 bg-white/5 rounded-full animate-pulse"></div><div class="h-12 bg-white/5 rounded-full animate-pulse"></div></div>
-<div class="mt-5 grid grid-cols-2 gap-2">
-<div class="bg-[#F5F1E8] rounded-[14px] p-3 text-black"><p class="text-[9px] font-black tracking-widest opacity-40">BLOGGER</p><p id="bloggerCount" class="font-black text-[18px] mt-1">—</p></div>
-<div class="bg-gradient-to-br from-[#C9A86A] to-[#9A7D4A] rounded-[14px] p-3 text-black"><p class="text-[9px] font-black tracking-widest text-black/60">MEMBER</p><p id="memberCount" class="font-black text-[18px] mt-1">—</p></div>
+<div class="hairline mb-8"></div>
+
+<div class="flex flex-wrap gap-2 mb-8">
+<button class="px-5 h-9 rounded-full bg-[#F5F1E8] text-black text-[12px] font-black">All</button>
+<button class="px-5 h-9 rounded-full bg-white/[0.06] border border-white/10 text-white/70 text-[12px] font-bold hover:bg-white/[0.10]">Veg</button>
+<button class="px-5 h-9 rounded-full bg-white/[0.06] border border-white/10 text-white/70 text-[12px] font-bold hover:bg-white/[0.10]">Non-Veg</button>
+<button class="px-5 h-9 rounded-full bg-white/[0.06] border border-white/10 text-white/70 text-[12px] font-bold hover:bg-white/[0.10]">Dessert</button>
+<button class="px-5 h-9 rounded-full bg-white/[0.06] border border-white/10 text-white/70 text-[12px] font-bold hover:bg-white/[0.10]">Quick 15m</button>
 </div>
-<a href="./portal.html" class="mt-4 w-full h-11 rounded-full bg-[#F5F1E8] text-black flex items-center justify-center gap-2 text-[12px] font-black hover:bg-[#C9A86A] transition"><i class="fa-solid fa-cloud-arrow-up"></i> Upload Recipe</a>
+
+<div class="grid md:grid-cols-3 gap-4">
+<div class="card rounded-[20px] overflow-hidden">
+<img src="https://images.unsplash.com/photo-1490818387583-1baba5e638af?w=600" class="w-full h-[200px] object-cover"/>
+<div class="p-4">
+<div class="flex gap-2 mb-3"><span class="text-[9px] font-bold px-2 py-1 rounded-full bg-white/[0.06] border border-white/10 text-white/50">15 MIN</span><span class="text-[9px] font-bold px-2 py-1 rounded-full border border-[#C9A86A]/20 text-[#F2D9A0]">VEG</span></div>
+<p class="serif font-bold text-[17px] leading-tight">Truffle Mushroom Risotto</p>
+<p class="text-[12px] text-white/40 mt-1 line-clamp-2">Creamy arborio with wild forest notes...</p>
+</div>
+</div>
+<div class="card rounded-[20px] overflow-hidden">
+<img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600" class="w-full h-[200px] object-cover"/>
+<div class="p-4">
+<div class="flex gap-2 mb-3"><span class="text-[9px] font-bold px-2 py-1 rounded-full bg-white/[0.06] border border-white/10 text-white/50">30 MIN</span><span class="text-[9px] font-bold px-2 py-1 rounded-full border border-[#C9A86A]/20 text-[#F2D9A0]">CHEF SPECIAL</span></div>
+<p class="serif font-bold text-[17px] leading-tight">Burrata & Heirloom Tomato</p>
+<p class="text-[12px] text-white/40 mt-1 line-clamp-2">Maison plating, olive dust...</p>
+</div>
+</div>
+<div class="card rounded-[20px] overflow-hidden">
+<img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=600" class="w-full h-[200px] object-cover"/>
+<div class="p-4">
+<div class="flex gap-2 mb-3"><span class="text-[9px] font-bold px-2 py-1 rounded-full bg-white/[0.06] border border-white/10 text-white/50">45 MIN</span><span class="text-[9px] font-bold px-2 py-1 rounded-full border border-[#C9A86A]/20 text-[#F2D9A0]">DESSERT</span></div>
+<p class="serif font-bold text-[17px] leading-tight">Gold Leaf Tiramisu</p>
+<p class="text-[12px] text-white/40 mt-1 line-clamp-2">Espresso soaked luxury...</p>
 </div>
 </div>
 </div>
-</section>
 
-<section class="relative max-w-[1280px] mx-auto px-4 md:px-6 pb-24">
-<div class="flex items-center justify-between mb-8 border-t border-white/10 pt-6"><h2 class="serif font-black text-[18px] flex items-center gap-3">Archive <span id="totalCount" class="px-3 py-1 rounded-full bg-[#F5F1E8] text-black text-[10px] font-black tracking-widest">LOADING</span></h2><select id="sort" onchange="applyAll()" class="h-9 px-4 rounded-full bg-white/5 border border-white/10 text-[11px] font-bold text-white/70 outline-none"><option value="latest">Latest First</option><option value="oldest">Oldest</option></select></div>
-<div id="grid" class="masonry"></div>
-<div id="loading" class="py-20 text-center"><div class="inline-flex flex-col items-center gap-3 px-8 py-6 rounded-[20px] bg-white/5 border border-white/10"><div class="w-6 h-6 border-2 border-white/20 border-t-[#C9A86A] rounded-full animate-spin"></div><p class="text-[10px] tracking-[0.2em] font-black text-white/40">LOADING ARCHIVE</p></div></div>
-<div id="empty" class="hidden py-16 text-center bg-white/5 border border-white/10 rounded-[24px]"><p class="font-black">No recipes found</p><p class="text-[11px] text-white/40 mt-1">Try different filter</p><button onclick="filterCat('all')" class="mt-4 h-9 px-5 rounded-full bg-[#F5F1E8] text-black text-[11px] font-black">CLEAR</button></div>
-</section>
+<div class="mt-16 flex justify-center">
+<div class="max-w-[900px] w-full bg-white/[0.04] border border-white/10 rounded-full px-4 py-2 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-gradient-to-br from-[#F2D9A0] to-[#C9A86A] flex items-center justify-center text-black"><i class="fa-solid fa-shield-halved text-[12px]"></i></div>
+<div><p class="serif font-bold text-[12px] leading-none">MAISON VERIFIED</p><p class="text-[10px] text-white/40 mt-1">Open recipes, verified chefs only.</p></div>
+</div>
+<a href="https://umbrellaedible-2ln.pages.dev/members/policies" class="h-9 px-5 rounded-full bg-[#F5F1E8] text-black text-[11px] font-black flex items-center gap-2">Policies <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i></a>
+</div>
+</div>
+</main>
 
-<!-- LUXURY MODAL -->
-<div id="modal" class="hidden fixed inset-0 z-[100] bg-black/80 backdrop-blur-xl p-3 md:p-6 overflow-auto"><div class="max-w-[720px] mx-auto mt-4 bg-[#F5F1E8] rounded-[28px] overflow-hidden text-black shadow-[0_40px_100px_rgba(0,0,0,0.8)]"><div class="relative"><img id="mImg" src="" class="w-full h-[340px] object-cover"/><div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"></div><button onclick="closeModal()" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/50 backdrop-blur text-white flex items-center justify-center border border-white/20 hover:bg-black transition"><i class="fa-solid fa-xmark"></i></button><div class="absolute bottom-4 left-5 right-5 flex gap-2 flex-wrap"><span id="mVeg" class="px-3 py-1.5 rounded-full bg-[#F5F1E8] text-black text-[10px] font-black tracking-widest"></span><span id="mCuisine" class="px-3 py-1.5 rounded-full bg-black text-white text-[10px] font-bold tracking-widest"></span><span id="mSource" class="px-3 py-1.5 rounded-full bg-[#C9A86A] text-black text-[10px] font-black tracking-widest"></span></div></div><div class="p-6 md:p-8"><h2 id="mTitle" class="serif font-black text-[30px] leading-[1.05]"></h2><div class="mt-4 flex items-center gap-3"><img id="mChefPhoto" src="" class="w-10 h-10 rounded-full object-cover border border-black/10"/><div><p id="mChefName" class="font-black text-[13px]"></p><p id="mChefMeta" class="text-[11px] text-black/50 font-bold"></p></div><div class="ml-auto seal-gold"><i class="fa-solid fa-check text-black text-[11px]"></i></div></div><div class="gold-line mt-6 mb-6"></div><div id="mIngredients" class="bg-white border border-black/10 rounded-[18px] p-5"></div><div id="mSteps" class="mt-4 bg-white border border-black/10 rounded-[18px] p-5"></div><a id="mLink" href="#" target="_blank" class="mt-6 w-full h-12 rounded-full bg-black text-white flex items-center justify-center gap-2 font-black text-[12px] tracking-widest hidden"><i class="fa-solid fa-arrow-up-right-from-square"></i> OPEN ORIGINAL</a></div></div></div>
+<footer class="border-t border-white/[0.06] py-8 text-center text-[11px] text-white/30 tracking-wide">
+Founded by <span class="text-[#F2D9A0] font-bold">Abhishek Ganguly</span> — MAISON UMBRELLAedible • MMXXVI
+</footer>
 
-<script>
-var firebaseConfig = { apiKey: "AIzaSyBNNodl0fWwQm42KAublAcSuFO3RQ8fwOE", authDomain: "umbrellaedible.firebaseapp.com", projectId: "umbrellaedible", storageBucket: "umbrellaedible.firebasestorage.app", messagingSenderId: "705948520770", appId: "1:705948520770:web:30d2080cb4191b2881b8db" };
-firebase.initializeApp(firebaseConfig);
-var db = firebase.firestore();
-let allRecipes = [];
-let activeCat='all';
-
-function render(recipes){
-  let grid=document.getElementById('grid');
-  let empty=document.getElementById('empty');
-  if(!recipes.length){grid.innerHTML=''; empty.classList.remove('hidden'); document.getElementById('totalCount').textContent='0'; return;}
-  empty.classList.add('hidden');
-  document.getElementById('totalCount').textContent=recipes.length+' RECIPES';
-  let html='';
-  recipes.forEach((r,i)=>{
-    let isMember=r.source==='member';
-    let isVeg = (r.veg||'').toLowerCase().includes('veg') &&!(r.veg||'').toLowerCase().includes('non');
-    let cardClass = isMember? 'luxury-card-member card mb-4' : 'luxury-card card mb-4';
-    let seal = isMember? `<div class="seal-gold"><i class="fa-solid fa-crown text-black text-[10px]"></i></div>` : `<div class="seal-ink"><i class="fa-solid fa-check text-[#C9A86A] text-[10px]"></i></div>`;
-    html+=`<div class="${cardClass} group cursor-pointer" onclick="openModal(${i})">
-      <div class="relative"><img src="${r.image}" loading="lazy" class="w-full h-auto object-cover group-hover:scale-[1.03] transition duration-700"/><div class="absolute top-3 left-3 flex gap-1.5"><span class="px-2.5 py-1 rounded-full ${isMember?'bg-[#C9A86A] text-black':'bg-black text-white'} text-[9px] font-black tracking-widest">${isMember?'MEMBER':'BLOGGER'}</span><span class="px-2.5 py-1 rounded-full ${isVeg?'bg-green-600 text-white':'bg-red-600 text-white'} text-[9px] font-black tracking-widest">${r.veg||'VEG'}</span></div><div class="absolute top-3 right-3">${seal}</div><div class="absolute bottom-0 left-0 right-0 h-[80px] bg-gradient-to-t ${isMember?'from-black to-transparent':'from-[#F5F1E8] to-transparent'}"></div></div>
-      <div class="p-4 ${isMember?'text-[#F5F1E8]':'text-black'}"><div class="flex items-center gap-2"><img src="${r.chefPhoto}" class="w-5 h-5 rounded-full object-cover"/><p class="text-[10px] font-bold opacity-60 truncate">${r.chefName} • ${r.cuisine||''}</p></div><h3 class="mt-2 serif font-black text-[17px] leading-[1.15] line-clamp-2">${r.title}</h3><p class="text-[11px] opacity-50 mt-1 line-clamp-2 leading-5">${r.snippet||''}</p><div class="mt-3 h-px ${isMember?'bg-white/10':'bg-black/10'}"></div><div class="mt-3 flex items-center justify-between"><span class="text-[9px] font-black tracking-widest opacity-40">${r.cookTime||'30 MINS'}</span><span class="w-6 h-6 rounded-full ${isMember?'bg-[#F5F1E8] text-black':'bg-black text-white'} flex items-center justify-center text-[10px]"><i class="fa-solid fa-arrow-up-right-from-square"></i></span></div></div>
-    </div>`;
-  });
-  grid.innerHTML=html;
-}
-
-function applyAll(){
-  let q=(document.getElementById('search').value||'').toLowerCase();
-  let filtered = allRecipes.filter(r=>{
-    let matchSearch=!q||r.title.toLowerCase().includes(q)||(r.cuisine||'').toLowerCase().includes(q)||(r.chefName||'').toLowerCase().includes(q)||(r.veg||'').toLowerCase().includes(q);
-    let matchCat=true;
-    if(activeCat==='all') matchCat=true;
-    else if(activeCat==='Member') matchCat=r.source==='member';
-    else if(activeCat==='Blogger') matchCat=r.source==='blogger';
-    else if(activeCat==='Veg') matchCat=(r.veg||'').toLowerCase().includes('veg')&&!(r.veg||'').toLowerCase().includes('non');
-    else if(activeCat==='Non-Veg') matchCat=(r.veg||'').toLowerCase().includes('non');
-    else matchCat=(r.cuisine||'').toLowerCase().includes(activeCat.toLowerCase())||(r.title||'').toLowerCase().includes(activeCat.toLowerCase());
-    return matchSearch&&matchCat;
-  });
-  let sort=document.getElementById('sort').value;
-  filtered.sort((a,b)=>{if(sort==='oldest')return (a.ts||0)-(b.ts||0); return (b.ts||0)-(a.ts||0);});
-  window._filtered=filtered;
-  render(filtered);
-}
-function filterCat(cat){
-  activeCat=cat;
-  document.querySelectorAll('.cat-btn').forEach(b=>{
-    if(b.dataset.cat===cat){b.className='cat-btn h-8 px-4 rounded-full bg-[#F5F1E8] text-black text-[11px] font-black tracking-widest';}
-    else b.className='cat-btn h-8 px-4 rounded-full bg-white/10 border border-white/10 text-[11px] font-bold text-white/60';
-  });
-  applyAll();
-}
-function doSearch(){applyAll();}
-document.getElementById('search').addEventListener('input',applyAll);
-
-let bloggerRecipes=[]; let memberRecipes=[];
-
-async function fetchBlogger(){
-  try{
-    let res=await fetch('https://umbrellaedible.blogspot.com/feeds/posts/default?alt=json&max-results=50');
-    let data=await res.json();
-    let entries=data.feed.entry||[];
-    bloggerRecipes=entries.map(e=>{
-      let title=e.title.$t;
-      let link=e.link.find(l=>l.rel==='alternate').href;
-      let thumb=e.media$thumbnail?e.media$thumbnail.url.replace('/s72-c/','/s800/'):'https://images.unsplash.com/photo-1490818387583-1baba5e638af?w=600';
-      let snippet=e.summary?e.summary.$t.substring(0,100):'';
-      let labels=e.category?e.category.map(c=>c.term):[];
-      let content=e.content?e.content.$t:'';
-      return {title,image:thumb,link,snippet,content,cuisine:labels[0]||'Indian',veg:labels.join(' ').toLowerCase().includes('non-veg')?'Non-Veg':'Veg',cookTime:'30 mins',chefName:'UMBRELLAedible Team',chefPhoto:'https://ui-avatars.com/api/?name=UMBRELLAedible&background=C9A86A&color=000',source:'blogger',ts: new Date(e.published.$t).getTime(), labels};
-    });
-    mergeAndRender();
-  }catch(err){bloggerRecipes=[]; mergeAndRender();}
-}
-db.collection('member_recipes').where('status','==','approved').onSnapshot(snap=>{
-  memberRecipes=[];
-  snap.forEach(doc=>{
-    let d=doc.data();
-    memberRecipes.push({title:d.title, image:d.imageUrl, cuisine:d.cuisine, veg:d.veg, cookTime:d.cookTime, difficulty:d.difficulty, ingredients:d.ingredients, steps:d.steps, story:d.story, chefName:d.chefName, chefPhoto:d.chefPhoto||'https://ui-avatars.com/api/?name='+encodeURIComponent(d.chefName||'Chef'), isVIP:d.isVIP||false, vipBadge:d.vipBadge||'', source:'member', ts: d.createdAt?d.createdAt.seconds*1000:Date.now(), snippet:(d.ingredients||'').substring(0,80)});
-  });
-  mergeAndRender();
-});
-function mergeAndRender(){
-  allRecipes=[...memberRecipes,...bloggerRecipes];
-  document.getElementById('bloggerCount').textContent=bloggerRecipes.length;
-  document.getElementById('memberCount').textContent=memberRecipes.length;
-  document.getElementById('loading').classList.add('hidden');
-  applyAll();
-}
-db.collection('chef_applications').where('status','==','approved').limit(4).onSnapshot(snap=>{
-  let html=''; snap.forEach(doc=>{
-    let c=doc.data(); if(c.banned) return;
-    let photo=c.photoUrl||'https://ui-avatars.com/api/?name='+encodeURIComponent(c.name||'Chef')+'&background=C9A86A&color=000';
-    html+=`<div class="flex items-center gap-3"><img src="${photo}" class="w-9 h-9 rounded-full object-cover border border-white/10"/><div class="flex-1 min-w-0"><p class="font-black text-[12px] truncate text-[#F5F1E8]">${c.name}</p><p class="text-[10px] text-white/40 truncate">${c.location||''}</p></div><div class="seal-gold w-6 h-6"><i class="fa-solid fa-check text-black text-[8px]"></i></div></div>`;
-  });
-  if(!html) html='<p class="text-[11px] text-white/40">No chefs yet</p>';
-  document.getElementById('miniChefs').innerHTML=html;
-});
-function openModal(idx){
-  let r=window._filtered[idx]; if(!r) return;
-  document.getElementById('mImg').src=r.image;
-  document.getElementById('mTitle').textContent=r.title;
-  document.getElementById('mVeg').textContent=r.veg;
-  document.getElementById('mCuisine').textContent=r.cuisine+' • '+(r.cookTime||'');
-  document.getElementById('mChefName').textContent=r.chefName;
-  document.getElementById('mChefPhoto').src=r.chefPhoto;
-  document.getElementById('mChefMeta').textContent=(r.difficulty||'')+' • '+(r.source==='member'?'Member Recipe':'Blogger Recipe');
-  document.getElementById('mSource').textContent=r.source==='member'?'MEMBER • VERIFIED':'BLOGGER • ARCHIVE';
-  document.getElementById('mLink').href=r.link||'#';
-  document.getElementById('mLink').classList.toggle('hidden',!r.link);
-  if(r.ingredients){document.getElementById('mIngredients').innerHTML='<p class="text-[10px] font-black tracking-[0.2em] opacity-40 mb-3">INGREDIENTS</p><pre class="text-[13px] leading-6 whitespace-pre-wrap font-[Plus Jakarta Sans]">'+r.ingredients+'</pre>';} else {document.getElementById('mIngredients').innerHTML='<p class="text-[12px] text-black/60">'+(r.snippet||'')+'</p>';}
-  if(r.steps){document.getElementById('mSteps').innerHTML='<p class="text-[10px] font-black tracking-[0.2em] opacity-40 mb-3">METHOD</p><pre class="text-[13px] leading-6 whitespace-pre-wrap font-[Plus Jakarta Sans]">'+r.steps+'</pre>'+(r.story?`<div class="mt-4 p-4 rounded-[14px] bg-[#F5F1E8] border border-[#C9A86A]/20"><p class="text-[10px] font-black tracking-widest opacity-40">CHEF NOTE</p><p class="text-[12px] mt-2 leading-5">${r.story}</p></div>`:'');} else {document.getElementById('mSteps').innerHTML='<div class="text-[13px] leading-6">'+(r.content||'').substring(0,1000)+'</div>';}
-  document.getElementById('modal').classList.remove('hidden'); document.body.style.overflow='hidden';
-}
-function closeModal(){document.getElementById('modal').classList.add('hidden'); document.body.style.overflow='';}
-fetchBlogger();
-</script>
-<div class='footer wrap' style="text-align:center; width:100%; display:flex; justify-content:center; align-items:center; padding:24px 0; font-size:10px; color:#666; letter-spacing:0.2em;">MAISON <span style="color:#C9A86A; font-weight:800; margin:0 6px;">UMBRELLAedible</span> — FOUNDED BY ABHISHEK GANGULY • 2026</div>
 </body>
 </html>
 
