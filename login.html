@@ -1,145 +1,99 @@
 
 
-
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Founder Login — UMBRELLAedible</title>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Member Login — UMBRELLAedible</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<style>body{font-family:'Plus Jakarta Sans',sans-serif;background:#080808;color:#fff}</style>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<style>body{font-family:'Plus Jakarta Sans',sans-serif;background:#080808;color:#fff}</style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-4">
-<div class="w-full max-w-[420px]">
-<div class="bg-[#111] border border-white/10 rounded-[32px] p-8">
-<div class="w-12 h-12 rounded-full bg-white text-black flex items-center justify-center mx-auto"><i class="fa-solid fa-crown"></i></div>
-<h1 class="mt-5 text-center font-black text-[24px]">Founder Login</h1>
-<p class="mt-2 text-center text-[12px] text-white/40">Email-only check from Firebase</p>
+<div class="w-full max-w-[440px] bg-[#111] border border-white/10 rounded-[32px] p-8">
+<div class="w-12 h-12 rounded-full bg-[#FFD27A] text-black flex items-center justify-center mx-auto"><i class="fa-solid fa-utensils"></i></div>
+<h1 class="mt-5 text-center font-black text-[22px]">Member Login</h1>
+<p class="mt-2 text-center text-[11px] text-white/40">Enter your registered email — system checks Firebase first</p>
 
 <div class="mt-8 space-y-3">
-<input id="email" type="email" placeholder="Founder Email" value="" class="w-full h-[48px] px-5 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px]"/>
-<p id="error" class="hidden text-[12px] text-red-400 bg-red-500/10 border border-red-500/20 rounded-[14px] p-3 whitespace-pre-wrap"></p>
+<input id="email" type="email" placeholder="Registered email — added by founder" class="w-full h-[48px] px-5 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px]"/>
+
+<p id="error" class="hidden text-[12px] text-red-400 bg-red-500/10 border border-red-500/20 rounded-[14px] p-3"></p>
 <p id="success" class="hidden text-[12px] text-green-400 bg-green-500/10 border border-green-500/20 rounded-[14px] p-3"></p>
-<button onclick="login()" id="loginBtn" class="w-full h-[48px] rounded-full bg-[#FFD27A] text-black font-black text-[13px] flex items-center justify-center gap-2"><i class="fa-solid fa-crown"></i> Check & Enter Console</button>
-<p class="text-center text-[10px] text-white/20">No password needed</p>
+
+<button onclick="login()" id="loginBtn" class="w-full h-[48px] rounded-full bg-white text-black font-black text-[13px] flex items-center justify-center gap-2"><i class="fa-solid fa-utensils"></i> Check & Login</button>
+
+<p class="text-center text-[10px] text-white/20">No password needed — verified by Firebase<br>Only approved chefs can login. Ask founder to approve you.</p>
+<div class="pt-4 border-t border-white/10 text-center">
+<p class="text-[11px] text-white/30">Not a chef yet? <a href="./become-chef.html" class="text-[#FFD27A] font-bold">Apply to become chef</a></p>
 </div>
-
-
 </div>
 </div>
 
 <script>
 var firebaseConfig = { apiKey: "AIzaSyBNNodl0fWwQm42KAublAcSuFO3RQ8fwOE", authDomain: "umbrellaedible.firebaseapp.com", projectId: "umbrellaedible", storageBucket: "umbrellaedible.firebasestorage.app", messagingSenderId: "705948520770", appId: "1:705948520770:web:30d2080cb4191b2881b8db" };
 firebase.initializeApp(firebaseConfig);
-var db = firebase.firestore();
+var db=firebase.firestore();
 
-// SUPER ADMIN - ALWAYS ALLOWED - NO FIREBASE NEEDED
-var SUPER_ADMINS = [
-  "abhishek.umbrellacorporation@gmail.com",
-  "abhishek@umbrellaedible.com",
-  "abhishekganguly@umbrellaedible.com",
-  "umbrellaedible@gmail.com",
-  "abhishekganguly2006@gmail.com"
-].map(e=>e.toLowerCase());
-
-function loadFounders(){
-  db.collection('config').doc('founders').get().then(doc=>{
-    var list = doc.exists && doc.data().emails? doc.data().emails : SUPER_ADMINS;
-    db.collection('chef_applications').where('role','in',['Founder','Co-Founder']).get().then(snap=>{
-      snap.forEach(d=>{ var em=d.data().email; if(em &&!list.map(x=>x.toLowerCase()).includes(em.toLowerCase())) list.push(em); });
-      if(!list.length) list = SUPER_ADMINS;
-      document.getElementById('founderList').innerHTML = list.map(e=>`<div class="flex items-center gap-2"><span class="w-1.5 h-1.5 ${SUPER_ADMINS.includes(e.toLowerCase())?'bg-[#FFD27A]':'bg-green-500'} rounded-full"></span>${e} ${SUPER_ADMINS.includes(e.toLowerCase())?'<span class="px-1.5 py-0.5 rounded bg-[#FFD27A]/20 text-[#FFD27A] text-[9px]">SUPER</span>':''}</div>`).join('');
-    }).catch(()=>{ document.getElementById('founderList').innerHTML = list.map(e=>`<div>${e}</div>`).join(''); });
-  }).catch(()=>{ document.getElementById('founderList').innerHTML = SUPER_ADMINS.map(e=>`<div>${e} (SUPER)</div>`).join(''); });
-}
-loadFounders();
-
-function fixMyEmail(){
-  var email = "abhishek.umbrellacorporation@gmail.com";
-  db.collection('config').doc('founders').set({emails: SUPER_ADMINS}, {merge:true}).then(()=>{
-    return db.collection('chef_applications').where('email','==',email).get();
-  }).then(snap=>{
-    if(snap.empty){
-      return db.collection('chef_applications').add({
-        name: "Abhishek Ganguly",
-        email: email,
-        role: "Founder",
-        founderRole: "Founder",
-        level: "Founder Team",
-        designation: "Founder",
-        status: "approved",
-        verified: true,
-        banned: false,
-        isVIP: true,
-        vipBadge: "FOUNDER",
-        location: "Bhopal",
-        photoUrl: "",
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-    }
-  }).then(()=>{ alert('✅ Fixed! Your email added to Firebase. Now click Login.'); loadFounders(); }).catch(e=>alert('Error: '+e.message));
-}
-
-function showError(msg){ var el=document.getElementById('error'); el.textContent=msg; el.classList.remove('hidden'); document.getElementById('success').classList.add('hidden'); }
-function showSuccess(msg){ var el=document.getElementById('success'); el.textContent=msg; el.classList.remove('hidden'); document.getElementById('error').classList.add('hidden'); }
+function showError(m){ document.getElementById('error').textContent=m; document.getElementById('error').classList.remove('hidden'); document.getElementById('success').classList.add('hidden'); }
+function showSuccess(m){ document.getElementById('success').textContent=m; document.getElementById('success').classList.remove('hidden'); document.getElementById('error').classList.add('hidden'); }
 
 function login(){
   var email=document.getElementById('email').value.trim().toLowerCase();
-  if(!email){ showError('Enter founder email'); return; }
-  document.getElementById('loginBtn').innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Checking...';
+  if(!email){ showError('Enter your registered email'); return; }
+  if(!email.includes('@')){ showError('Enter valid email'); return; }
 
-  // SUPER ADMIN BYPASS - CHECK FIRST BEFORE FIREBASE
-  if(SUPER_ADMINS.includes(email)){
-    localStorage.setItem('umbrella_founder_email', email);
-    localStorage.setItem('umbrella_founder_name', 'Abhishek Ganguly');
-    localStorage.setItem('umbrella_founder_id', 'super_admin');
-    localStorage.setItem('umbrella_founder_role', 'Founder');
-    localStorage.setItem('umbrella_founder_login_time', Date.now().toString());
-    // Auto-add to Firebase for future
-    db.collection('config').doc('founders').set({emails: SUPER_ADMINS}, {merge:true});
-    showSuccess('✅ SUPER ADMIN verified! Redirecting...');
-    setTimeout(()=>{ window.location.href='https://umbrellaedible-2ln.pages.dev/admin-panel.html'; }, 600);
-    return;
-  }
+  document.getElementById('loginBtn').innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Checking Firebase...';
 
-  // Normal check
-  db.collection('config').doc('founders').get().then(function(doc){
-    var allowed = doc.exists && doc.data().emails? doc.data().emails.map(e=>e.toLowerCase()) : SUPER_ADMINS;
-    db.collection('chef_applications').where('email','==',email).get().then(function(snap){
-      var isFounderInDB = false; var founderData = null;
-      if(!snap.empty){
-        snap.forEach(function(d){
-          var data=d.data();
-          var role=(data.role||data.founderRole||'').toLowerCase();
-          if(role.includes('founder') || data.level==='Founder Team' || allowed.includes(email)){
-            isFounderInDB=true; founderData={id:d.id,...data};
-          }
-        });
-      }
-      var isInConfig = allowed.includes(email);
-      if(isInConfig || isFounderInDB){
-        if(founderData && (founderData.banned || founderData.status==='banned')){
-          showError('Banned: '+(founderData.banReason||'')); document.getElementById('loginBtn').innerHTML='<i class="fa-solid fa-crown"></i> Check & Enter Console'; return;
-        }
-        localStorage.setItem('umbrella_founder_email', email);
-        localStorage.setItem('umbrella_founder_name', founderData? founderData.name : email.split('@')[0]);
-        localStorage.setItem('umbrella_founder_id', founderData? founderData.id : 'config_founder');
-        localStorage.setItem('umbrella_founder_role', founderData? (founderData.role||'Founder') : 'Founder');
-        localStorage.setItem('umbrella_founder_login_time', Date.now().toString());
-        showSuccess('✅ Founder verified! Redirecting...');
-        setTimeout(function(){ window.location.href='https://umbrellaedible-2ln.pages.dev/admin.html'; }, 600);
-      } else {
-        showError('❌ Email not found.\nClick "Fix: Add my email to Firebase now" button below, then try again.');
-        document.getElementById('loginBtn').innerHTML='<i class="fa-solid fa-crown"></i> Check & Enter Console';
-      }
-    });
+  // SAME CHECK AS FOUNDER - CHECK FIREBASE FIRST
+  db.collection('chef_applications').where('email','==',email).get().then(function(snap){
+    if(snap.empty){
+      showError('❌ Email not found in chef database.\nFounder must add you first in Admin Panel > Add Chef');
+      document.getElementById('loginBtn').innerHTML='<i class="fa-solid fa-utensils"></i> Check & Login';
+      return;
+    }
+    var d=snap.docs[0].data();
+    var id=snap.docs[0].id;
+
+    if(d.banned || d.status==='banned'){
+      showError('🚫 Banned: '+(d.banReason||'Contact founder'));
+      document.getElementById('loginBtn').innerHTML='<i class="fa-solid fa-utensils"></i> Check & Login';
+      return;
+    }
+    if(d.status==='pending'){
+      showError('⏳ Your application is pending review. Wait for founder approval.');
+      document.getElementById('loginBtn').innerHTML='<i class="fa-solid fa-utensils"></i> Check & Login';
+      return;
+    }
+    if(d.status==='rejected'){
+      showError('❌ Application rejected: '+(d.rejectionReason||'Contact founder'));
+      document.getElementById('loginBtn').innerHTML='<i class="fa-solid fa-utensils"></i> Check & Login';
+      return;
+    }
+    if(d.status!=='approved'){
+      showError('Status is '+d.status+'. Need founder approval.');
+      document.getElementById('loginBtn').innerHTML='<i class="fa-solid fa-utensils"></i> Check & Login';
+      return;
+    }
+
+    // SUCCESS - Same as founder login
+    localStorage.setItem('umbrella_member_email', email);
+    localStorage.setItem('umbrella_member_id', id);
+    localStorage.setItem('umbrella_member_name', d.name||email);
+    localStorage.setItem('umbrella_member_role', d.role||d.level||'Chef');
+    localStorage.setItem('umbrella_member_photo', d.photoUrl||'');
+    localStorage.setItem('umbrella_member_login_time', Date.now().toString());
+
+    showSuccess('✅ Chef verified from Firebase! Redirecting to panel...');
+    setTimeout(function(){
+      window.location.href='https://umbrellaedible-2ln.pages.dev/member-panel.html';
+    }, 800);
+  }).catch(function(e){
+    showError('Firebase error: '+e.message);
+    document.getElementById('loginBtn').innerHTML='<i class="fa-solid fa-utensils"></i> Check & Login';
   });
 }
 </script>
 </body>
 </html>
-
