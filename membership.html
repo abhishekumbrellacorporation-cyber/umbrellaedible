@@ -11,8 +11,8 @@
 body{font-family:'Plus Jakarta Sans',sans-serif;background:#FFF9F0}
 h1,h2{font-family:'Fraunces',serif}
 @media(max-width:640px){
- .hero-h1{font-size:34px!important;line-height:0.9!important}
- .hero-img{height:300px!important}
+.hero-h1{font-size:34px!important;line-height:0.9!important}
+.hero-img{height:300px!important}
 }
 </style>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -40,7 +40,6 @@ h1,h2{font-family:'Fraunces',serif}
 <h1 class="hero-h1 mt-4 md:mt-5 text-[36px] sm:text-[44px] md:text-[68px] font-black leading-[0.85] tracking-tight">Your recipes.<br><span class="text-[#FF7A1A]">Your name.</span><br>Your legacy.</h1>
 <p class="mt-4 md:mt-5 text-[14px] md:text-[15px] leading-[24px] md:leading-[26px] text-black/60 max-w-[500px]">UMBRELLAedible is open — anyone can read without login. To post, become a verified chef. Your application saves to Firebase <b>umbrellaedible → chef_applications</b> and we invite you as Blogger Author in 24 hours.</p>
 <div class="mt-6 md:mt-7 grid grid-cols-1 sm:grid-cols-3 gap-3">
-
 <div class="bg-[#111] text-white rounded-[18px] p-4 flex sm:block items-center justify-between gap-3"><div><p class="text-[10px] font-black text-white/40 tracking-widest">APPROVAL</p><p class="mt-1 font-black text-[13px]">24 Hours</p><p class="text-[11px] text-white/60">Badge + Post access</p></div><span class="sm:hidden w-8 h-8 rounded-full bg-white/10 flex items-center justify-center"><i class="fa-solid fa-clock text-[12px]"></i></span></div>
 </div>
 </div>
@@ -94,24 +93,34 @@ h1,h2{font-family:'Fraunces',serif}
 <textarea id="ingredients" required placeholder="Ingredients List * — min 50 characters" class="md:col-span-2 w-full h-[110px] p-5 md:p-6 rounded-[20px] md:rounded-[24px] bg-[#F6F1E9] border border-black/5 outline-none text-[14px] resize-none"></textarea>
 <textarea id="steps" required placeholder="Full Steps / Method * — min 100 characters" class="md:col-span-2 w-full h-[140px] md:h-[150px] p-5 md:p-6 rounded-[20px] md:rounded-[24px] bg-[#F6F1E9] border border-black/5 outline-none text-[14px] resize-none"></textarea>
 <textarea id="whyJoin" required placeholder="Why do you want to join UMBRELLAedible as Chef? *" class="md:col-span-2 w-full h-[90px] p-5 md:p-6 rounded-[20px] md:rounded-[24px] bg-[#F6F1E9] border border-black/5 outline-none text-[14px] resize-none"></textarea>
+
+<!-- ORIGINAL CONFIRM CHECKBOX -->
 <label class="md:col-span-2 mt-3 md:mt-4 flex gap-3 p-4 rounded-[16px] md:rounded-[18px] bg-[#FFF6E8] border border-[#FFD8A8]/50 cursor-pointer">
 <input type="checkbox" id="agree" required class="mt-1 w-4 h-4 accent-black shrink-0"/>
 <span class="text-[11px] md:text-[12px] leading-[18px] text-black/70"><b class="text-black">I confirm:</b> I am 18+, my recipe & photos are original and owned by me, I agree to open community rules, and I consent to store my application in Firebase umbrellaedible.</span>
 </label>
-<button type="submit" id="submitBtn" class="md:col-span-2 mt-4 md:mt-6 h-[52px] md:h-[56px] rounded-full bg-[#111] text-white font-black text-[14px] md:text-[15px] hover:bg-black flex items-center justify-center gap-2 md:gap-3 w-full">
-<span id="btnText" class="flex items-center gap-2"><span class="hidden sm:inline">Submit Application</span><span class="sm:hidden">Submit Application →</span></span>
+
+<!-- NEW MANDATORY POLICIES CHECKBOX - SUBMIT WON'T WORK WITHOUT THIS -->
+<label class="md:col-span-2 mt-3 flex gap-3 p-4 rounded-[16px] md:rounded-[18px] bg-[#FFF9F0] border border-black/10 cursor-pointer" style="border: 1.5px solid #111;">
+<input type="checkbox" id="policyAgree" required class="mt-1 w-4 h-4 accent-black shrink-0"/>
+<span class="text-[11px] md:text-[12px] leading-[18px] text-black/80"><b class="text-black">I have read and agree to <a href="/members/policies.html" target="_blank" style="text-decoration:underline; font-weight:800; color:#FF6A00;">Membership Policies, Code of Conduct & Privacy Policy</a> *</b><br>Your profile will be manually reviewed by our team.</span>
+</label>
+
+<!-- SUBMIT BUTTON + CENTERED TEXT WRAPPER -->
+<div class="md:col-span-2 w-full flex flex-col items-center justify-center mt-4 md:mt-6">
+<button type="submit" id="submitBtn" disabled class="w-full h-[52px] md:h-[56px] rounded-full bg-[#111] text-white font-black text-[14px] md:text-[15px] hover:bg-black flex items-center justify-center gap-2 md:gap-3 disabled:opacity-40 disabled:cursor-not-allowed transition-opacity">
+<span id="btnText" class="flex items-center gap-2"><span>Submit Application</span></span>
 <span id="btnLoader" class="hidden flex items-center gap-2"><i class="fa-solid fa-spinner fa-spin"></i> Saving...</span>
 </button>
 
-
-<div style="width:100% !important; display:block !important; text-align:center !important; margin-top:16px !important; padding:0 20px !important; box-sizing:border-box !important;">
-  <p style="font-size:11px !important; color:#666 !important; line-height:1.5 !important; text-align:center !important; margin:0 auto !important; max-width:360px !important; display:block !important;">
-    By submitting the application, you agree to our 
-    <a href="/members/policies.html" style="text-decoration:underline !important; font-weight:700 !important; color:#111 !important;">Membership Policies, Code of Conduct & Privacy Policy</a>. 
+<div style="width:100%; text-align:center; margin-top:14px;">
+  <p style="font-size:11px; color:#666; line-height:1.5; text-align:center; margin:0 auto; max-width:360px;">
+    By submitting the application, you agree to our
+    <a href="/members/policies.html" style="text-decoration:underline; font-weight:700; color:#111;">Membership Policies, Code of Conduct & Privacy Policy</a>.
     Your profile will be manually reviewed by our team.
   </p>
 </div>
-
+</div>
 
 <p id="status" class="md:col-span-2 text-center text-[13px] font-bold mt-3 px-2 break-words"></p>
 </form>
@@ -132,8 +141,39 @@ var firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 var db = firebase.firestore();
+
+// DISABLE BUTTON UNTIL POLICIES CHECKED
+var agreeCheck = document.getElementById('agree');
+var policyCheck = document.getElementById('policyAgree');
+var submitBtn = document.getElementById('submitBtn');
+function updateButtonState(){
+  if(agreeCheck.checked && policyCheck.checked){
+    submitBtn.disabled = false;
+    submitBtn.style.opacity = "1";
+  } else {
+    submitBtn.disabled = true;
+    submitBtn.style.opacity = "0.4";
+  }
+}
+agreeCheck.addEventListener('change', updateButtonState);
+policyCheck.addEventListener('change', updateButtonState);
+updateButtonState();
+
 document.getElementById('chefForm').addEventListener('submit', function(e){
   e.preventDefault();
+
+  // EXTRA CHECK - POLICIES MUST BE MARKED
+  if(!document.getElementById('policyAgree').checked){
+    document.getElementById('status').textContent='❌ You must agree to Membership Policies to submit';
+    document.getElementById('status').style.color='red';
+    return;
+  }
+  if(!document.getElementById('agree').checked){
+    document.getElementById('status').textContent='❌ Please confirm original content';
+    document.getElementById('status').style.color='red';
+    return;
+  }
+
   var btnText = document.getElementById('btnText');
   var btnLoader = document.getElementById('btnLoader');
   var status = document.getElementById('status');
@@ -145,8 +185,8 @@ document.getElementById('chefForm').addEventListener('submit', function(e){
   status.textContent='';
   var ingredients = document.getElementById('ingredients').value.trim();
   var steps = document.getElementById('steps').value.trim();
-  if(ingredients.length < 50){ status.textContent='Ingredients too short (50+ chars)'; status.style.color='red'; btnText.classList.remove('hidden'); btnLoader.classList.add('hidden'); btnLoader.classList.remove('flex'); btn.disabled=false; return; }
-  if(steps.length < 100){ status.textContent='Steps too short (100+ chars)'; status.style.color='red'; btnText.classList.remove('hidden'); btnLoader.classList.add('hidden'); btnLoader.classList.remove('flex'); btn.disabled=false; return; }
+  if(ingredients.length < 50){ status.textContent='Ingredients too short (50+ chars)'; status.style.color='red'; btnText.classList.remove('hidden'); btnLoader.classList.add('hidden'); btnLoader.classList.remove('flex'); btn.disabled=false; updateButtonState(); return; }
+  if(steps.length < 100){ status.textContent='Steps too short (100+ chars)'; status.style.color='red'; btnText.classList.remove('hidden'); btnLoader.classList.add('hidden'); btnLoader.classList.remove('flex'); btn.disabled=false; updateButtonState(); return; }
   db.collection('chef_applications').add({
     name: document.getElementById('name').value.trim(),
     email: document.getElementById('email').value.trim().toLowerCase(),
@@ -165,6 +205,7 @@ document.getElementById('chefForm').addEventListener('submit', function(e){
     ingredients: ingredients,
     steps: steps,
     whyJoin: document.getElementById('whyJoin').value.trim(),
+    agreedToPolicies: true,
     status: "pending",
     verified: false,
     createdAt: firebase.firestore.Timestamp.now(),
@@ -180,6 +221,7 @@ document.getElementById('chefForm').addEventListener('submit', function(e){
     btnLoader.classList.add('hidden');
     btnLoader.classList.remove('flex');
     btn.disabled=false;
+    updateButtonState();
   }).catch(function(err){
     status.style.color='red';
     status.textContent = 'Error: ' + err.message + ' — Fix Firestore Rules';
@@ -187,6 +229,7 @@ document.getElementById('chefForm').addEventListener('submit', function(e){
     btnLoader.classList.add('hidden');
     btnLoader.classList.remove('flex');
     btn.disabled=false;
+    updateButtonState();
   });
 });
 </script>
