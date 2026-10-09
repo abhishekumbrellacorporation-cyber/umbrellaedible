@@ -12,17 +12,15 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>body{font-family:'Plus Jakarta Sans',sans-serif;background:#080808;color:#fff}::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-thumb{background:#222;border-radius:999px}</style>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 </head>
 <body class="antialiased selection:bg-[#FFD27A] selection:text-black">
 
-<!-- AUTH GUARD - EMAIL ONLY CHECK -->
 <div id="authGuard" class="fixed inset-0 z-[999] bg-[#080808] flex items-center justify-center">
 <div class="text-center"><div class="w-12 h-12 border-4 border-white/10 border-t-[#FFD27A] rounded-full animate-spin mx-auto"></div><p class="mt-4 text-[12px] font-bold text-white/40">Checking Founder Auth...</p><p id="authEmail" class="mt-2 text-[11px] text-white/20"></p></div>
 </div>
 
-<!-- TOP NAV - SAME -->
+<!-- TOP NAV -->
 <div class="sticky top-0 z-40 bg-[#080808]/80 backdrop-blur-xl border-b border-white/10">
 <div class="max-w-[1440px] mx-auto px-4 md:px-6 h-[64px] flex items-center justify-between gap-3">
 <div class="flex items-center gap-3">
@@ -32,40 +30,52 @@
 </div>
 <div class="flex items-center gap-2">
 <span id="founderEmailBadge" class="hidden md:flex px-3 py-1 rounded-full bg-green-500/10 border border-green-500/20 text-green-400 text-[11px] font-bold max-w-[200px] truncate"></span>
-<button onclick="openAddMemberModal()" class="h-9 px-4 rounded-full bg-[#FFD27A] text-black text-[12px] font-black flex items-center gap-2"><i class="fa-solid fa-plus"></i><span class="hidden sm:inline">Add Chef</span><span class="sm:hidden">Add</span></button>
-<a href="./members.html" target="_blank" class="h-9 w-9 md:w-auto md:px-4 rounded-full bg-[#111] border border-white/10 flex items-center justify-center md:gap-2 text-[12px] font-bold"><i class="fa-solid fa-external-link"></i><span class="hidden md:inline">Members Page</span></a>
-<button onclick="founderLogout()" class="h-9 w-9 rounded-full bg-[#111] border border-white/10 flex items-center justify-center text-white/60 hover:text-white hover:border-red-500/30"><i class="fa-solid fa-right-from-bracket text-[13px]"></i></button>
+<button onclick="openAddMemberModal()" class="h-9 px-4 rounded-full bg-[#FFD27A] text-black text-[12px] font-black flex items-center gap-2"><i class="fa-solid fa-plus"></i><span class="hidden sm:inline">Add Chef</span></button>
+<a href="./members.html" target="_blank" class="h-9 w-9 md:w-auto md:px-4 rounded-full bg-[#111] border border-white/10 flex items-center justify-center md:gap-2 text-[12px] font-bold"><i class="fa-solid fa-external-link"></i><span class="hidden md:inline">Members</span></a>
+<button onclick="founderLogout()" class="h-9 w-9 rounded-full bg-[#111] border border-white/10 flex items-center justify-center text-white/60 hover:text-white"><i class="fa-solid fa-right-from-bracket text-[13px]"></i></button>
 </div>
 </div>
 </div>
 
 <div class="max-w-[1440px] mx-auto px-4 md:px-6 py-6">
-<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3">
+<!-- STATS -->
+<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-9 gap-3">
 <div class="bg-[#111] border border-white/10 rounded-[20px] p-4"><p class="text-[10px] font-black tracking-widest text-white/30">TOTAL CHEFS</p><p id="statTotal" class="text-[26px] font-black mt-1">0</p></div>
-<div class="bg-[#111] border border-yellow-500/20 rounded-[20px] p-4"><p class="text-[10px] font-black tracking-widest text-yellow-400/60">PENDING REVIEW</p><p id="statPending" class="text-[26px] font-black mt-1 text-yellow-400">0</p></div>
+<div class="bg-[#111] border border-yellow-500/20 rounded-[20px] p-4"><p class="text-[10px] font-black tracking-widest text-yellow-400/60">PENDING CHEFS</p><p id="statPending" class="text-[26px] font-black mt-1 text-yellow-400">0</p></div>
 <div class="bg-[#111] border border-green-500/20 rounded-[20px] p-4"><p class="text-[10px] font-black tracking-widest text-green-400/60">VERIFIED</p><p id="statApproved" class="text-[26px] font-black mt-1 text-green-400">0</p></div>
 <div class="bg-[#111] border border-[#FFD27A]/20 rounded-[20px] p-4"><p class="text-[10px] font-black tracking-widest text-[#FFD27A]">FOUNDER</p><p id="statFounder" class="text-[26px] font-black mt-1 text-[#FFD27A]">0</p></div>
 <div class="bg-[#111] border border-purple-500/20 rounded-[20px] p-4"><p class="text-[10px] font-black tracking-widest text-purple-400/60">CO-FOUNDER</p><p id="statCoFounder" class="text-[26px] font-black mt-1 text-purple-400">0</p></div>
 <div class="bg-[#111] border border-white/10 rounded-[20px] p-4"><p class="text-[10px] font-black tracking-widest text-purple-400/60">VIP</p><p id="statVIP" class="text-[26px] font-black mt-1 text-purple-400">0</p></div>
 <div class="bg-[#111] border border-red-500/20 rounded-[20px] p-4"><p class="text-[10px] font-black tracking-widest text-red-400/60">BANNED</p><p id="statBanned" class="text-[26px] font-black mt-1 text-red-400">0</p></div>
-<div class="bg-[#111] border border-white/10 rounded-[20px] p-4"><p class="text-[10px] font-black tracking-widest text-orange-400/60">RECIPES</p><p id="statRecipesTotal" class="text-[26px] font-black mt-1 text-orange-400">0</p></div>
+<div class="bg-[#111] border border-orange-400/20 rounded-[20px] p-4"><p class="text-[10px] font-black tracking-widest text-orange-400/60">PENDING RECIPES</p><p id="statPendingRecipes" class="text-[26px] font-black mt-1 text-orange-400">0</p></div>
+<div class="bg-[#111] border border-green-400/20 rounded-[20px] p-4"><p class="text-[10px] font-black tracking-widest text-green-400/60">APPROVED RECIPES</p><p id="statApprovedRecipes" class="text-[26px] font-black mt-1 text-green-400">0</p></div>
 </div>
 
+<!-- TABS -->
 <div class="mt-8 flex gap-2 overflow-x-auto pb-2">
-<button onclick="switchTab('review')" id="tabReview" class="shrink-0 px-5 py-2.5 rounded-full bg-[#FFD27A] text-black text-[13px] font-black flex items-center gap-2"><i class="fa-solid fa-clipboard-check"></i> Application Review <span id="tabPendingBadge" class="px-2 py-0.5 rounded-full bg-black text-[#FFD27A] text-[10px]">0</span></button>
+<button onclick="switchTab('review')" id="tabReview" class="shrink-0 px-5 py-2.5 rounded-full bg-[#FFD27A] text-black text-[13px] font-black flex items-center gap-2"><i class="fa-solid fa-clipboard-check"></i> Chef Review <span id="tabPendingBadge" class="px-2 py-0.5 rounded-full bg-black text-[#FFD27A] text-[10px]">0</span></button>
+<button onclick="switchTab('recipePending')" id="tabRecipePending" class="shrink-0 px-5 py-2.5 rounded-full bg-[#111] border border-white/10 text-white/60 text-[13px] font-bold flex items-center gap-2"><i class="fa-solid fa-clock"></i> Recipe Approval <span id="tabRecipePendingBadge" class="px-2 py-0.5 rounded-full bg-orange-500 text-black text-[10px] font-black">0</span></button>
 <button onclick="switchTab('chefs')" id="tabChefs" class="shrink-0 px-5 py-2.5 rounded-full bg-[#111] border border-white/10 text-white/60 text-[13px] font-bold flex items-center gap-2"><i class="fa-solid fa-users"></i> All Chefs</button>
-<button onclick="switchTab('recipes')" id="tabRecipes" class="shrink-0 px-5 py-2.5 rounded-full bg-[#111] border border-white/10 text-white/60 text-[13px] font-bold flex items-center gap-2"><i class="fa-solid fa-utensils"></i> Recipes</button>
+<button onclick="switchTab('recipes')" id="tabRecipes" class="shrink-0 px-5 py-2.5 rounded-full bg-[#111] border border-white/10 text-white/60 text-[13px] font-bold flex items-center gap-2"><i class="fa-solid fa-utensils"></i> Approved Recipes</button>
 <button onclick="switchTab('banned')" id="tabBanned" class="shrink-0 px-5 py-2.5 rounded-full bg-[#111] border border-white/10 text-white/60 text-[13px] font-bold flex items-center gap-2"><i class="fa-solid fa-ban"></i> Banned</button>
 </div>
 
+<!-- CHEF REVIEW TAB -->
 <div id="reviewTab">
 <div class="mt-6 flex flex-col md:flex-row gap-3">
-<input id="searchReview" placeholder="Search pending..." class="flex-1 h-[46px] px-5 rounded-full bg-[#111] border border-white/10 outline-none text-[13px]"/>
+<input id="searchReview" placeholder="Search pending chefs..." class="flex-1 h-[46px] px-5 rounded-full bg-[#111] border border-white/10 outline-none text-[13px]"/>
 <select id="sortReview" class="h-[46px] px-5 rounded-full bg-[#111] border border-white/10 outline-none text-[13px] font-bold"><option value="newest">Newest First</option><option value="oldest">Oldest First</option></select>
 </div>
 <div id="reviewList" class="mt-6 grid gap-4"></div>
 </div>
 
+<!-- RECIPE APPROVAL TAB -->
+<div id="recipePendingTab" class="hidden">
+<div class="mt-6 flex gap-3"><input id="searchPendingRecipes" placeholder="Search pending recipes..." class="flex-1 h-[46px] px-5 rounded-full bg-[#111] border border-white/10 outline-none text-[13px]"/></div>
+<div id="pendingRecipeList" class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+</div>
+
+<!-- CHEFS TAB -->
 <div id="chefsTab" class="hidden">
 <div class="mt-6 flex flex-col md:flex-row gap-3">
 <input id="search" placeholder="Search verified chefs..." class="flex-1 h-[46px] px-5 rounded-full bg-[#111] border border-white/10 outline-none text-[13px]"/>
@@ -74,25 +84,45 @@
 <div id="list" class="mt-6 grid gap-4"></div>
 </div>
 
+<!-- APPROVED RECIPES TAB - ONLY DELETE -->
 <div id="recipesTab" class="hidden">
-<div class="mt-6 flex gap-3"><input id="searchRecipes" placeholder="Search recipes..." class="flex-1 h-[46px] px-5 rounded-full bg-[#111] border border-white/10 outline-none text-[13px]"/><select id="filterRecipeStatus" class="h-[46px] px-5 rounded-full bg-[#111] border border-white/10 outline-none text-[13px] font-bold"><option value="">All</option><option value="pending">Pending</option><option value="approved">Approved</option></select></div>
+<div class="mt-6 flex gap-3"><input id="searchRecipes" placeholder="Search approved recipes..." class="flex-1 h-[46px] px-5 rounded-full bg-[#111] border border-white/10 outline-none text-[13px]"/><div class="h-[46px] px-5 rounded-full bg-green-500/10 border border-green-500/20 text-green-400 text-[12px] font-bold flex items-center gap-2"><span class="w-2 h-2 bg-green-500 rounded-full"></span>Approved Only</div></div>
 <div id="recipeList" class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
 </div>
 
+<!-- BANNED TAB -->
 <div id="bannedTab" class="hidden"><div id="bannedList" class="mt-6 grid gap-4"></div></div>
 </div>
 
-<!-- MODALS SAME -->
+<!-- CONFIRMATION MODAL -->
+<div id="confirmModal" class="fixed inset-0 z-[300] hidden">
+<div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="closeConfirm()"></div>
+<div class="relative min-h-screen flex items-center justify-center p-4">
+<div class="bg-[#141414] border border-white/15 rounded-[28px] p-6 w-full max-w-[420px] text-center">
+<div id="confirmIcon" class="w-14 h-14 rounded-full bg-[#222] text-white flex items-center justify-center mx-auto"><i class="fa-solid fa-triangle-exclamation"></i></div>
+<h3 id="confirmTitle" class="mt-4 font-black text-[18px]">Are you sure?</h3>
+<p id="confirmDesc" class="mt-2 text-[12px] text-white/50 leading-5"></p>
+<div id="confirmInputWrap" class="hidden mt-4"><input id="confirmInput" placeholder='Type DELETE to confirm' class="w-full h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px] text-center"/></div>
+<div class="mt-6 flex gap-2">
+<button onclick="closeConfirm()" class="flex-1 h-11 rounded-full bg-[#222] text-white font-bold text-[13px]">Cancel</button>
+<button id="confirmYes" class="flex-1 h-11 rounded-full bg-white text-black font-black text-[13px]">Confirm</button>
+</div>
+</div>
+</div>
+</div>
+
+<!-- REVIEW MODAL -->
 <div id="reviewModal" class="fixed inset-0 z-[200] hidden"><div class="absolute inset-0 bg-black/90 backdrop-blur-md" onclick="closeReviewModal()"></div>
 <div class="relative min-h-screen flex items-center justify-center p-3 md:p-6"><div class="bg-[#141414] border border-white/15 rounded-[28px] w-full max-w-[780px] max-h-[92vh] overflow-y-auto">
 <div class="sticky top-0 bg-[#141414]/95 backdrop-blur-xl border-b border-white/10 p-5 flex justify-between items-center z-10"><div><h3 class="font-black text-[18px]"><i class="fa-solid fa-clipboard-check text-[#FFD27A] mr-2"></i>Application Review</h3><p id="reviewId" class="text-[10px] font-mono text-white/30 mt-1"></p></div><button onclick="closeReviewModal()" class="w-9 h-9 rounded-full bg-[#222] flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button></div>
 <div id="reviewContent" class="p-5 md:p-7"></div>
 <div class="sticky bottom-0 bg-[#141414]/95 backdrop-blur-xl border-t border-white/10 p-4 flex gap-2">
-<button onclick="rejectFromReview()" class="flex-1 h-12 rounded-full bg-[#222] border border-red-500/30 text-red-400 font-bold text-[13px]">Reject</button>
-<button onclick="approveFromReview()" class="flex-1 h-12 rounded-full bg-[#FFD27A] text-black font-black text-[13px]">Approve & Verify</button>
+<button onclick="askRejectFromReview()" class="flex-1 h-12 rounded-full bg-[#222] border border-red-500/30 text-red-400 font-bold text-[13px]">Reject</button>
+<button onclick="askApproveFromReview()" class="flex-1 h-12 rounded-full bg-[#FFD27A] text-black font-black text-[13px]">Approve & Verify</button>
 </div>
 </div></div></div>
 
+<!-- ACTION MODAL -->
 <div id="actionModal" class="fixed inset-0 z-[150] hidden"><div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="closeActionModal()"></div>
 <div class="relative min-h-screen flex items-center justify-center p-4"><div class="bg-[#141414] border border-white/10 rounded-[28px] p-6 w-full max-w-[520px]">
 <h3 class="font-black text-[18px] flex items-center gap-2"><span class="w-9 h-9 rounded-full bg-white text-black flex items-center justify-center"><i class="fa-solid fa-bolt"></i></span> Founder Actions</h3>
@@ -101,6 +131,7 @@
 <div class="mt-6"><button onclick="closeActionModal()" class="w-full h-11 rounded-full bg-[#222] text-white font-bold text-[13px]">Close</button></div>
 </div></div></div>
 
+<!-- BAN MODAL -->
 <div id="banModal" class="fixed inset-0 z-[200] hidden"><div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="closeBanModal()"></div><div class="relative min-h-screen flex items-center justify-center p-4"><div class="bg-[#141414] border border-red-500/20 rounded-[28px] p-6 w-full max-w-[460px]">
 <h3 class="font-black text-[18px] text-red-400"><i class="fa-solid fa-ban mr-2"></i>Ban Chef</h3><p id="banName" class="text-[12px] text-white/50 mt-1"></p>
 <select id="banDuration" class="mt-4 w-full h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px]"><option value="7">7 Days</option><option value="30">30 Days</option><option value="90">90 Days</option><option value="permanent">Permanent</option></select>
@@ -108,6 +139,7 @@
 <div class="mt-5 flex gap-2"><button onclick="closeBanModal()" class="flex-1 h-11 rounded-full bg-[#222] text-white">Cancel</button><button onclick="confirmBan()" class="flex-1 h-11 rounded-full bg-red-500 text-black font-black">Confirm Ban</button></div>
 </div></div></div>
 
+<!-- ADD MODAL -->
 <div id="addModal" class="fixed inset-0 z-[100] hidden"><div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="closeAddMemberModal()"></div><div class="relative min-h-screen flex items-center justify-center p-4"><div class="bg-[#141414] border border-white/10 rounded-[28px] p-6 w-full max-w-[600px] max-h-[90vh] overflow-y-auto"><h3 class="font-black text-[18px]">Add Chef Directly — Founder</h3>
 <div class="mt-5 grid grid-cols-1 md:grid-cols-2 gap-3">
 <input id="addName" placeholder="Full Name *" class="h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px]"/>
@@ -117,30 +149,53 @@
 <div id="founderRoleDiv" class="hidden md:col-span-2 p-3 rounded-[16px] bg-[#FFD27A]/10 border border-[#FFD27A]/30"><select id="addFounderRole" class="w-full h-[44px] px-4 rounded-full bg-black border border-[#FFD27A]/50 outline-none text-[13px] font-bold"><option value="Founder">👑 Founder</option><option value="Co-Founder">🤝 Co-Founder</option></select></div>
 <input id="addPhotoUrl" placeholder="Profile Photo URL *" class="md:col-span-2 h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px]"/>
 </div>
-<div class="mt-5 flex gap-2"><button onclick="closeAddMemberModal()" class="flex-1 h-11 rounded-full bg-[#222] text-white">Cancel</button><button onclick="confirmAddMember()" id="addChefBtn" class="flex-1 h-11 rounded-full bg-[#FFD27A] text-black font-black">Add Verified</button></div>
+<div class="mt-5 flex gap-2"><button onclick="closeAddMemberModal()" class="flex-1 h-11 rounded-full bg-[#222] text-white">Cancel</button><button onclick="askAddMember()" id="addChefBtn" class="flex-1 h-11 rounded-full bg-[#FFD27A] text-black font-black">Add Verified</button></div>
 </div></div></div>
+
+<!-- RECIPE DETAIL MODAL -->
+<div id="recipeDetailModal" class="fixed inset-0 z-[200] hidden"><div class="absolute inset-0 bg-black/90 backdrop-blur-md" onclick="closeRecipeDetail()"></div><div class="relative min-h-screen flex items-center justify-center p-3 md:p-6"><div class="bg-[#141414] border border-white/15 rounded-[28px] w-full max-w-[700px] max-h-[92vh] overflow-y-auto"><div class="sticky top-0 bg-[#141414]/95 backdrop-blur-xl border-b border-white/10 p-5 flex justify-between items-center"><h3 class="font-black text-[16px]">Recipe Review</h3><button onclick="closeRecipeDetail()" class="w-9 h-9 rounded-full bg-[#222] flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button></div><div id="recipeDetailContent" class="p-5"></div></div></div></div>
 
 <script>
 var firebaseConfig = { apiKey: "AIzaSyBNNodl0fWwQm42KAublAcSuFO3RQ8fwOE", authDomain: "umbrellaedible.firebaseapp.com", projectId: "umbrellaedible", storageBucket: "umbrellaedible.firebasestorage.app", messagingSenderId: "705948520770", appId: "1:705948520770:web:30d2080cb4191b2881b8db" };
 firebase.initializeApp(firebaseConfig);
 var db = firebase.firestore();
-var auth = firebase.auth(); // kept for member auth creation
-var allDocs=[]; var allRecipes=[]; var currentReviewId=null; var currentBanId=null; var currentActionId=null;
+var allDocs=[]; var allRecipes=[]; var currentReviewId=null; var currentBanId=null; var currentActionId=null; var currentRecipeId=null;
+var pendingConfirmAction=null;
 
 function handleLevelChange(){ document.getElementById('founderRoleDiv').classList.toggle('hidden', document.getElementById('addLevel').value!=='Founder Team'); }
 function getFounderType(c){ var raw=(c.role||c.founderRole||'').toLowerCase(); if(raw==='founder') return 'founder'; if(raw.includes('co')) return 'cofounder'; if(c.level==='Founder Team'){ if((c.name||'').toLowerCase().includes('abhishek')) return 'founder'; if((c.vipBadge||'').toLowerCase().includes('co')) return 'cofounder'; return 'founder'; } return 'normal'; }
+
+// CONFIRM SYSTEM
+function showConfirm(title, desc, type, requireDelete, onYes){
+  document.getElementById('confirmTitle').textContent=title;
+  document.getElementById('confirmDesc').innerHTML=desc;
+  var icon=document.getElementById('confirmIcon');
+  var yesBtn=document.getElementById('confirmYes');
+  if(type==='danger'){ icon.className='w-14 h-14 rounded-full bg-red-500/20 text-red-400 flex items-center justify-center mx-auto'; yesBtn.className='flex-1 h-11 rounded-full bg-red-500 text-black font-black text-[13px]'; yesBtn.textContent='Yes, Delete'; }
+  else if(type==='approve'){ icon.className='w-14 h-14 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center mx-auto'; yesBtn.className='flex-1 h-11 rounded-full bg-green-500 text-black font-black text-[13px]'; yesBtn.textContent='Yes, Approve'; }
+  else { icon.className='w-14 h-14 rounded-full bg-[#FFD27A]/20 text-[#FFD27A] flex items-center justify-center mx-auto'; yesBtn.className='flex-1 h-11 rounded-full bg-white text-black font-black text-[13px]'; yesBtn.textContent='Yes, Confirm'; }
+  document.getElementById('confirmInputWrap').classList.toggle('hidden',!requireDelete);
+  document.getElementById('confirmInput').value='';
+  pendingConfirmAction=onYes;
+  document.getElementById('confirmModal').classList.remove('hidden');
+  document.getElementById('confirmYes').onclick=function(){
+    if(requireDelete && document.getElementById('confirmInput').value!=='DELETE'){ alert('Type DELETE to confirm'); return; }
+    var fn=pendingConfirmAction; closeConfirm(); if(fn) fn();
+  };
+}
+function closeConfirm(){ document.getElementById('confirmModal').classList.add('hidden'); pendingConfirmAction=null; }
+
 function switchTab(tab){
-  document.getElementById('reviewTab').classList.add('hidden'); document.getElementById('chefsTab').classList.add('hidden'); document.getElementById('recipesTab').classList.add('hidden'); document.getElementById('bannedTab').classList.add('hidden');
-  document.getElementById('tabReview').className='shrink-0 px-5 py-2.5 rounded-full bg-[#111] border border-white/10 text-white/60 text-[13px] font-bold flex items-center gap-2';
-  document.getElementById('tabChefs').className='shrink-0 px-5 py-2.5 rounded-full bg-[#111] border border-white/10 text-white/60 text-[13px] font-bold flex items-center gap-2';
-  document.getElementById('tabRecipes').className='shrink-0 px-5 py-2.5 rounded-full bg-[#111] border border-white/10 text-white/60 text-[13px] font-bold flex items-center gap-2';
-  document.getElementById('tabBanned').className='shrink-0 px-5 py-2.5 rounded-full bg-[#111] border border-white/10 text-white/60 text-[13px] font-bold flex items-center gap-2';
+  document.getElementById('reviewTab').classList.add('hidden'); document.getElementById('recipePendingTab').classList.add('hidden'); document.getElementById('chefsTab').classList.add('hidden'); document.getElementById('recipesTab').classList.add('hidden'); document.getElementById('bannedTab').classList.add('hidden');
+  ['tabReview','tabRecipePending','tabChefs','tabRecipes','tabBanned'].forEach(id=>{ document.getElementById(id).className='shrink-0 px-5 py-2.5 rounded-full bg-[#111] border border-white/10 text-white/60 text-[13px] font-bold flex items-center gap-2'; });
   if(tab==='review'){ document.getElementById('reviewTab').classList.remove('hidden'); document.getElementById('tabReview').className='shrink-0 px-5 py-2.5 rounded-full bg-[#FFD27A] text-black text-[13px] font-black flex items-center gap-2'; }
+  if(tab==='recipePending'){ document.getElementById('recipePendingTab').classList.remove('hidden'); document.getElementById('tabRecipePending').className='shrink-0 px-5 py-2.5 rounded-full bg-orange-500 text-black text-[13px] font-black flex items-center gap-2'; }
   if(tab==='chefs'){ document.getElementById('chefsTab').classList.remove('hidden'); document.getElementById('tabChefs').className='shrink-0 px-5 py-2.5 rounded-full bg-white text-black text-[13px] font-black flex items-center gap-2'; }
   if(tab==='recipes'){ document.getElementById('recipesTab').classList.remove('hidden'); document.getElementById('tabRecipes').className='shrink-0 px-5 py-2.5 rounded-full bg-white text-black text-[13px] font-black flex items-center gap-2'; }
   if(tab==='banned'){ document.getElementById('bannedTab').classList.remove('hidden'); document.getElementById('tabBanned').className='shrink-0 px-5 py-2.5 rounded-full bg-red-500 text-black text-[13px] font-black flex items-center gap-2'; }
 }
 
+// LISTENERS
 db.collection('chef_applications').orderBy('createdAt','desc').onSnapshot(function(snap){
   allDocs=[]; var stats={total:0, pending:0, approved:0, vip:0, banned:0, founder:0, cofounder:0};
   snap.forEach(function(doc){ var d=doc.data(); d._id=doc.id; allDocs.push(d); stats.total++; if(d.status==='pending') stats.pending++; if(d.status==='approved') stats.approved++; if(d.isVIP) stats.vip++; if(d.banned || d.status==='banned') stats.banned++; var t=getFounderType(d); if(t==='founder') stats.founder++; if(t==='cofounder') stats.cofounder++; });
@@ -148,9 +203,9 @@ db.collection('chef_applications').orderBy('createdAt','desc').onSnapshot(functi
   document.getElementById('tabPendingBadge').textContent=stats.pending; document.getElementById('liveCount').textContent=stats.pending+' pending • Live';
   applyAll();
 });
-db.collection('member_recipes').orderBy('createdAt','desc').onSnapshot(function(snap){ allRecipes=[]; var total=0; snap.forEach(function(doc){ var d=doc.data(); d._id=doc.id; allRecipes.push(d); total++; }); document.getElementById('statRecipesTotal').textContent=total; applyAll(); });
+db.collection('member_recipes').orderBy('createdAt','desc').onSnapshot(function(snap){ allRecipes=[]; snap.forEach(function(doc){ var d=doc.data(); d._id=doc.id; allRecipes.push(d); }); applyAll(); });
 
-function applyAll(){ renderReview(); renderChefs(); renderRecipes(); renderBanned(); }
+function applyAll(){ renderReview(); renderChefs(); renderPendingRecipes(); renderApprovedRecipes(); renderBanned(); }
 
 function renderReview(){
   var q=(document.getElementById('searchReview').value||'').toLowerCase(); var sort=document.getElementById('sortReview').value;
@@ -162,10 +217,35 @@ function renderReview(){
   list.forEach(function(d){
     var photo=d.photoUrl||'https://ui-avatars.com/api/?name='+encodeURIComponent(d.name||'Chef');
     var sample=d.sampleImageUrl||'https://images.unsplash.com/photo-1490818387583-1baba5e638af?w=600';
-    html+=`<div class="bg-[#111] border border-yellow-500/30 rounded-[24px] p-5"><div class="flex flex-col lg:flex-row gap-5"><div class="flex gap-4 flex-1"><img src="${photo}" class="w-16 h-16 rounded-full object-cover border-2 border-yellow-500/30 shrink-0"/><div class="min-w-0 flex-1"><div class="flex items-center gap-2 flex-wrap"><h3 class="font-black text-[15px]">${d.name}</h3><span class="px-2 py-0.5 rounded-full bg-yellow-500 text-black text-[9px] font-black">PENDING REVIEW</span></div><p class="text-[11px] text-white/50 mt-1">${d.email} • ${d.location} • ${d.level}</p><div class="mt-3 bg-[#0a0a0a] rounded-[14px] p-3 border border-white/5"><div class="flex gap-3"><img src="${sample}" class="w-16 h-16 rounded-[10px] object-cover"/><div class="min-w-0"><p class="font-bold text-[13px]">${d.sampleRecipeTitle||'Untitled'}</p><p class="text-[11px] text-white/50 mt-1 line-clamp-2">${(d.ingredients||'').substring(0,80)}...</p></div></div></div></div></div><div class="flex lg:flex-col gap-2 lg:w-[200px] shrink-0"><button onclick="openReviewModal('${d._id}')" class="flex-1 h-11 rounded-full bg-white text-black font-black text-[12px]">Full Review</button><div class="flex gap-2"><button onclick="approve('${d._id}')" class="flex-1 h-10 rounded-full bg-green-500 text-black font-black text-[11px]">Approve</button><button onclick="reject('${d._id}')" class="flex-1 h-10 rounded-full bg-[#222] border border-red-500/30 text-red-400 font-bold text-[11px]">Reject</button></div></div></div></div>`;
+    html+=`<div class="bg-[#111] border border-yellow-500/30 rounded-[24px] p-5"><div class="flex flex-col lg:flex-row gap-5"><div class="flex gap-4 flex-1"><img src="${photo}" class="w-16 h-16 rounded-full object-cover border-2 border-yellow-500/30 shrink-0"/><div class="min-w-0 flex-1"><div class="flex items-center gap-2 flex-wrap"><h3 class="font-black text-[15px]">${d.name}</h3><span class="px-2 py-0.5 rounded-full bg-yellow-500 text-black text-[9px] font-black">PENDING REVIEW</span></div><p class="text-[11px] text-white/50 mt-1">${d.email} • ${d.location} • ${d.level}</p><div class="mt-3 bg-[#0a0a0a] rounded-[14px] p-3 border border-white/5"><div class="flex gap-3"><img src="${sample}" class="w-16 h-16 rounded-[10px] object-cover"/><div class="min-w-0"><p class="font-bold text-[13px]">${d.sampleRecipeTitle||'Untitled'}</p><p class="text-[11px] text-white/50 mt-1 line-clamp-2">${(d.ingredients||'').substring(0,80)}...</p></div></div></div></div></div><div class="flex lg:flex-col gap-2 lg:w-[200px] shrink-0"><button onclick="openReviewModal('${d._id}')" class="flex-1 h-11 rounded-full bg-white text-black font-black text-[12px]">Full Review</button><div class="flex gap-2"><button onclick="askApprove('${d._id}')" class="flex-1 h-10 rounded-full bg-green-500 text-black font-black text-[11px]">Approve</button><button onclick="askReject('${d._id}')" class="flex-1 h-10 rounded-full bg-[#222] border border-red-500/30 text-red-400 font-bold text-[11px]">Reject</button></div></div></div></div>`;
   });
   el.innerHTML=html;
 }
+
+// RECIPE PENDING - NEW TAB
+function renderPendingRecipes(){
+  var q=(document.getElementById('searchPendingRecipes').value||'').toLowerCase();
+  var list=allRecipes.filter(r=>r.status==='pending').filter(r=>!q||(r.title||'').toLowerCase().includes(q)||(r.chefName||'').toLowerCase().includes(q));
+  document.getElementById('statPendingRecipes').textContent=allRecipes.filter(r=>r.status==='pending').length;
+  document.getElementById('tabRecipePendingBadge').textContent=list.length;
+  var el=document.getElementById('pendingRecipeList');
+  if(!list.length){ el.innerHTML='<div class="col-span-3 py-16 text-center bg-[#111] rounded-[24px] text-white/40"><div class="w-12 h-12 rounded-full bg-orange-500/10 text-orange-400 flex items-center justify-center mx-auto"><i class="fa-solid fa-clock"></i></div><p class="mt-3 font-bold">No pending recipes</p></div>'; return; }
+  var html=''; list.forEach(function(r){
+    html+=`<div class="bg-[#111] border border-orange-500/30 rounded-[20px] overflow-hidden"><img src="${r.imageUrl}" class="w-full h-[150px] object-cover"/><div class="p-4"><div class="flex items-center justify-between"><h3 class="font-bold text-[13px]">${r.title}</h3><span class="px-2 py-0.5 rounded-full bg-orange-500 text-black text-[9px] font-black">PENDING</span></div><p class="text-[11px] text-white/40 mt-1">By ${r.chefName||''} • ${r.cuisine||''} • ${r.cookTime||''}</p><p class="text-[11px] text-white/30 mt-2 line-clamp-2">${(r.ingredients||'').substring(0,100)}...</p><div class="mt-3 flex gap-2"><button onclick="openRecipeDetail('${r._id}')" class="flex-1 h-9 rounded-full bg-white text-black text-[11px] font-bold">View Full</button></div><div class="mt-2 flex gap-2"><button onclick="askApproveRecipe('${r._id}')" class="flex-1 h-9 rounded-full bg-green-500 text-black text-[11px] font-black">Approve</button><button onclick="askDeleteRecipe('${r._id}')" class="flex-1 h-9 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-[11px] font-bold">Reject & Delete</button></div></div></div>`;
+  });
+  el.innerHTML=html;
+}
+
+// APPROVED RECIPES - ONLY DELETE
+function renderApprovedRecipes(){
+  var q=(document.getElementById('searchRecipes').value||'').toLowerCase();
+  var list=allRecipes.filter(r=>r.status==='approved').filter(r=>!q||(r.title||'').toLowerCase().includes(q));
+  document.getElementById('statApprovedRecipes').textContent=allRecipes.filter(r=>r.status==='approved').length;
+  var el=document.getElementById('recipeList');
+  if(!list.length){ el.innerHTML='<div class="col-span-3 py-16 text-center bg-[#111] rounded-[20px] text-white/40">No approved recipes yet</div>'; return; }
+  var html=''; list.forEach(function(r){ html+=`<div class="bg-[#111] border border-green-500/20 rounded-[20px] overflow-hidden"><img src="${r.imageUrl}" class="w-full h-[150px] object-cover"/><div class="p-4"><div class="flex items-center justify-between gap-2"><h3 class="font-bold text-[13px] truncate flex-1">${r.title}</h3><span class="px-2 py-0.5 rounded-full bg-green-500 text-black text-[9px] font-black shrink-0">APPROVED</span></div><p class="text-[11px] text-white/40">${r.chefName||''} • ${r.cuisine||''}</p><div class="mt-3"><button onclick="askDeleteRecipe('${r._id}')" class="w-full h-9 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-[11px] font-bold flex items-center justify-center gap-2"><i class="fa-solid fa-trash"></i> Delete Recipe</button></div></div></div>`; }); el.innerHTML=html;
+}
+
 function renderChefs(){
   var q=(document.getElementById('search').value||'').toLowerCase(); var f=document.getElementById('filterStatus').value;
   var list=allDocs.filter(d=>d.status==='approved'&&!d.banned).filter(d=>{ var type=getFounderType(d); var match=!q||(d.name||'').toLowerCase().includes(q); var status=true; if(f==='founder') status=type==='founder'; if(f==='cofounder') status=type==='cofounder'; if(f==='vip') status=d.isVIP; return match&&status; });
@@ -187,18 +267,30 @@ function renderBanned(){
   var html='';
   list.forEach(function(d){
     var photo=d.photoUrl||'https://ui-avatars.com/api/?name=Chef';
-    html+=`<div class="bg-[#111] border border-red-500/30 rounded-[22px] p-5 flex justify-between gap-4"><div class="flex gap-3"><img src="${photo}" class="w-12 h-12 rounded-full object-cover"/><div><b class="text-[14px]">${d.name}</b><span class="ml-2 px-2 py-0.5 rounded-full bg-red-500 text-black text-[9px] font-black">BANNED</span><p class="text-[11px] text-white/40">${d.email} • ${d.banDuration||''}</p><p class="text-[11px] text-red-300/70 mt-1">Reason: ${d.banReason||''}</p></div></div><div class="flex flex-col gap-2"><button onclick="unban('${d._id}')" class="h-9 px-4 rounded-full bg-white text-black font-black text-[11px]">Unban</button><button onclick="deleteDoc('${d._id}')" class="h-8 px-3 rounded-full bg-[#222] text-white/60 text-[11px]">Delete</button></div></div>`;
+    html+=`<div class="bg-[#111] border border-red-500/30 rounded-[22px] p-5 flex justify-between gap-4"><div class="flex gap-3"><img src="${photo}" class="w-12 h-12 rounded-full object-cover"/><div><b class="text-[14px]">${d.name}</b><span class="ml-2 px-2 py-0.5 rounded-full bg-red-500 text-black text-[9px] font-black">BANNED</span><p class="text-[11px] text-white/40">${d.email} • ${d.banDuration||''}</p><p class="text-[11px] text-red-300/70 mt-1">Reason: ${d.banReason||''}</p></div></div><div class="flex flex-col gap-2"><button onclick="askUnban('${d._id}')" class="h-9 px-4 rounded-full bg-white text-black font-black text-[11px]">Unban</button><button onclick="askDeleteChef('${d._id}')" class="h-8 px-3 rounded-full bg-[#222] text-white/60 text-[11px]">Delete</button></div></div>`;
   });
   el.innerHTML=html;
 }
-function renderRecipes(){
-  var q=(document.getElementById('searchRecipes').value||'').toLowerCase(); var f=document.getElementById('filterRecipeStatus').value;
-  var list=allRecipes.filter(function(r){ var mSearch=!q||(r.title||'').toLowerCase().includes(q); var mStatus=!f||r.status===f; return mSearch&&mStatus; });
-  var el=document.getElementById('recipeList');
-  if(!list.length){ el.innerHTML='<div class="col-span-3 py-16 text-center bg-[#111] rounded-[20px] text-white/40">No recipes</div>'; return; }
-  var html=''; list.forEach(function(r){ html+=`<div class="bg-[#111] border border-white/10 rounded-[20px] overflow-hidden"><img src="${r.imageUrl}" class="w-full h-[150px] object-cover"/><div class="p-4"><h3 class="font-bold text-[13px]">${r.title}</h3><p class="text-[11px] text-white/40">${r.chefName||''}</p><div class="mt-3 flex gap-2"><button onclick="db.collection('member_recipes').doc('${r._id}').update({status:'approved'})" class="h-8 px-3 rounded-full bg-white text-black text-[11px] font-bold">Approve</button><button onclick="db.collection('member_recipes').doc('${r._id}').delete()" class="h-8 px-3 rounded-full bg-red-500 text-black text-[11px] font-black">Delete</button></div></div></div>`; }); el.innerHTML=html;
+
+// CONFIRM WRAPPERS
+function askApprove(id){ showConfirm('Approve Chef?', 'This chef will be verified and shown on Members page.<br><b>'+(allDocs.find(x=>x._id===id)?.name||'')+'</b>', 'approve', false, ()=>{ db.collection('chef_applications').doc(id).update({status:'approved', verified:true, banned:false, reviewedAt: firebase.firestore.FieldValue.serverTimestamp()}); }); }
+function askReject(id){ showConfirm('Reject Application?', 'This application will be rejected. Chef will not be verified.<br><b>'+(allDocs.find(x=>x._id===id)?.name||'')+'</b>', 'danger', false, ()=>{ var r=prompt('Reason for rejection?'); if(r===null) return; db.collection('chef_applications').doc(id).update({status:'rejected', verified:false, rejectionReason:r}); }); }
+function askApproveFromReview(){ if(!currentReviewId) return; askApprove(currentReviewId); closeReviewModal(); }
+function askRejectFromReview(){ if(!currentReviewId) return; askReject(currentReviewId); closeReviewModal(); }
+function askDeleteChef(id){ showConfirm('Delete Chef Forever?', 'This will permanently delete <b>'+(allDocs.find(x=>x._id===id)?.name||'')+'</b> from database. This action cannot be undone.', 'danger', true, ()=>{ db.collection('chef_applications').doc(id).delete(); }); }
+function askUnban(id){ showConfirm('Unban Chef?', 'This chef will be moved back to pending review.<br><b>'+(allDocs.find(x=>x._id===id)?.name||'')+'</b>', 'approve', false, ()=>{ db.collection('chef_applications').doc(id).update({status:'pending', banned:false, banReason: firebase.firestore.FieldValue.delete(), banUntil: firebase.firestore.FieldValue.delete(), banDuration: firebase.firestore.FieldValue.delete()}); }); }
+function askApproveRecipe(id){ var r=allRecipes.find(x=>x._id===id); showConfirm('Approve Recipe?', 'This recipe <b>\"'+(r?.title||'')+'\"</b> by <b>'+(r?.chefName||'')+'</b> will be visible on Explore page.', 'approve', false, ()=>{ db.collection('member_recipes').doc(id).update({status:'approved', approvedAt: firebase.firestore.FieldValue.serverTimestamp()}); }); }
+function askDeleteRecipe(id){ var r=allRecipes.find(x=>x._id===id); showConfirm('Delete Recipe?', 'Are you sure you want to delete recipe <b>\"'+(r?.title||'')+'\"</b>? This cannot be undone.', 'danger', false, ()=>{ db.collection('member_recipes').doc(id).delete(); }); }
+function askSetRole(role){ showConfirm('Set Role to '+role+'?', 'Set <b>'+(allDocs.find(x=>x._id===currentActionId)?.name||'')+'</b> as <b>'+role+'</b>? They will get VIP badge and founder privileges.', 'approve', false, ()=>{ db.collection('chef_applications').doc(currentActionId).update({role:role, founderRole:role, designation:role, level:'Founder Team', isVIP:true, vipBadge:role.toUpperCase(), status:'approved', verified:true}).then(()=>{ closeActionModal(); }); }); }
+function askMakeVIP(){ var badge=prompt('Enter VIP Badge (e.g., TOP CHEF, ELITE)'); if(!badge) return; showConfirm('Make VIP?', 'Give VIP badge <b>\"'+badge.toUpperCase()+'\"</b> to <b>'+(allDocs.find(x=>x._id===currentActionId)?.name||'')+'</b>?', 'approve', false, ()=>{ db.collection('chef_applications').doc(currentActionId).update({isVIP:true, vipBadge:badge.toUpperCase(), status:'approved', verified:true}).then(()=>{ closeActionModal(); }); }); }
+function askAddMember(){
+  var name=document.getElementById('addName').value.trim();
+  var email=document.getElementById('addEmail').value.trim().toLowerCase();
+  if(!name||!email){ alert('Name & Email required'); return; }
+  showConfirm('Add Chef '+name+'?', 'Add <b>'+name+'</b> ('+email+') as verified chef? They will be able to login immediately.', 'approve', false, ()=>{ confirmAddMember(); });
 }
 
+// ORIGINALS NOW WITH CONFIRM
 function openReviewModal(id){
   var d=allDocs.find(x=>x._id===id); if(!d) return; currentReviewId=id;
   document.getElementById('reviewId').textContent=id+' • '+(d.createdAt? new Date(d.createdAt.seconds*1000).toLocaleString() : '');
@@ -207,32 +299,33 @@ function openReviewModal(id){
   document.getElementById('reviewModal').classList.remove('hidden');
 }
 function closeReviewModal(){ document.getElementById('reviewModal').classList.add('hidden'); }
-function approveFromReview(){ if(!currentReviewId) return; db.collection('chef_applications').doc(currentReviewId).update({status:'approved', verified:true, banned:false, reviewedAt: firebase.firestore.FieldValue.serverTimestamp()}).then(()=>{ closeReviewModal(); }); }
-function rejectFromReview(){ if(!currentReviewId) return; var r=prompt('Reason?'); if(r===null) return; db.collection('chef_applications').doc(currentReviewId).update({status:'rejected', verified:false, rejectionReason:r}).then(()=>{ closeReviewModal(); }); }
-function approve(id){ db.collection('chef_applications').doc(id).update({status:'approved', verified:true, banned:false, reviewedAt: firebase.firestore.FieldValue.serverTimestamp()}); }
-function reject(id){ var r=prompt('Reason?'); if(!r) return; db.collection('chef_applications').doc(id).update({status:'rejected', verified:false, rejectionReason:r}); }
-function deleteDoc(id){ if(confirm('Delete?') && prompt('Type DELETE')==='DELETE'){ db.collection('chef_applications').doc(id).delete(); } }
-function unban(id){ db.collection('chef_applications').doc(id).update({status:'pending', banned:false, banReason: firebase.firestore.FieldValue.delete(), banUntil: firebase.firestore.FieldValue.delete(), banDuration: firebase.firestore.FieldValue.delete()}); }
+
+function openRecipeDetail(id){
+  var r=allRecipes.find(x=>x._id===id); if(!r) return; currentRecipeId=id;
+  document.getElementById('recipeDetailContent').innerHTML=`<img src="${r.imageUrl}" class="w-full h-[220px] object-cover rounded-[16px]"/><div class="mt-4"><h3 class="font-black text-[20px]">${r.title}</h3><p class="text-[12px] text-white/50 mt-1">${r.cuisine||''} • ${r.cookTime||''} • ${r.difficulty||''} • ${r.veg||''} • ${r.servings||''}</p><p class="text-[12px] text-white/40 mt-2">By ${r.chefName||''} (${r.chefEmail||''})</p><div class="mt-4"><p class="text-[11px] font-black tracking-widest text-white/30">INGREDIENTS</p><p class="mt-2 text-[13px] leading-6 bg-[#0a0a0a] p-4 rounded-[14px] border border-white/10 whitespace-pre-wrap">${r.ingredients||''}</p></div><div class="mt-4"><p class="text-[11px] font-black tracking-widest text-white/30">STEPS</p><p class="mt-2 text-[13px] leading-6 bg-[#0a0a0a] p-4 rounded-[14px] border border-white/10 whitespace-pre-wrap">${r.steps||''}</p></div><div class="mt-6 flex gap-2"><button onclick="askApproveRecipe('${r._id}'); closeRecipeDetail();" class="flex-1 h-11 rounded-full bg-green-500 text-black font-black text-[13px]">Approve Recipe</button><button onclick="askDeleteRecipe('${r._id}'); closeRecipeDetail();" class="flex-1 h-11 rounded-full bg-red-500/20 border border-red-500/30 text-red-400 font-bold text-[13px]">Delete</button></div></div>`;
+  document.getElementById('recipeDetailModal').classList.remove('hidden');
+}
+function closeRecipeDetail(){ document.getElementById('recipeDetailModal').classList.add('hidden'); }
+
 function openBanModal(id,name){ currentBanId=id; document.getElementById('banName').textContent=name+' ('+id+')'; document.getElementById('banModal').classList.remove('hidden'); }
 function closeBanModal(){ document.getElementById('banModal').classList.add('hidden'); }
-function confirmBan(){ var reason=document.getElementById('banReason').value.trim(); var duration=document.getElementById('banDuration').value; if(!reason){ alert('Enter reason'); return; } var banUntil=null; var text=''; if(duration!=='permanent'){ var days=parseInt(duration); var until=new Date(); until.setDate(until.getDate()+days); banUntil=firebase.firestore.Timestamp.fromDate(until); text=days+' days'; } else text='Permanent'; db.collection('chef_applications').doc(currentBanId).update({status:'banned', banned:true, banReason:reason, banDuration:text, banUntil:banUntil||null, bannedAt: firebase.firestore.FieldValue.serverTimestamp(), verified:false}).then(()=>{ closeBanModal(); }); }
+function confirmBan(){ var reason=document.getElementById('banReason').value.trim(); var duration=document.getElementById('banDuration').value; if(!reason){ alert('Enter reason'); return; } showConfirm('Confirm Ban?', 'Ban <b>'+document.getElementById('banName').textContent+'</b> for <b>'+duration+'</b>?<br>Reason: '+reason, 'danger', false, ()=>{ var banUntil=null; var text=''; if(duration!=='permanent'){ var days=parseInt(duration); var until=new Date(); until.setDate(until.getDate()+days); banUntil=firebase.firestore.Timestamp.fromDate(until); text=days+' days'; } else text='Permanent'; db.collection('chef_applications').doc(currentBanId).update({status:'banned', banned:true, banReason:reason, banDuration:text, banUntil:banUntil||null, bannedAt: firebase.firestore.FieldValue.serverTimestamp(), verified:false}).then(()=>{ closeBanModal(); }); }); }
+
 function openActionModal(id){
   var d=allDocs.find(x=>x._id===id); if(!d) return; currentActionId=id;
   document.getElementById('actionName').textContent=d.name+' • '+d.email+' • '+(d.role||d.level);
   document.getElementById('actionButtons').innerHTML=`
-    <button onclick="setRole('Founder')" class="h-12 rounded-[14px] bg-[#FFD27A] text-black font-black text-[12px]">👑 Set Founder</button>
-    <button onclick="setRole('Co-Founder')" class="h-12 rounded-[14px] bg-[#7C3AED] text-white font-black text-[12px]">🤝 Set Co-Founder</button>
-    <button onclick="makeVIP()" class="h-12 rounded-[14px] bg-[#111] border border-purple-500/30 text-purple-300 font-bold text-[12px]">Make VIP</button>
-    <button onclick="approve(currentActionId); closeActionModal();" class="h-12 rounded-[14px] bg-green-500 text-black font-black text-[12px]">Approve</button>
+    <button onclick="askSetRole('Founder')" class="h-12 rounded-[14px] bg-[#FFD27A] text-black font-black text-[12px]">👑 Set Founder</button>
+    <button onclick="askSetRole('Co-Founder')" class="h-12 rounded-[14px] bg-[#7C3AED] text-white font-black text-[12px]">🤝 Set Co-Founder</button>
+    <button onclick="askMakeVIP()" class="h-12 rounded-[14px] bg-[#111] border border-purple-500/30 text-purple-300 font-bold text-[12px]">Make VIP</button>
+    <button onclick="askApprove(currentActionId); closeActionModal();" class="h-12 rounded-[14px] bg-green-500 text-black font-black text-[12px]">Approve</button>
     <button onclick="openBanModal(currentActionId,'${d.name}'); closeActionModal();" class="h-12 rounded-[14px] bg-[#111] border border-red-500/30 text-red-400 font-bold text-[12px]">Ban</button>
     <button onclick="openReviewModal(currentActionId); closeActionModal();" class="h-12 rounded-[14px] bg-white text-black font-black text-[12px]">View App</button>
-    <button onclick="deleteDoc(currentActionId); closeActionModal();" class="h-12 rounded-[14px] bg-red-500 text-black font-black text-[12px] col-span-2">Delete Forever</button>
+    <button onclick="askDeleteChef(currentActionId); closeActionModal();" class="h-12 rounded-[14px] bg-red-500 text-black font-black text-[12px] col-span-2">Delete Forever</button>
   `;
   document.getElementById('actionModal').classList.remove('hidden');
 }
 function closeActionModal(){ document.getElementById('actionModal').classList.add('hidden'); }
-function setRole(role){ db.collection('chef_applications').doc(currentActionId).update({role:role, founderRole:role, designation:role, level:'Founder Team', isVIP:true, vipBadge:role.toUpperCase(), status:'approved', verified:true}).then(()=>{ closeActionModal(); }); }
-function makeVIP(){ var b=prompt('Badge?'); if(!b) return; db.collection('chef_applications').doc(currentActionId).update({isVIP:true, vipBadge:b.toUpperCase(), status:'approved', verified:true}).then(()=>{ closeActionModal(); }); }
 function openAddMemberModal(){ document.getElementById('addModal').classList.remove('hidden'); }
 function closeAddMemberModal(){ document.getElementById('addModal').classList.add('hidden'); }
 function confirmAddMember(){
@@ -246,7 +339,6 @@ function confirmAddMember(){
   var data={ name:name, email:email, location:location, level:level, role:role||level, founderRole:role, designation:role||level, photoUrl:photo, status:'approved', verified:true, banned:false, createdAt: firebase.firestore.Timestamp.now(), isVIP: role?true:false, vipBadge: role?role.toUpperCase():null };
   document.getElementById('addChefBtn').innerHTML='Adding...';
   db.collection('chef_applications').add(data).then(function(docRef){
-    // Also add to config/founders if founder
     if(role==='Founder' || role==='Co-Founder'){
       db.collection('config').doc('founders').get().then(function(doc){
         var emails = doc.exists && doc.data().emails? doc.data().emails : [];
@@ -257,20 +349,20 @@ function confirmAddMember(){
       });
     }
     document.getElementById('addChefBtn').innerHTML='Add Verified';
-    alert('✅ Chef Added: '+name+' ('+email+')\nHe can now login with email only at /login.html if Founder, or /member-login.html if Chef');
+    alert('✅ Chef Added: '+name);
     closeAddMemberModal();
+    document.getElementById('addName').value=''; document.getElementById('addEmail').value=''; document.getElementById('addLocation').value=''; document.getElementById('addPhotoUrl').value='';
   });
 }
-function applyAll(){ renderReview(); renderChefs(); renderRecipes(); renderBanned(); }
+
 document.getElementById('searchReview').addEventListener('input',renderReview);
 document.getElementById('sortReview').addEventListener('change',renderReview);
+document.getElementById('searchPendingRecipes').addEventListener('input',renderPendingRecipes);
 document.getElementById('search').addEventListener('input',renderChefs);
 document.getElementById('filterStatus').addEventListener('change',renderChefs);
-document.getElementById('searchRecipes').addEventListener('input',renderRecipes);
-document.getElementById('filterRecipeStatus').addEventListener('change',renderRecipes);
+document.getElementById('searchRecipes').addEventListener('input',renderApprovedRecipes);
 switchTab('review');
 
-// ============ NEW EMAIL-ONLY FOUNDER AUTH - SAME AS MEMBER LOGIN ============
 function checkFounderSession(){
   var email = localStorage.getItem('umbrella_founder_email');
   var loginTime = localStorage.getItem('umbrella_founder_login_time');
@@ -279,49 +371,30 @@ function checkFounderSession(){
     window.location.href='https://umbrellaedible-2ln.pages.dev/login.html';
     return;
   }
-  if(!email){
-    window.location.href='https://umbrellaedible-2ln.pages.dev/login.html';
-    return;
-  }
+  if(!email){ window.location.href='https://umbrellaedible-2ln.pages.dev/login.html'; return; }
   document.getElementById('authEmail').textContent=email;
   db.collection('config').doc('founders').get().then(function(doc){
     var allowed = doc.exists && doc.data().emails? doc.data().emails.map(e=>e.toLowerCase()) : [];
     db.collection('chef_applications').where('email','==',email).get().then(function(snap){
       var isFounder = allowed.includes(email);
-      snap.forEach(function(d){
-        var data=d.data();
-        var role=(data.role||data.founderRole||'').toLowerCase();
-        if(role.includes('founder') || data.level==='Founder Team' || data.isVIP) isFounder=true;
-      });
+      snap.forEach(function(d){ var data=d.data(); var role=(data.role||data.founderRole||'').toLowerCase(); if(role.includes('founder') || data.level==='Founder Team' || data.isVIP) isFounder=true; });
       if(!isFounder){
-        // First time founder auto-create config
-        if(!doc.exists){
-          db.collection('config').doc('founders').set({emails:[email]}).then(function(){
-            document.getElementById('authGuard').classList.add('hidden');
-            document.getElementById('founderEmailBadge').textContent=email+' • Founder';
-            document.getElementById('founderEmailBadge').classList.remove('hidden');
-          });
-        } else {
-          alert('Not authorized founder: '+email);
-          localStorage.clear();
-          window.location.href='https://umbrellaedible-2ln.pages.dev/login.html';
-        }
-      } else {
-        document.getElementById('authGuard').classList.add('hidden');
-        document.getElementById('founderEmailBadge').textContent=email+' • Founder';
-        document.getElementById('founderEmailBadge').classList.remove('hidden');
-      }
+        if(!doc.exists){ db.collection('config').doc('founders').set({emails:[email]}).then(function(){ document.getElementById('authGuard').classList.add('hidden'); document.getElementById('founderEmailBadge').textContent=email+' • Founder'; document.getElementById('founderEmailBadge').classList.remove('hidden'); }); }
+        else { alert('Not authorized founder: '+email); localStorage.clear(); window.location.href='https://umbrellaedible-2ln.pages.dev/login.html'; }
+      } else { document.getElementById('authGuard').classList.add('hidden'); document.getElementById('founderEmailBadge').textContent=email+' • Founder'; document.getElementById('founderEmailBadge').classList.remove('hidden'); }
     });
   }).catch(function(){ document.getElementById('authGuard').classList.add('hidden'); });
 }
 checkFounderSession();
 function founderLogout(){
-  localStorage.removeItem('umbrella_founder_email');
-  localStorage.removeItem('umbrella_founder_name');
-  localStorage.removeItem('umbrella_founder_id');
-  localStorage.removeItem('umbrella_founder_role');
-  localStorage.removeItem('umbrella_founder_login_time');
-  window.location.href='https://umbrellaedible-2ln.pages.dev/login.html';
+  showConfirm('Logout?', 'Are you sure you want to logout from Founder Console?', 'danger', false, ()=>{
+    localStorage.removeItem('umbrella_founder_email');
+    localStorage.removeItem('umbrella_founder_name');
+    localStorage.removeItem('umbrella_founder_id');
+    localStorage.removeItem('umbrella_founder_role');
+    localStorage.removeItem('umbrella_founder_login_time');
+    window.location.href='https://umbrellaedible-2ln.pages.dev/login.html';
+  });
 }
 </script>
 </body>
