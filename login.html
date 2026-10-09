@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>body{font-family:'Plus Jakarta Sans',sans-serif;background:#080808;color:#fff}</style>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 </head>
 <body class="min-h-screen flex items-center justify-center p-4">
@@ -19,26 +20,35 @@
 <div class="bg-[#111] border border-white/10 rounded-[32px] p-8">
 <div class="w-12 h-12 rounded-full bg-white text-black flex items-center justify-center mx-auto"><i class="fa-solid fa-crown"></i></div>
 <h1 class="mt-5 text-center font-black text-[24px]">Founder Login</h1>
-<p class="mt-2 text-center text-[12px] text-white/40">Email-only check from Firebase</p>
+<p class="mt-2 text-center text-[12px] text-white/40">Firebase check first — like member login</p>
 
 <div class="mt-8 space-y-3">
-<input id="email" type="email" placeholder="Founder Email" value="" class="w-full h-[48px] px-5 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px]"/>
+<input id="email" type="email" placeholder="Founder Email" value="abhishek.umbrellacorporation@gmail.com" class="w-full h-[48px] px-5 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px]"/>
+<div class="relative">
+<input id="password" type="password" placeholder="Password" class="w-full h-[48px] px-5 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px]"/>
+<button onclick="togglePass()" type="button" class="absolute right-4 top-1/2 -translate-y-1/2 text-white/30"><i id="eyeIcon" class="fa-solid fa-eye"></i></button>
+</div>
 <p id="error" class="hidden text-[12px] text-red-400 bg-red-500/10 border border-red-500/20 rounded-[14px] p-3 whitespace-pre-wrap"></p>
 <p id="success" class="hidden text-[12px] text-green-400 bg-green-500/10 border border-green-500/20 rounded-[14px] p-3"></p>
+
 <button onclick="login()" id="loginBtn" class="w-full h-[48px] rounded-full bg-[#FFD27A] text-black font-black text-[13px] flex items-center justify-center gap-2"><i class="fa-solid fa-crown"></i> Check & Enter Console</button>
-<p class="text-center text-[10px] text-white/20">No password needed</p>
+<button onclick="sendReset()" class="w-full text-[11px] text-white/30 hover:text-white/60">Forgot password? Send reset link</button>
 </div>
 
-
+<div class="mt-8 pt-6 border-t border-white/10">
+<p class="text-[10px] font-black tracking-widest text-white/30">AUTHORIZED FOUNDERS FROM FIREBASE</p>
+<div id="founderList" class="mt-3 space-y-2 text-[11px] text-white/50">Loading...</div>
 </div>
+</div>
+<p class="mt-4 text-center text-[11px] text-white/20">UMBRELLAedible 2026 • Founder Only</p>
 </div>
 
 <script>
 var firebaseConfig = { apiKey: "AIzaSyBNNodl0fWwQm42KAublAcSuFO3RQ8fwOE", authDomain: "umbrellaedible.firebaseapp.com", projectId: "umbrellaedible", storageBucket: "umbrellaedible.firebasestorage.app", messagingSenderId: "705948520770", appId: "1:705948520770:web:30d2080cb4191b2881b8db" };
 firebase.initializeApp(firebaseConfig);
 var db = firebase.firestore();
+var auth = firebase.auth();
 
-// SUPER ADMIN - ALWAYS ALLOWED - NO FIREBASE NEEDED
 var SUPER_ADMINS = [
   "abhishek.umbrellacorporation@gmail.com",
   "abhishek@umbrellaedible.com",
@@ -48,97 +58,81 @@ var SUPER_ADMINS = [
 ].map(e=>e.toLowerCase());
 
 function loadFounders(){
+  var el=document.getElementById('founderList');
+  if(!el) return;
   db.collection('config').doc('founders').get().then(doc=>{
     var list = doc.exists && doc.data().emails? doc.data().emails : SUPER_ADMINS;
-    db.collection('chef_applications').where('role','in',['Founder','Co-Founder']).get().then(snap=>{
-      snap.forEach(d=>{ var em=d.data().email; if(em &&!list.map(x=>x.toLowerCase()).includes(em.toLowerCase())) list.push(em); });
-      if(!list.length) list = SUPER_ADMINS;
-      document.getElementById('founderList').innerHTML = list.map(e=>`<div class="flex items-center gap-2"><span class="w-1.5 h-1.5 ${SUPER_ADMINS.includes(e.toLowerCase())?'bg-[#FFD27A]':'bg-green-500'} rounded-full"></span>${e} ${SUPER_ADMINS.includes(e.toLowerCase())?'<span class="px-1.5 py-0.5 rounded bg-[#FFD27A]/20 text-[#FFD27A] text-[9px]">SUPER</span>':''}</div>`).join('');
-    }).catch(()=>{ document.getElementById('founderList').innerHTML = list.map(e=>`<div>${e}</div>`).join(''); });
-  }).catch(()=>{ document.getElementById('founderList').innerHTML = SUPER_ADMINS.map(e=>`<div>${e} (SUPER)</div>`).join(''); });
+    el.innerHTML = list.map(e=>`<div class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>${e}</div>`).join('');
+  }).catch(()=>{ el.innerHTML = SUPER_ADMINS.map(e=>`<div>${e}</div>`).join(''); });
 }
 loadFounders();
 
-function fixMyEmail(){
-  var email = "abhishek.umbrellacorporation@gmail.com";
-  db.collection('config').doc('founders').set({emails: SUPER_ADMINS}, {merge:true}).then(()=>{
-    return db.collection('chef_applications').where('email','==',email).get();
-  }).then(snap=>{
-    if(snap.empty){
-      return db.collection('chef_applications').add({
-        name: "Abhishek Ganguly",
-        email: email,
-        role: "Founder",
-        founderRole: "Founder",
-        level: "Founder Team",
-        designation: "Founder",
-        status: "approved",
-        verified: true,
-        banned: false,
-        isVIP: true,
-        vipBadge: "FOUNDER",
-        location: "Bhopal",
-        photoUrl: "",
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-    }
-  }).then(()=>{ alert('✅ Fixed! Your email added to Firebase. Now click Login.'); loadFounders(); }).catch(e=>alert('Error: '+e.message));
-}
-
+function togglePass(){ var p=document.getElementById('password'); var icon=document.getElementById('eyeIcon'); if(p.type==='password'){ p.type='text'; icon.className='fa-solid fa-eye-slash'; } else { p.type='password'; icon.className='fa-solid fa-eye'; } }
 function showError(msg){ var el=document.getElementById('error'); el.textContent=msg; el.classList.remove('hidden'); document.getElementById('success').classList.add('hidden'); }
 function showSuccess(msg){ var el=document.getElementById('success'); el.textContent=msg; el.classList.remove('hidden'); document.getElementById('error').classList.add('hidden'); }
 
 function login(){
   var email=document.getElementById('email').value.trim().toLowerCase();
-  if(!email){ showError('Enter founder email'); return; }
-  document.getElementById('loginBtn').innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Checking...';
+  var pass=document.getElementById('password').value;
+  if(!email||!pass){ showError('Enter email & password'); return; }
+  document.getElementById('loginBtn').innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Checking Firebase...';
 
-  // SUPER ADMIN BYPASS - CHECK FIRST BEFORE FIREBASE
-  if(SUPER_ADMINS.includes(email)){
-    localStorage.setItem('umbrella_founder_email', email);
-    localStorage.setItem('umbrella_founder_name', 'Abhishek Ganguly');
-    localStorage.setItem('umbrella_founder_id', 'super_admin');
-    localStorage.setItem('umbrella_founder_role', 'Founder');
-    localStorage.setItem('umbrella_founder_login_time', Date.now().toString());
-    // Auto-add to Firebase for future
-    db.collection('config').doc('founders').set({emails: SUPER_ADMINS}, {merge:true});
-    showSuccess('✅ SUPER ADMIN verified! Redirecting...');
-    setTimeout(()=>{ window.location.href='https://umbrellaedible-2ln.pages.dev/admin-panel.html'; }, 600);
-    return;
-  }
-
-  // Normal check
-  db.collection('config').doc('founders').get().then(function(doc){
-    var allowed = doc.exists && doc.data().emails? doc.data().emails.map(e=>e.toLowerCase()) : SUPER_ADMINS;
-    db.collection('chef_applications').where('email','==',email).get().then(function(snap){
-      var isFounderInDB = false; var founderData = null;
+  // STEP 1: CHECK FIREBASE FIRST - SAME AS MEMBER LOGIN
+  db.collection('chef_applications').where('email','==',email).get().then(function(snap){
+    db.collection('config').doc('founders').get().then(function(configDoc){
+      var allowed = configDoc.exists && configDoc.data().emails? configDoc.data().emails.map(e=>e.toLowerCase()) : SUPER_ADMINS;
+      var isFounderInDB = SUPER_ADMINS.includes(email) || allowed.includes(email);
+      var founderData=null;
       if(!snap.empty){
         snap.forEach(function(d){
           var data=d.data();
           var role=(data.role||data.founderRole||'').toLowerCase();
-          if(role.includes('founder') || data.level==='Founder Team' || allowed.includes(email)){
-            isFounderInDB=true; founderData={id:d.id,...data};
+          if(role.includes('founder') || data.level==='Founder Team' || SUPER_ADMINS.includes(email) || allowed.includes(email)){
+            isFounderInDB=true; founderData=data;
           }
         });
       }
-      var isInConfig = allowed.includes(email);
-      if(isInConfig || isFounderInDB){
-        if(founderData && (founderData.banned || founderData.status==='banned')){
-          showError('Banned: '+(founderData.banReason||'')); document.getElementById('loginBtn').innerHTML='<i class="fa-solid fa-crown"></i> Check & Enter Console'; return;
-        }
+      if(!isFounderInDB){
+        showError('❌ Email not found in founder database.\n\nThis email is not registered as founder.\nAsk main founder to add you in Admin Panel > Add Chef > Founder Team\nOr add in Firestore: config/founders -> emails array\n\nYour email: '+email);
+        document.getElementById('loginBtn').innerHTML='<i class="fa-solid fa-crown"></i> Check & Enter Console';
+        return;
+      }
+      if(founderData && (founderData.banned || founderData.status==='banned')){
+        showError('🚫 This founder account is BANNED\nReason: '+(founderData.banReason||'Contact main founder'));
+        document.getElementById('loginBtn').innerHTML='<i class="fa-solid fa-crown"></i> Check & Enter Console';
+        return;
+      }
+
+      // STEP 2: FIREBASE AUTH CHECK - SAME AS MEMBER LOGIN PAGE
+      auth.signInWithEmailAndPassword(email, pass).then(function(cred){
         localStorage.setItem('umbrella_founder_email', email);
         localStorage.setItem('umbrella_founder_name', founderData? founderData.name : email.split('@')[0]);
-        localStorage.setItem('umbrella_founder_id', founderData? founderData.id : 'config_founder');
-        localStorage.setItem('umbrella_founder_role', founderData? (founderData.role||'Founder') : 'Founder');
         localStorage.setItem('umbrella_founder_login_time', Date.now().toString());
-        showSuccess('✅ Founder verified! Redirecting...');
-        setTimeout(function(){ window.location.href='https://umbrellaedible-2ln.pages.dev/admin.html'; }, 600);
-      } else {
-        showError('❌ Email not found.\nClick "Fix: Add my email to Firebase now" button below, then try again.');
+        showSuccess('✅ Founder verified! Redirecting to console...');
+        setTimeout(function(){ window.location.href='https://umbrellaedible-2ln.pages.dev/admin.html'; }, 800);
+      }).catch(function(e){
+        // SAME ERROR MESSAGES AS MEMBER LOGIN
+        if(e.code==='auth/wrong-password'){
+          showError('❌ Wrong password!\n\nThe password you entered is incorrect for '+email+'\n\nTry again or click "Forgot password? Send reset link"');
+        } else if(e.code==='auth/user-not-found'){
+          showError('❌ No login found for this email in Firebase Auth.\n\nFounder is in database but not in Auth.\n\nGo to Firebase Console > Authentication > Add User:\nEmail: '+email+'\nThen try again.\n\nOr click Fix button below.');
+        } else if(e.code==='auth/too-many-requests'){
+          showError('⚠️ Too many wrong attempts. Try after 5 minutes or reset password.');
+        } else if(e.code==='auth/invalid-email'){
+          showError('❌ Invalid email format: '+email);
+        } else {
+          showError('❌ Login failed: '+e.message);
+        }
         document.getElementById('loginBtn').innerHTML='<i class="fa-solid fa-crown"></i> Check & Enter Console';
-      }
+      });
     });
   });
+}
+
+function sendReset(){
+  var email=document.getElementById('email').value.trim().toLowerCase();
+  if(!email){ showError('Enter email first to send reset link'); return; }
+  auth.sendPasswordResetEmail(email).then(function(){ showSuccess('✅ Reset link sent to '+email+'\nCheck inbox / spam folder'); }).catch(function(e){ showError('❌ '+e.message); });
 }
 </script>
 </body>
