@@ -17,18 +17,17 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--ink);color:var(
 .serif{font-family:'Bodoni Moda',serif}
 .instrument{font-family:'Instrument Serif',serif}
 .gold-text{background:linear-gradient(100deg,var(--gold2),var(--gold),#E8C77A,var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.noise::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");opacity:0.03;pointer-events:none;z-index:9999}
-.gold-border{border:1px solid transparent;background:linear-gradient(var(--ink),var(--ink)) padding-box, linear-gradient(135deg,var(--gold2),var(--gold),var(--gold2)) border-box}
-.card:hover{transform:translateY(-4px);border-color:rgba(201,168,106,0.3)}
+.noise::before{content:'';position:fixed;inset:0;pointer-events:none;opacity:0.03;z-index:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.card{transition:all.3s ease}
+.card:hover{transform:translateY(-4px)}
 </style>
 </head>
-<body class="noise min-h-screen">
-
-<!-- HEADER FIXED - NO NESTED A -->
+<body class="noise relative">
+<!-- HEADER - FIXED CLICKABLE LOGO -->
 <header class="sticky top-0 z-50 backdrop-blur-[24px] bg-[#0A0A0B]/80 border-b border-white/[0.06]">
 <div class="max-w-[1280px] mx-auto px-4 md:px-6 h-[72px] flex items-center justify-between">
 <a href="https://umbrellaedible.blogspot.com" class="flex items-center gap-3 no-underline">
-<div class="w-10 h-10 rounded-full bg-[#F5F1E8] text-black flex items-center justify-center shrink-0"><i class="fa-solid fa-utensils text-[13px]"></i></div>
+<div class="w-10 h-10 rounded-full bg-[#F5F1E8] text-black flex items-center justify-center"><i class="fa-solid fa-utensils text-[13px]"></i></div>
 <div>
 <p class="serif font-black text-[16px] leading-none tracking-tight text-white">UMBRELLAedible</p>
 <p class="text-[8px] tracking-[0.22em] text-white/30 font-bold mt-[3px]">MAISON • MMXXVI</p>
@@ -37,107 +36,113 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--ink);color:var(
 </a>
 <div class="flex items-center gap-2">
 <a href="https://umbrellaedible-2ln.pages.dev/members" class="h-9 px-4 rounded-full bg-white/10 border border-white/10 flex items-center gap-2 text-[12px] font-bold"><span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>Chefs</a>
-<a href="https://courageous-travesseiro-b31e7e.netlify.app/" class="h-9 px-5 rounded-full bg-[#F5F1E8] text-black flex items-center gap-2 text-[12px] font-black hover:bg-[#C9A86A] transition"><i class="fa-solid fa-crown text-[10px]"></i> Join</a>
+<a href="https://courageous-travesseiro-b31e7e.netlify.app/" class="h-9 px-5 rounded-full bg-[#F5F1E8] text-black text-[12px] font-black"><i class="fa-solid fa-crown text-[10px] mr-1"></i> Join</a>
 </div>
 </div>
 </header>
 
-<!-- HERO -->
-<div class="max-w-[1280px] mx-auto px-4 md:px-6 pt-12 pb-10">
-<div class="flex items-center gap-4 mb-6">
-<div class="h-[1px] w-12 bg-gradient-to-r from-transparent to-[#C9A86A]"></div>
-<p class="text-[11px] tracking-[0.22em] text-[#C9A86A] font-black">MAISON COLLECTION • MMXXVI</p>
+<main class="relative z-10 max-w-[1280px] mx-auto px-4 md:px-6 py-12">
+<div class="flex items-end justify-between mb-10">
+<div>
+<p class="text-[11px] tracking-[0.2em] text-[#C9A86A] font-black">MAISON COLLECTION</p>
+<h1 class="serif text-[42px] md:text-[56px] font-black leading-[0.9] mt-3">Explore <span class="instrument font-normal italic gold-text">Recipes</span></h1>
 </div>
-<h1 class="serif font-black text-[42px] md:text-[68px] leading-[0.9] tracking-[-0.03em]">Cook. <span class="gold-text italic font-normal instrument">Share.</span> Belong.</h1>
-<p class="mt-4 text-[15px] text-white/60 max-w-[520px] leading-relaxed">Curated luxury recipes from verified Maison chefs. Click any recipe — opens here, no redirect to home.</p>
-<div class="mt-8 flex gap-3">
-<button class="h-11 px-6 rounded-full bg-[#F5F1E8] text-black font-black text-[13px] flex items-center gap-2"><i class="fa-solid fa-compass text-[11px]"></i> Explore Recipes</button>
-<a href="https://umbrellaedible.blogspot.com" class="h-11 px-6 rounded-full bg-white/[0.06] border border-white/[0.08] font-bold text-[13px] flex items-center gap-2"><i class="fa-solid fa-house text-[11px]"></i> Home</a>
-</div>
+<p class="hidden md:block text-[13px] text-white/40 max-w-[280px]">Recipes uploaded via Member Panel. Click to expand full content.</p>
 </div>
 
-<!-- GRID - ALL CLICKABLE -->
-<div class="max-w-[1280px] mx-auto px-4 md:px-6 pb-20">
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+<!-- GRID - DYNAMIC FROM MEMBER PANEL -->
+<div id="grid" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+<div id="empty" class="hidden text-center py-20 text-white/40">No recipes yet. Upload from Member Panel.</div>
+</main>
 
-<!-- CARD 1 -->
-<div onclick="openRecipe('butter')" class="card cursor-pointer gold-border rounded-[22px] overflow-hidden bg-white/[0.03] transition-all duration-300">
-<div class="h-[190px] bg-gradient-to-br from-orange-900/30 to-black relative p-5 flex flex-col justify-between">
-<span class="px-3 py-1 rounded-full bg-[#C9A86A] text-black text-[10px] font-black tracking-widest w-fit">MAISON SIGNATURE</span>
-<i class="fa-solid fa-utensils text-[40px] text-white/10 absolute right-6 bottom-6"></i>
-</div>
-<div class="p-5">
-<h3 class="serif font-bold text-[19px]">Butter Chicken Maison</h3>
-<p class="text-[13px] text-white/50 mt-2 line-clamp-2">Tandoori chicken in silky tomato-cashew gravy, finished with gold dust.</p>
-<div class="mt-4 flex items-center gap-2 text-[11px] text-white/40"><i class="fa-regular fa-clock"></i> 45 min <span class="w-1 h-1 bg-white/20 rounded-full"></span> Chef Verified</div>
-</div>
-</div>
-
-<!-- CARD 2 -->
-<div onclick="openRecipe('truffle')" class="card cursor-pointer gold-border rounded-[22px] overflow-hidden bg-white/[0.03] transition-all duration-300">
-<div class="h-[190px] bg-gradient-to-br from-stone-800 to-black relative p-5">
-<span class="px-3 py-1 rounded-full bg-white/10 border border-white/10 text-[10px] font-black tracking-widest">LUXURY PASTA</span>
-</div>
-<div class="p-5">
-<h3 class="serif font-bold text-[19px]">Black Truffle Pasta</h3>
-<p class="text-[13px] text-white/50 mt-2">Handmade tagliatelle, brown butter, 24-month parmesan, fresh truffle.</p>
-<div class="mt-4 flex items-center gap-2 text-[11px] text-white/40"><i class="fa-regular fa-clock"></i> 25 min</div>
-</div>
-</div>
-
-<!-- CARD 3 -->
-<div onclick="openRecipe('tiramisu')" class="card cursor-pointer gold-border rounded-[22px] overflow-hidden bg-white/[0.03] transition-all duration-300">
-<div class="h-[190px] bg-gradient-to-br from-amber-900/30 to-black relative p-5">
-<span class="px-3 py-1 rounded-full bg-white/10 border border-white/10 text-[10px] font-black tracking-widest">DESSERT</span>
-</div>
-<div class="p-5">
-<h3 class="serif font-bold text-[19px]">Maison Tiramisu</h3>
-<p class="text-[13px] text-white/50 mt-2">Espresso-soaked savoiardi, mascarpone cloud, cocoa veil.</p>
-<div class="mt-4 flex items-center gap-2 text-[11px] text-white/40"><i class="fa-regular fa-clock"></i> 4 hrs chill</div>
-</div>
-</div>
-
-</div>
-</div>
-
-<!-- RECIPE MODAL - NO REDIRECT -->
-<div id="recipeModal" class="fixed inset-0 z-[999] hidden">
-<div class="absolute inset-0 bg-black/80 backdrop-blur-[16px]" onclick="closeRecipe()"></div>
-<div class="relative max-w-[680px] mx-auto mt-[6vh] bg-[#121214] border border-white/10 rounded-[24px] overflow-hidden shadow-[0_20px_80px_rgba(0,0,0,0.6)]">
-<div class="h-[220px] bg-gradient-to-br from-[#C9A86A]/20 to-black p-8 flex flex-col justify-end">
-<p class="text-[10px] tracking-[0.22em] text-[#C9A86A] font-black">MAISON VERIFIED RECIPE</p>
-<h2 id="mTitle" class="serif font-black text-[34px] leading-[0.9] mt-3">Recipe</h2>
-</div>
-<div class="p-8">
-<p id="mDesc" class="text-[14px] leading-relaxed text-white/70">Loading...</p>
-<div class="mt-8 flex gap-3">
-<button onclick="closeRecipe()" class="h-11 px-6 rounded-full bg-[#F5F1E8] text-black font-black text-[12px]">Close</button>
-<a href="https://umbrellaedible.blogspot.com" class="h-11 px-6 rounded-full bg-white/10 border border-white/10 font-bold text-[12px] flex items-center justify-center">Go to Home Blog</a>
-</div>
-</div>
-<button onclick="closeRecipe()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/10 flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+<!-- EXPANDED MODAL - SHOWS FULL MEMBER UPLOAD -->
+<div id="modal" class="fixed inset-0 z-[999] hidden">
+<div class="absolute inset-0 bg-black/85 backdrop-blur-[16px]" onclick="closeModal()"></div>
+<div class="relative max-w-[840px] mx-auto mt-[3vh] mb-[3vh] max-h-[94vh] overflow-y-auto bg-[#121214] border border-white/10 rounded-[28px]">
+<div id="modalContent" class="p-7 md:p-10"></div>
 </div>
 </div>
 
 <script>
-const data={
- butter:{title:"Butter Chicken Maison",desc:"Ingredients: Tandoori chicken, tomato-cashew gravy, butter, cream, kasuri methi. Method: 1. Marinate chicken overnight. 2. Char in tandoor. 3. Make makhani gravy with tomatoes + cashews. 4. Finish with butter + gold leaf. Served only by verified Maison chefs."},
- truffle:{title:"Black Truffle Pasta",desc:"Ingredients: Fresh tagliatelle, black truffle, brown butter, 24M parmesan. Method: Cook pasta al dente, brown butter until nutty, toss pasta, shave truffle tableside."},
- tiramisu:{title:"Maison Tiramisu",desc:"Ingredients: Savoiardi, espresso, mascarpone, cocoa. Chill 4 hours. Luxury plating with gold dust."}
-};
-function openRecipe(id){
- const r=data[id]; document.getElementById('mTitle').innerText=r.title;
- document.getElementById('mDesc').innerText=r.desc;
- document.getElementById('recipeModal').classList.remove('hidden');
- document.body.style.overflow='hidden';
+// FETCH RECIPES FROM MEMBER PANEL STORAGE
+function getRecipes(){
+  try{
+    const local = JSON.parse(localStorage.getItem('umbrella_recipes') || '[]');
+    const member = JSON.parse(localStorage.getItem('maison_recipes') || '[]');
+    const all = [...local,...member];
+    if(all.length) return all;
+  }catch(e){}
+  // Fallback sample if member panel empty
+  return [
+    {id:1, title:"Butter Chicken Maison", chef:"Chef Aanya", time:"45m", image:"https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=800", description:"Creamy tomato, cashew, tandoori legacy recipe", ingredients:["500g chicken","200ml cream","Tomato puree","Cashew paste","Garam masala"], steps:["Marinate chicken 4hrs","Grill till charred","Make makhani gravy","Finish with cream & kasuri methi"], story:"Uploaded via Member Panel - Maison style"},
+  ];
 }
-function closeRecipe(){
- document.getElementById('recipeModal').classList.add('hidden');
- document.body.style.overflow='';
-}
-</script>
 
+function render(){
+  const grid = document.getElementById('grid');
+  const recipes = getRecipes();
+  if(!recipes.length){document.getElementById('empty').classList.remove('hidden'); return;}
+  grid.innerHTML = recipes.map(r=>`
+    <div onclick='openRecipe(${JSON.stringify(r).replace(/'/g,"&#39;")})' class="card cursor-pointer group rounded-[22px] overflow-hidden bg-white/[0.04] border border-white/[0.06] hover:border-[#C9A86A]/30">
+      <div class="h-[200px] overflow-hidden relative">
+        <img src="${r.image || 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800'}" class="w-full h-full object-cover group-hover:scale-[1.05] transition duration-500"/>
+        <div class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur text-[9px] font-black tracking-widest text-white border border-white/10">${r.chef || 'MAISON CHEF'}</div>
+      </div>
+      <div class="p-5">
+        <h3 class="serif text-[20px] font-bold leading-tight">${r.title}</h3>
+        <p class="text-[12px] text-white/50 mt-2 line-clamp-2">${r.description || ''}</p>
+        <div class="mt-4 flex items-center justify-between">
+          <span class="text-[11px] text-white/30"><i class="fa-regular fa-clock mr-1"></i> ${r.time || '30m'}</span>
+          <span class="text-[11px] font-black tracking-widest text-[#C9A86A]">EXPAND →</span>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function openRecipe(r){
+  if(typeof r === 'string') r = JSON.parse(r);
+  document.getElementById('modalContent').innerHTML = `
+    <div class="flex justify-between items-start gap-4">
+      <div>
+        <p class="text-[10px] tracking-[0.22em] text-[#C9A86A] font-black">${r.chef || 'MAISON CHEF'} • ${r.time || ''}</p>
+        <h2 class="serif text-[36px] md:text-[44px] font-black leading-[0.9] mt-3">${r.title}</h2>
+        <p class="instrument italic text-[18px] text-white/60 mt-3">${r.description || ''}</p>
+      </div>
+      <button onclick="closeModal()" class="w-10 h-10 rounded-full bg-white/10 border border-white/10 flex items-center justify-center shrink-0"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    ${r.image? `<img src="${r.image}" class="w-full h-[360px] object-cover rounded-[18px] mt-8 border border-white/10"/>` : ''}
+    <div class="grid md:grid-cols-[260px_1fr] gap-8 mt-8">
+      <div>
+        <h4 class="text-[11px] tracking-[0.2em] font-black text-[#C9A86A] mb-4">INGREDIENTS</h4>
+        <ul class="space-y-2">
+          ${(r.ingredients||[]).map(i=>`<li class="text-[13px] text-white/70 flex gap-2"><span class="text-[#C9A86A]">•</span> ${i}</li>`).join('')}
+        </ul>
+      </div>
+      <div>
+        <h4 class="text-[11px] tracking-[0.2em] font-black text-[#C9A86A] mb-4">METHOD — AS UPLOADED</h4>
+        <div class="space-y-3">
+          ${(r.steps||[]).map((s,idx)=>`<div class="flex gap-3"><span class="w-6 h-6 rounded-full bg-[#C9A86A]/20 text-[#C9A86A] text-[11px] font-black flex items-center justify-center shrink-0 mt-0.5">${idx+1}</span><p class="text-[14px] leading-relaxed text-white/70">${s}</p></div>`).join('')}
+        </div>
+        ${r.story? `<div class="mt-8 p-5 rounded-[16px] bg-[#C9A86A]/10 border border-[#C9A86A]/20"><p class="text-[11px] tracking-widest font-black text-[#C9A86A] mb-2">CHEF'S NOTE</p><p class="text-[13px] italic text-white/60">${r.story}</p></div>` : ''}
+      </div>
+    </div>
+    <div class="mt-10 flex gap-3">
+      <a href="https://umbrellaedible.blogspot.com" class="h-11 px-6 rounded-full bg-[#F5F1E8] text-black font-black text-[12px] flex items-center justify-center"><i class="fa-solid fa-arrow-left mr-2"></i> Back to Maison</a>
+      <button onclick="closeModal()" class="h-11 px-6 rounded-full bg-white/10 border border-white/10 font-bold text-[12px]">Close</button>
+    </div>
+  `;
+  document.getElementById('modal').classList.remove('hidden');
+  document.body.style.overflow='hidden';
+}
+function closeModal(){
+  document.getElementById('modal').classList.add('hidden');
+  document.body.style.overflow='';
+}
+render();
+// Auto-refresh if member panel uploads new recipe in other tab
+window.addEventListener('storage', render);
+</script>
 </body>
 </html>
-
 
