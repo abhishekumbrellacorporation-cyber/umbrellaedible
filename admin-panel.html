@@ -8,7 +8,7 @@
 <title>Admin Panel — UMBRELLAedible | Founder Access</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<style>body{font-family:'Plus Jakarta Sans',system-ui;background:#080808;color:#fff}</style>
+<style>body{font-family:'Plus Jakarta Sans',system-ui;background:#080808;color:#fff}.line-clamp-2{overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2}</style>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 </head>
@@ -17,21 +17,21 @@
 <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
 <div>
 <h1 class="text-[24px] md:text-[32px] font-black tracking-tight flex items-center gap-3"><span class="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center"><i class="fa-solid fa-crown text-[16px]"></i></span> Founder Admin — UMBRELLAedible</h1>
-<p class="text-[11px] text-white/40 mt-1">umbrellaedible • chef_applications • founder role detection enabled</p>
+<p class="text-[11px] text-white/40 mt-1">Review Applications • Founder / Co-Founder Categorized • Universal Delete</p>
 </div>
 <div class="flex flex-wrap items-center gap-2">
 <span id="count" class="px-3 py-1.5 rounded-full bg-white text-black text-[12px] font-bold">Loading...</span>
-<button onclick="openAddMemberModal()" class="px-4 py-1.5 rounded-full bg-[#FFD27A] text-black text-[12px] font-black flex items-center gap-2"><i class="fa-solid fa-user-plus"></i> Add Member Direct</button>
+<button onclick="openAddMemberModal()" class="px-4 py-1.5 rounded-full bg-[#FFD27A] text-black text-[12px] font-black flex items-center gap-2"><i class="fa-solid fa-user-plus"></i> Add Direct</button>
 <a href="./members.html" target="_blank" class="px-3 py-1.5 rounded-full bg-[#FFD8A8] text-black text-[12px] font-bold">Members Page</a>
 </div>
 </div>
 
 <div class="mt-6 grid grid-cols-2 md:grid-cols-8 gap-3">
-<div class="bg-[#111] border border-white/10 rounded-[16px] p-4"><p class="text-[10px] font-black text-white/40 tracking-widest">TOTAL CHEFS</p><p id="statTotal" class="text-[22px] font-black mt-1">0</p></div>
-<div class="bg-[#111] border border-white/10 rounded-[16px] p-4"><p class="text-[10px] font-black text-yellow-400/60 tracking-widest">PENDING</p><p id="statPending" class="text-[22px] font-black mt-1 text-yellow-400">0</p></div>
-<div class="bg-[#111] border border-white/10 rounded-[16px] p-4"><p class="text-[10px] font-black text-green-400/60 tracking-widest">VERIFIED</p><p id="statApproved" class="text-[22px] font-black mt-1 text-green-400">0</p></div>
-<div class="bg-[#111] border border-white/10 rounded-[16px] p-4"><p class="text-[10px] font-black text-[#FFD27A] tracking-widest">FOUNDER</p><p id="statFounder" class="text-[22px] font-black mt-1 text-[#FFD27A]">0</p></div>
-<div class="bg-[#111] border border-white/10 rounded-[16px] p-4"><p class="text-[10px] font-black text-purple-400/60 tracking-widest">CO-FOUNDER</p><p id="statCoFounder" class="text-[22px] font-black mt-1 text-purple-400">0</p></div>
+<div class="bg-[#111] border border-white/10 rounded-[16px] p-4"><p class="text-[10px] font-black text-white/40 tracking-widest">TOTAL</p><p id="statTotal" class="text-[22px] font-black mt-1">0</p></div>
+<div class="bg-[#111] border border-yellow-500/20 rounded-[16px] p-4"><p class="text-[10px] font-black text-yellow-400/60 tracking-widest">PENDING REVIEW</p><p id="statPending" class="text-[22px] font-black mt-1 text-yellow-400">0</p></div>
+<div class="bg-[#111] border border-green-500/20 rounded-[16px] p-4"><p class="text-[10px] font-black text-green-400/60 tracking-widest">VERIFIED</p><p id="statApproved" class="text-[22px] font-black mt-1 text-green-400">0</p></div>
+<div class="bg-[#111] border border-[#FFD27A]/20 rounded-[16px] p-4"><p class="text-[10px] font-black text-[#FFD27A] tracking-widest">FOUNDER</p><p id="statFounder" class="text-[22px] font-black mt-1 text-[#FFD27A]">0</p></div>
+<div class="bg-[#111] border border-purple-500/20 rounded-[16px] p-4"><p class="text-[10px] font-black text-purple-400/60 tracking-widest">CO-FOUNDER</p><p id="statCoFounder" class="text-[22px] font-black mt-1 text-purple-400">0</p></div>
 <div class="bg-[#111] border border-white/10 rounded-[16px] p-4"><p class="text-[10px] font-black text-purple-400/60 tracking-widest">VIP</p><p id="statVIP" class="text-[22px] font-black mt-1 text-purple-400">0</p></div>
 <div class="bg-[#111] border border-white/10 rounded-[16px] p-4"><p class="text-[10px] font-black text-red-400/60 tracking-widest">BANNED</p><p id="statBanned" class="text-[22px] font-black mt-1 text-red-400">0</p></div>
 <div class="bg-[#111] border border-white/10 rounded-[16px] p-4"><p class="text-[10px] font-black text-orange-400/60 tracking-widest">RECIPES</p><p id="statRecipesTotal" class="text-[22px] font-black mt-1 text-orange-400">0</p></div>
@@ -39,110 +39,76 @@
 
 <div class="mt-8 flex gap-2">
 <button onclick="switchTab('chefs')" id="tabChefs" class="px-5 py-2 rounded-full bg-white text-black text-[13px] font-black">👨‍🍳 Chefs Management</button>
-<button onclick="switchTab('recipes')" id="tabRecipes" class="px-5 py-2 rounded-full bg-[#111] border border-white/10 text-white/60 text-[13px] font-bold">🍲 Recipes Management</button>
+<button onclick="switchTab('recipes')" id="tabRecipes" class="px-5 py-2 rounded-full bg-[#111] border border-white/10 text-white/60 text-[13px] font-bold">🍲 Recipes</button>
 </div>
 
 <div id="chefsTab">
 <div class="mt-6 flex flex-col md:flex-row gap-3">
-<input id="search" placeholder="Search name, email, city, founder, co-founder..." class="flex-1 h-[44px] px-5 rounded-full bg-[#111] border border-white/10 outline-none text-[13px]"/>
-<select id="filterStatus" class="h-[44px] px-4 rounded-full bg-[#111] border border-white/10 outline-none text-[13px] font-bold"><option value="">All Status</option><option value="founder">👑 Founder Only</option><option value="cofounder">🤝 Co-Founder Only</option><option value="founderTeam">Founder Team All</option><option value="pending">Pending</option><option value="approved">Verified</option><option value="vip">VIP Only</option><option value="banned">Banned</option></select>
+<input id="search" placeholder="Search name, email, founder, recipe title..." class="flex-1 h-[44px] px-5 rounded-full bg-[#111] border border-white/10 outline-none text-[13px]"/>
+<select id="filterStatus" class="h-[44px] px-4 rounded-full bg-[#111] border border-white/10 outline-none text-[13px] font-bold"><option value="">All</option><option value="pending">⚠️ Pending Review</option><option value="founder">👑 Founder</option><option value="cofounder">🤝 Co-Founder</option><option value="approved">Verified</option><option value="banned">Banned</option></select>
 </div>
 <div id="list" class="mt-6 grid gap-4"></div>
 </div>
 
 <div id="recipesTab" class="hidden">
-<div class="mt-6 flex gap-3"><input id="searchRecipes" placeholder="Search recipe..." class="flex-1 h-[44px] px-5 rounded-full bg-[#111] border border-white/10 outline-none text-[13px]"/><select id="filterRecipeStatus" class="h-[44px] px-4 rounded-full bg-[#111] border border-white/10 outline-none text-[13px] font-bold"><option value="">All Recipes</option><option value="pending">Pending</option><option value="approved">Approved</option></select></div>
+<div class="mt-6 flex gap-3"><input id="searchRecipes" placeholder="Search recipe..." class="flex-1 h-[44px] px-5 rounded-full bg-[#111] border border-white/10 outline-none text-[13px]"/><select id="filterRecipeStatus" class="h-[44px] px-4 rounded-full bg-[#111] border border-white/10 outline-none text-[13px] font-bold"><option value="">All</option><option value="pending">Pending</option><option value="approved">Approved</option></select></div>
 <div id="recipeList" class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
 </div>
 </div>
 
-<!-- ADD MEMBER MODAL - UPDATED WITH FOUNDER/CO-FOUNDER -->
-<div id="addModal" class="fixed inset-0 z-[100] hidden"><div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="closeAddMemberModal()"></div><div class="relative min-h-screen flex items-center justify-center p-4"><div class="bg-[#141414] border border-white/10 rounded-[24px] p-6 w-full max-w-[600px] max-h-[90vh] overflow-y-auto"><h3 class="font-black text-[18px]">Add Member Direct — Founder Categorized</h3>
+<!-- APPLICATION REVIEW MODAL - NEW -->
+<div id="reviewModal" class="fixed inset-0 z-[200] hidden"><div class="absolute inset-0 bg-black/90 backdrop-blur-md" onclick="closeReviewModal()"></div>
+<div class="relative min-h-screen flex items-center justify-center p-3 md:p-6"><div class="bg-[#141414] border border-white/15 rounded-[24px] w-full max-w-[720px] max-h-[92vh] overflow-y-auto">
+<div class="sticky top-0 bg-[#141414]/90 backdrop-blur-xl border-b border-white/10 p-5 flex justify-between items-start">
+<div><h3 class="font-black text-[18px] flex items-center gap-2"><i class="fa-solid fa-file-lines text-[#FFD27A]"></i> Chef Application Review</h3><p id="reviewId" class="text-[10px] font-mono text-white/30 mt-1"></p></div>
+<button onclick="closeReviewModal()" class="w-9 h-9 rounded-full bg-[#222] flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+</div>
+<div id="reviewContent" class="p-5 md:p-6"></div>
+<div class="sticky bottom-0 bg-[#141414] border-t border-white/10 p-4 flex gap-2">
+<button onclick="rejectFromReview()" class="flex-1 h-11 rounded-full bg-[#222] border border-red-500/30 text-red-400 font-bold text-[13px]"><i class="fa-solid fa-xmark mr-1"></i> Reject</button>
+<button onclick="approveFromReview()" class="flex-1 h-11 rounded-full bg-green-500 text-black font-black text-[13px]"><i class="fa-solid fa-check mr-1"></i> Approve & Verify</button>
+</div>
+</div></div></div>
+
+<!-- ADD MEMBER MODAL -->
+<div id="addModal" class="fixed inset-0 z-[100] hidden"><div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="closeAddMemberModal()"></div><div class="relative min-h-screen flex items-center justify-center p-4"><div class="bg-[#141414] border border-white/10 rounded-[24px] p-6 w-full max-w-[600px] max-h-[90vh] overflow-y-auto"><h3 class="font-black text-[18px]">Add Member Direct</h3>
 <div class="mt-5 grid grid-cols-1 md:grid-cols-2 gap-3">
 <input id="addName" placeholder="Full Name *" class="h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px]"/>
 <input id="addEmail" placeholder="Email *" class="h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px]"/>
 <input id="addPhone" placeholder="Phone" class="h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px]"/>
 <input id="addLocation" placeholder="City, Country *" class="h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px]"/>
-<input id="addSpeciality" placeholder="Speciality" class="h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px]"/>
-
-<select id="addLevel" onchange="handleLevelChange()" class="h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px]"><option>Home Cook</option><option>Professional Chef</option><option>Baker</option><option>Food Blogger</option><option>Student</option><option>Founder Team</option></select>
-
-<!-- FOUNDER ROLE SELECTOR - ONLY SHOWS WHEN FOUNDER TEAM -->
-<div id="founderRoleDiv" class="hidden md:col-span-2 grid grid-cols-2 gap-3 p-3 rounded-[16px] bg-[#FFD27A]/10 border border-[#FFD27A]/30">
-<label class="text-[11px] font-black tracking-widest text-[#FFD27A] col-span-2">SELECT FOUNDER CATEGORY *</label>
-<select id="addFounderRole" class="h-[44px] px-4 rounded-full bg-black border border-[#FFD27A]/50 outline-none text-[13px] font-bold col-span-2">
-<option value="Founder">👑 Founder — Main Founder (Abhishek)</option>
-<option value="Co-Founder">🤝 Co-Founder — Second Founder</option>
-</select>
-<p class="col-span-2 text-[10px] text-white/50">Founder will get ORANGE GLOW + Founder Badge. Co-Founder will get PURPLE GLOW + Co-Founder Badge on members page.</p>
-</div>
-
+<select id="addLevel" onchange="handleLevelChange()" class="h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px]"><option>Home Cook</option><option>Professional Chef</option><option>Baker</option><option>Food Blogger</option><option>Founder Team</option></select>
+<div id="founderRoleDiv" class="hidden md:col-span-2 p-3 rounded-[16px] bg-[#FFD27A]/10 border border-[#FFD27A]/30"><select id="addFounderRole" class="w-full h-[44px] px-4 rounded-full bg-black border border-[#FFD27A]/50 outline-none text-[13px] font-bold"><option value="Founder">👑 Founder</option><option value="Co-Founder">🤝 Co-Founder</option></select></div>
 <input id="addPhotoUrl" placeholder="Profile Photo URL *" class="md:col-span-2 h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px]"/>
-<input id="addInstagram" placeholder="Instagram Link" class="md:col-span-2 h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px]"/>
-<textarea id="addBio" placeholder="Short Bio" class="md:col-span-2 h-[70px] p-4 rounded-[16px] bg-[#0a0a0a] border border-white/10 outline-none text-[13px] resize-none"></textarea>
+<input id="addInstagram" placeholder="Instagram" class="md:col-span-2 h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px]"/>
 </div>
-<div class="mt-5 flex gap-2"><button onclick="closeAddMemberModal()" class="flex-1 h-11 rounded-full bg-[#222] text-white text-[13px] font-bold">Cancel</button><button onclick="confirmAddMember()" class="flex-1 h-11 rounded-full bg-[#FFD27A] text-black text-[13px] font-black">Add Verified Chef</button></div>
+<div class="mt-5 flex gap-2"><button onclick="closeAddMemberModal()" class="flex-1 h-11 rounded-full bg-[#222] text-white">Cancel</button><button onclick="confirmAddMember()" class="flex-1 h-11 rounded-full bg-[#FFD27A] text-black font-black">Add Verified</button></div>
 </div></div></div>
 
-<!-- VIP MODAL - SAME -->
-<div id="vipModal" class="fixed inset-0 z-[100] hidden"><div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="closeVIPModal()"></div><div class="relative min-h-screen flex items-center justify-center p-4"><div class="bg-[#141414] border border-purple-500/30 rounded-[24px] p-6 w-full max-w-[460px]"><h3 class="font-black text-[18px]" id="vipTitle">Make VIP</h3><p id="vipName" class="text-[12px] text-white/50 mt-1"></p><select id="vipBadgeSelect" onchange="document.getElementById('vipBadgeCustom').value=this.value" class="mt-4 w-full h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-purple-500/30 outline-none text-[13px]"><option>FOUNDER'S CIRCLE</option><option>FOUNDER</option><option>CO-FOUNDER</option><option>FAMILY</option><option>OG CHEF</option><option>VIP CHEF</option><option>CUSTOM</option></select><input id="vipBadgeCustom" placeholder="Badge" class="mt-3 w-full h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-purple-500/30 outline-none text-[13px]"/><div class="mt-5 flex gap-2"><button onclick="closeVIPModal()" class="flex-1 h-11 rounded-full bg-[#222] text-white">Cancel</button><button onclick="confirmVIP()" class="flex-1 h-11 rounded-full bg-[#7C3AED] text-white font-black">Confirm</button></div></div></div></div>
+<!-- VIP MODAL -->
+<div id="vipModal" class="fixed inset-0 z-[100] hidden"><div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="closeVIPModal()"></div><div class="relative min-h-screen flex items-center justify-center p-4"><div class="bg-[#141414] border border-purple-500/30 rounded-[24px] p-6 w-full max-w-[460px]"><h3 class="font-black text-[18px]" id="vipTitle">Make VIP</h3><p id="vipName" class="text-[12px] text-white/50 mt-1"></p><select id="vipBadgeSelect" onchange="document.getElementById('vipBadgeCustom').value=this.value" class="mt-4 w-full h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-purple-500/30 outline-none text-[13px]"><option>FOUNDER</option><option>CO-FOUNDER</option><option>FOUNDER'S CIRCLE</option><option>VIP CHEF</option></select><input id="vipBadgeCustom" placeholder="Badge" class="mt-3 w-full h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-purple-500/30 outline-none text-[13px]"/><div class="mt-5 flex gap-2"><button onclick="closeVIPModal()" class="flex-1 h-11 rounded-full bg-[#222] text-white">Cancel</button><button onclick="confirmVIP()" class="flex-1 h-11 rounded-full bg-[#7C3AED] text-white font-black">Confirm</button></div></div></div></div>
 
 <script>
 var firebaseConfig = { apiKey: "AIzaSyBNNodl0fWwQm42KAublAcSuFO3RQ8fwOE", authDomain: "umbrellaedible.firebaseapp.com", projectId: "umbrellaedible", storageBucket: "umbrellaedible.firebasestorage.app", messagingSenderId: "705948520770", appId: "1:705948520770:web:30d2080cb4191b2881b8db" };
 firebase.initializeApp(firebaseConfig); var db = firebase.firestore();
-var allDocs=[]; var allRecipes=[]; var currentVIPId=null;
+var allDocs=[]; var allRecipes=[]; var currentVIPId=null; var currentReviewId=null; var currentReviewData=null;
 
-function handleLevelChange(){
-  var lvl=document.getElementById('addLevel').value;
-  if(lvl==='Founder Team'){ document.getElementById('founderRoleDiv').classList.remove('hidden'); } else { document.getElementById('founderRoleDiv').classList.add('hidden'); }
-}
-function getFounderType(c){
-  var raw=(c.role||c.founderRole||c.designation||'').toLowerCase();
-  if(raw==='founder' || raw.includes('main founder')) return 'founder';
-  if(raw.includes('co-founder')||raw.includes('cofounder')||raw.includes('co founder')) return 'cofounder';
-  if(c.level==='Founder Team'){
-    if((c.name||'').toLowerCase().includes('abhishek')) return 'founder';
-    // fallback: check vipBadge
-    if((c.vipBadge||'').toLowerCase().includes('co')) return 'cofounder';
-    return 'founder';
-  }
-  return 'normal';
-}
-
-function switchTab(tab){
-  if(tab==='chefs'){ document.getElementById('chefsTab').classList.remove('hidden'); document.getElementById('recipesTab').classList.add('hidden'); document.getElementById('tabChefs').className='px-5 py-2 rounded-full bg-white text-black text-[13px] font-black'; document.getElementById('tabRecipes').className='px-5 py-2 rounded-full bg-[#111] border border-white/10 text-white/60 text-[13px] font-bold'; }
-  else { document.getElementById('chefsTab').classList.add('hidden'); document.getElementById('recipesTab').classList.remove('hidden'); document.getElementById('tabChefs').className='px-5 py-2 rounded-full bg-[#111] border border-white/10 text-white/60 text-[13px] font-bold'; document.getElementById('tabRecipes').className='px-5 py-2 rounded-full bg-white text-black text-[13px] font-black'; }
-}
+function handleLevelChange(){ var lvl=document.getElementById('addLevel').value; document.getElementById('founderRoleDiv').classList.toggle('hidden', lvl!=='Founder Team'); }
+function getFounderType(c){ var raw=(c.role||c.founderRole||'').toLowerCase(); if(raw==='founder') return 'founder'; if(raw.includes('co')) return 'cofounder'; if(c.level==='Founder Team'){ if((c.name||'').toLowerCase().includes('abhishek')) return 'founder'; if((c.vipBadge||'').toLowerCase().includes('co')) return 'cofounder'; return 'founder'; } return 'normal'; }
+function switchTab(tab){ if(tab==='chefs'){ document.getElementById('chefsTab').classList.remove('hidden'); document.getElementById('recipesTab').classList.add('hidden'); } else { document.getElementById('chefsTab').classList.add('hidden'); document.getElementById('recipesTab').classList.remove('hidden'); } }
 
 db.collection('chef_applications').orderBy('createdAt','desc').onSnapshot(function(snap){
   allDocs=[]; var stats={total:0, pending:0, approved:0, vip:0, banned:0, founder:0, cofounder:0};
   snap.forEach(function(doc){ var d=doc.data(); d._id=doc.id; allDocs.push(d); stats.total++; if(d.status==='pending') stats.pending++; if(d.status==='approved') stats.approved++; if(d.isVIP) stats.vip++; if(d.banned) stats.banned++; var t=getFounderType(d); if(t==='founder') stats.founder++; if(t==='cofounder') stats.cofounder++; });
   document.getElementById('statTotal').textContent=stats.total; document.getElementById('statPending').textContent=stats.pending; document.getElementById('statApproved').textContent=stats.approved; document.getElementById('statFounder').textContent=stats.founder; document.getElementById('statCoFounder').textContent=stats.cofounder; document.getElementById('statVIP').textContent=stats.vip; document.getElementById('statBanned').textContent=stats.banned;
-  document.getElementById('count').textContent=stats.total+' members • '+stats.founder+' Founder • '+stats.cofounder+' Co-Founder';
+  document.getElementById('count').textContent=stats.pending+' pending review • '+stats.total+' total';
   applyFilters();
 });
-
-db.collection('member_recipes').orderBy('createdAt','desc').onSnapshot(function(snap){
-  allRecipes=[]; var total=0; snap.forEach(function(doc){ var d=doc.data(); d._id=doc.id; allRecipes.push(d); total++; });
-  document.getElementById('statRecipesTotal').textContent=total;
-  applyRecipeFilters();
-});
+db.collection('member_recipes').orderBy('createdAt','desc').onSnapshot(function(snap){ allRecipes=[]; var total=0; snap.forEach(function(doc){ var d=doc.data(); d._id=doc.id; allRecipes.push(d); total++; }); document.getElementById('statRecipesTotal').textContent=total; applyRecipeFilters(); });
 
 function applyFilters(){
-  var q=(document.getElementById('search').value||'').toLowerCase(); var fStatus=document.getElementById('filterStatus').value;
-  var filtered=allDocs.filter(function(d){
-    var type=getFounderType(d);
-    var searchMatch=!q || (d.name||'').toLowerCase().includes(q) || (d.email||'').toLowerCase().includes(q) || (d.role||'').toLowerCase().includes(q) || type.includes(q);
-    var statusMatch=true;
-    if(fStatus==='founder') statusMatch=type==='founder';
-    if(fStatus==='cofounder') statusMatch=type==='cofounder';
-    if(fStatus==='founderTeam') statusMatch=d.level==='Founder Team';
-    if(fStatus==='pending') statusMatch=d.status==='pending';
-    if(fStatus==='approved') statusMatch=d.status==='approved';
-    if(fStatus==='vip') statusMatch=d.isVIP;
-    if(fStatus==='banned') statusMatch=d.banned;
-    return searchMatch && statusMatch;
-  });
+  var q=(document.getElementById('search').value||'').toLowerCase(); var f=document.getElementById('filterStatus').value;
+  var filtered=allDocs.filter(function(d){ var type=getFounderType(d); var searchMatch=!q||(d.name||'').toLowerCase().includes(q)||(d.email||'').toLowerCase().includes(q)||(d.sampleRecipeTitle||'').toLowerCase().includes(q); var statusMatch=true; if(f==='founder') statusMatch=type==='founder'; if(f==='cofounder') statusMatch=type==='cofounder'; if(f==='pending') statusMatch=d.status==='pending'; if(f==='approved') statusMatch=d.status==='approved'; if(f==='banned') statusMatch=d.banned; return searchMatch&&statusMatch; });
   render(filtered);
 }
 
@@ -151,49 +117,67 @@ function render(docs){
   if(!docs.length){ listEl.innerHTML='<div class="py-16 text-center bg-[#111] border border-white/10 rounded-[20px] text-white/40">No members</div>'; return; }
   var html='';
   docs.forEach(function(d){
-    var type=getFounderType(d);
-    var isFounder=type==='founder'; var isCoFounder=type==='cofounder';
-    var borderClass=isFounder?'border-[#FFD27A]/50':isCoFounder?'border-purple-500/50':d.isVIP?'border-purple-500/30':'border-white/10';
+    var type=getFounderType(d); var isFounder=type==='founder'; var isCoFounder=type==='cofounder'; var isPending=d.status==='pending';
     var photo=d.photoUrl||'https://ui-avatars.com/api/?name='+encodeURIComponent(d.name||'Chef');
-    var badgeHTML='';
-    if(isFounder) badgeHTML=`<span class="px-3 py-1 rounded-full bg-[#FFD27A] text-black text-[10px] font-black tracking-widest">👑 FOUNDER</span>`;
-    else if(isCoFounder) badgeHTML=`<span class="px-3 py-1 rounded-full bg-[#7C3AED] text-white text-[10px] font-black tracking-widest">🤝 CO-FOUNDER</span>`;
-    else if(d.level==='Founder Team') badgeHTML=`<span class="px-3 py-1 rounded-full bg-[#111] border border-white/20 text-white text-[10px] font-bold">FOUNDER TEAM</span>`;
-
-    html+=`<div class="bg-[#111] border ${borderClass} rounded-[20px] p-5 ${isFounder?'shadow-[0_0_30px_rgba(255,210,122,0.2)]':isCoFounder?'shadow-[0_0_30px_rgba(124,58,237,0.2)]':''}">
+    var badge=''; if(isFounder) badge='<span class="px-3 py-1 rounded-full bg-[#FFD27A] text-black text-[10px] font-black">👑 FOUNDER</span>'; else if(isCoFounder) badge='<span class="px-3 py-1 rounded-full bg-[#7C3AED] text-white text-[10px] font-black">🤝 CO-FOUNDER</span>';
+    html+=`<div class="bg-[#111] border ${isPending?'border-yellow-500/40':isFounder?'border-[#FFD27A]/50':isCoFounder?'border-purple-500/50':'border-white/10'} rounded-[20px] p-5 ${isPending?'bg-yellow-500/5':''}">
       <div class="flex justify-between gap-3">
-        <div class="flex gap-3"><img src="${photo}" class="w-14 h-14 rounded-full object-cover border border-white/10"/><div><div class="flex items-center gap-2 flex-wrap"><b>${d.name}</b>${badgeHTML}${d.verified?'<span class="px-2 py-0.5 rounded-full bg-green-500 text-black text-[10px] font-black">VERIFIED</span>':''}</div><p class="text-[11px] text-white/40 mt-1">${d.email||''} • ${d.role||d.founderRole||d.level||''} • ${d.location||''}</p><p class="text-[10px] text-white/30 mt-1">Role field: <b class="text-white/60">${d.role||d.founderRole||'Not set'}</b> | Level: ${d.level||''} | VIP: ${d.vipBadge||'No'}</p></div></div>
-        <div class="flex flex-col gap-2"><button onclick="openVIPModal('${d._id}','${d.name}')" class="h-8 px-3 rounded-full bg-[#7C3AED] text-white text-[11px] font-bold">Make VIP</button><button onclick="editFounderRole('${d._id}','${d.name}')" class="h-8 px-3 rounded-full bg-[#FFD27A] text-black text-[11px] font-black">${isFounder||isCoFounder?'Change Role':'Set Founder'}</button><button onclick="approve('${d._id}')" class="h-8 px-3 rounded-full bg-white text-black text-[11px] font-bold">Approve</button></div>
+        <div class="flex gap-3 flex-1 min-w-0"><img src="${photo}" class="w-14 h-14 rounded-full object-cover"/><div class="min-w-0 flex-1"><div class="flex items-center gap-2 flex-wrap"><b class="text-[14px]">${d.name||''}</b>${badge}${isPending?'<span class="px-2 py-0.5 rounded-full bg-yellow-500 text-black text-[9px] font-black animate-pulse">PENDING REVIEW</span>':d.verified?'<span class="px-2 py-0.5 rounded-full bg-green-500 text-black text-[9px] font-black">VERIFIED</span>':''}</div><p class="text-[11px] text-white/40 mt-1 truncate">${d.email||''} • ${d.location||''} • ${d.level||''}</p><p class="text-[11px] text-white/60 mt-1 line-clamp-2">Recipe: <b class="text-white">${d.sampleRecipeTitle||'No title'}</b> • ${d.cookTime||''} • ${d.veg||''}</p></div></div>
+        <div class="flex flex-col gap-1.5 shrink-0">
+          ${isPending?`<button onclick="openReviewModal('${d._id}')" class="h-9 px-5 rounded-full bg-[#FFD27A] text-black text-[11px] font-black flex items-center gap-1"><i class="fa-solid fa-eye"></i> Review Application</button>`:''}
+          <div class="flex gap-1.5"><button onclick="approve('${d._id}')" class="h-8 px-3 rounded-full bg-white text-black text-[11px] font-bold">Approve</button><button onclick="openVIPModal('${d._id}','${d.name}')" class="h-8 px-3 rounded-full bg-[#222] text-white text-[11px]">VIP</button></div>
+        </div>
       </div>
+      ${isPending?`<div class="mt-3 flex gap-2 text-[10px]"><span class="px-2 py-1 rounded-full bg-[#0a0a0a] border border-white/10">Photo: ${d.photoUrl?'Yes':'No'}</span><span class="px-2 py-1 rounded-full bg-[#0a0a0a] border border-white/10">Sample: ${d.sampleImageUrl?'Yes':'No'}</span><span class="px-2 py-1 rounded-full bg-[#0a0a0a] border border-white/10">Ingredients: ${(d.ingredients||'').length} chars</span></div>`:''}
     </div>`;
   });
   listEl.innerHTML=html;
 }
 
-function approve(id){ db.collection('chef_applications').doc(id).update({status:'approved', verified:true, banned:false}); }
+// REVIEW MODAL LOGIC
+function openReviewModal(id){
+  var d=allDocs.find(x=>x._id===id); if(!d) return;
+  currentReviewId=id; currentReviewData=d;
+  document.getElementById('reviewId').textContent='ID: '+id+' • '+ (d.createdAt? new Date(d.createdAt.seconds*1000).toLocaleString() : '');
+  var photo=d.photoUrl||'https://ui-avatars.com/api/?name=Chef';
+  var sample=d.sampleImageUrl||'';
+  document.getElementById('reviewContent').innerHTML=`
+    <div class="grid md:grid-cols-2 gap-6">
+      <div>
+        <p class="text-[11px] font-black tracking-widest text-white/30">APPLICANT</p>
+        <div class="mt-3 flex gap-3 items-center"><img src="${photo}" class="w-16 h-16 rounded-full object-cover border-2 border-white/10"/><div><p class="font-black text-[16px]">${d.name||''}</p><p class="text-[12px] text-white/50">${d.email||''}</p><p class="text-[11px] text-white/40">${d.phone||''} • ${d.location||''}</p></div></div>
+        <div class="mt-4 space-y-2 text-[12px]"><p><span class="text-white/40">Experience:</span> <b>${d.experience||''}</b></p><p><span class="text-white/40">Speciality:</span> <b>${d.speciality||''}</b></p><p><span class="text-white/40">Level:</span> <b>${d.level||''}</b></p><p><span class="text-white/40">Role:</span> <b class="text-[#FFD27A]">${d.role||d.founderRole||'Not set'}</b></p><p><span class="text-white/40">Instagram:</span> <a href="${d.instagram||'#'}" target="_blank" class="text-blue-400 underline">${d.instagram||'Not provided'}</a></p></div>
+        <div class="mt-5 p-3 rounded-[14px] bg-[#0a0a0a] border border-white/10"><p class="text-[11px] font-black text-white/40">WHY JOIN?</p><p class="mt-1 text-[12px] leading-5 text-white/70 whitespace-pre-wrap">${d.whyJoin||''}</p></div>
+      </div>
+      <div>
+        <p class="text-[11px] font-black tracking-widest text-[#FFD27A]">SAMPLE RECIPE — SKILL VERIFICATION</p>
+        <div class="mt-3 bg-[#0a0a0a] rounded-[16px] overflow-hidden border border-white/10">
+          ${sample?`<img src="${sample}" class="w-full h-[180px] object-cover"/>`:''}
+          <div class="p-4">
+            <h3 class="font-black text-[16px]">${d.sampleRecipeTitle||'Untitled'}</h3>
+            <div class="mt-2 flex flex-wrap gap-2">${d.cookTime?`<span class="px-2.5 py-1 rounded-full bg-white/10 text-[10px] font-bold"><i class="fa-solid fa-clock mr-1"></i>${d.cookTime}</span>`:''}${d.servings?`<span class="px-2.5 py-1 rounded-full bg-white/10 text-[10px] font-bold">${d.servings}</span>`:''}${d.veg?`<span class="px-2.5 py-1 rounded-full bg-green-500/20 text-green-400 text-[10px] font-bold">${d.veg}</span>`:''}</div>
+            <div class="mt-4"><p class="text-[11px] font-black text-white/40">INGREDIENTS (${(d.ingredients||'').length} chars)</p><p class="mt-2 text-[12px] leading-6 text-white/70 whitespace-pre-wrap bg-black/50 p-3 rounded-[12px]">${d.ingredients||'Not provided'}</p></div>
+            <div class="mt-4"><p class="text-[11px] font-black text-white/40">STEPS / METHOD (${(d.steps||'').length} chars)</p><p class="mt-2 text-[12px] leading-6 text-white/70 whitespace-pre-wrap bg-black/50 p-3 rounded-[12px]">${d.steps||'Not provided'}</p></div>
+            <div class="mt-4 grid grid-cols-2 gap-2 text-[10px]"><div class="p-2 rounded-[10px] bg-[#111]"><span class="text-white/30">Profile Photo URL:</span><br><span class="text-white/60 break-all">${d.photoUrl||''}</span></div><div class="p-2 rounded-[10px] bg-[#111]"><span class="text-white/30">Sample Photo URL:</span><br><span class="text-white/60 break-all">${d.sampleImageUrl||''}</span></div></div>
+            <div class="mt-4 p-2 rounded-[10px] ${d.agreedToPolicies?'bg-green-500/10 border border-green-500/20 text-green-400':'bg-red-500/10 border border-red-500/20 text-red-400'} text-[11px] font-bold">${d.agreedToPolicies?'✓ Agreed to Policies':'✗ Did not agree'}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  document.getElementById('reviewModal').classList.remove('hidden');
+}
+function closeReviewModal(){ document.getElementById('reviewModal').classList.add('hidden'); currentReviewId=null; }
+function approveFromReview(){ if(!currentReviewId) return; db.collection('chef_applications').doc(currentReviewId).update({status:'approved', verified:true, banned:false, reviewedAt: firebase.firestore.FieldValue.serverTimestamp(), reviewedBy:'founder'}).then(()=>{ closeReviewModal(); alert('Approved & Verified!'); }); }
+function rejectFromReview(){ if(!currentReviewId) return; var reason=prompt('Rejection reason?'); if(reason===null) return; db.collection('chef_applications').doc(currentReviewId).update({status:'rejected', verified:false, rejectionReason:reason, reviewedAt: firebase.firestore.FieldValue.serverTimestamp()}).then(()=>{ closeReviewModal(); }); }
+
+function approve(id){ db.collection('chef_applications').doc(id).update({status:'approved', verified:true, banned:false, reviewedAt: firebase.firestore.FieldValue.serverTimestamp()}); }
 function openAddMemberModal(){ document.getElementById('addModal').classList.remove('hidden'); }
 function closeAddMemberModal(){ document.getElementById('addModal').classList.add('hidden'); }
-function editFounderRole(id,name){
-  var role=prompt('Set role for '+name+': Type FOUNDER or CO-FOUNDER').toUpperCase();
-  if(role==='FOUNDER' || role==='CO-FOUNDER' || role==='COFOUNDER'){
-    var finalRole = role.includes('CO')?'Co-Founder':'Founder';
-    db.collection('chef_applications').doc(id).update({role:finalRole, founderRole:finalRole, designation:finalRole, level:'Founder Team', isVIP:true, vipBadge:finalRole.toUpperCase(), status:'approved', verified:true});
-    alert(name+' set as '+finalRole);
-  }
-}
-function confirmAddMember(){
-  var name=document.getElementById('addName').value.trim(); var email=document.getElementById('addEmail').value.trim().toLowerCase(); var location=document.getElementById('addLocation').value.trim(); var level=document.getElementById('addLevel').value;
-  if(!name||!email||!location){ alert('Name, Email, Location required'); return; }
-  var role=''; var founderRole=''; var vipBadge=''; var isVIP=false;
-  if(level==='Founder Team'){
-    role=document.getElementById('addFounderRole').value; founderRole=role; isVIP=true; vipBadge=role.toUpperCase();
-  }
-  var data={ name:name, email:email, phone:document.getElementById('addPhone').value.trim(), location:location, speciality:document.getElementById('addSpeciality').value.trim()||'Founder Team', level:level, role:role||level, founderRole:founderRole, designation:founderRole||level, photoUrl:document.getElementById('addPhotoUrl').value.trim(), instagram:document.getElementById('addInstagram').value.trim(), bio:document.getElementById('addBio').value.trim(), status:'approved', verified:true, banned:false, createdAt: firebase.firestore.Timestamp.now(), isVIP:isVIP, vipBadge:isVIP?vipBadge:null };
-  db.collection('chef_applications').add(data).then(function(){ alert('Added as '+ (role||level) +' — Verified'); closeAddMemberModal(); });
-}
+function confirmAddMember(){ var name=document.getElementById('addName').value.trim(); var email=document.getElementById('addEmail').value.trim().toLowerCase(); var location=document.getElementById('addLocation').value.trim(); var level=document.getElementById('addLevel').value; if(!name||!email||!location){ alert('Required'); return; } var role=''; if(level==='Founder Team'){ role=document.getElementById('addFounderRole').value; } var data={ name:name, email:email, phone:document.getElementById('addPhone').value.trim(), location:location, level:level, role:role||level, founderRole:role, designation:role||level, photoUrl:document.getElementById('addPhotoUrl').value.trim(), instagram:document.getElementById('addInstagram').value.trim(), status:'approved', verified:true, banned:false, createdAt: firebase.firestore.Timestamp.now(), isVIP: role?true:false, vipBadge: role?role.toUpperCase():null }; db.collection('chef_applications').add(data).then(()=>{ alert('Added'); closeAddMemberModal(); }); }
 function openVIPModal(id,name){ currentVIPId=id; document.getElementById('vipName').textContent=name; document.getElementById('vipModal').classList.remove('hidden'); }
 function closeVIPModal(){ document.getElementById('vipModal').classList.add('hidden'); }
-function confirmVIP(){ var badge=document.getElementById('vipBadgeCustom').value.trim()||document.getElementById('vipBadgeSelect').value; var role=badge.toUpperCase().includes('CO')?'Co-Founder':badge.toUpperCase().includes('FOUNDER')?'Founder':''; var update={isVIP:true, vipBadge:badge.toUpperCase(), status:'approved', verified:true}; if(role){ update.role=role; update.founderRole=role; update.designation=role; update.level='Founder Team'; } db.collection('chef_applications').doc(currentVIPId).update(update).then(()=>{closeVIPModal();}); }
+function confirmVIP(){ var badge=document.getElementById('vipBadgeCustom').value.trim()||document.getElementById('vipBadgeSelect').value; var role=badge.toUpperCase().includes('CO')?'Co-Founder':badge.toUpperCase().includes('FOUNDER')?'Founder':''; var update={isVIP:true, vipBadge:badge.toUpperCase(), status:'approved', verified:true}; if(role){ update.role=role; update.founderRole=role; update.level='Founder Team'; } db.collection('chef_applications').doc(currentVIPId).update(update).then(()=>{closeVIPModal();}); }
 function applyRecipeFilters(){ var q=(document.getElementById('searchRecipes').value||'').toLowerCase(); var f=document.getElementById('filterRecipeStatus').value; var filtered=allRecipes.filter(function(r){ var mSearch=!q||(r.title||'').toLowerCase().includes(q); var mStatus=!f||r.status===f; return mSearch&&mStatus; }); renderRecipes(filtered); }
 function renderRecipes(list){ var el=document.getElementById('recipeList'); if(!list.length){ el.innerHTML='<div class="col-span-3 py-16 text-center bg-[#111] rounded-[20px] text-white/40">No recipes</div>'; return; } var html=''; list.forEach(function(r){ html+=`<div class="bg-[#111] border border-white/10 rounded-[20px] p-4"><h3 class="font-bold text-[13px]">${r.title}</h3><p class="text-[11px] text-white/50">${r.chefName||''}</p><button onclick="db.collection('member_recipes').doc('${r._id}').delete()" class="mt-3 h-8 px-3 rounded-full bg-red-500 text-black text-[11px] font-black">Delete</button></div>`; }); el.innerHTML=html; }
 document.getElementById('search').addEventListener('input',applyFilters);
