@@ -17,12 +17,12 @@
 </head>
 <body class="antialiased selection:bg-[#FFD27A] selection:text-black">
 
-<!-- AUTH GUARD -->
+<!-- AUTH GUARD - EMAIL ONLY CHECK -->
 <div id="authGuard" class="fixed inset-0 z-[999] bg-[#080808] flex items-center justify-center">
-<div class="text-center"><div class="w-12 h-12 border-4 border-white/10 border-t-white rounded-full animate-spin mx-auto"></div><p class="mt-4 text-[12px] font-bold text-white/40">Checking Founder Auth...</p><p id="authEmail" class="mt-2 text-[11px] text-white/20"></p></div>
+<div class="text-center"><div class="w-12 h-12 border-4 border-white/10 border-t-[#FFD27A] rounded-full animate-spin mx-auto"></div><p class="mt-4 text-[12px] font-bold text-white/40">Checking Founder Auth...</p><p id="authEmail" class="mt-2 text-[11px] text-white/20"></p></div>
 </div>
 
-<!-- TOP NAV -->
+<!-- TOP NAV - SAME -->
 <div class="sticky top-0 z-40 bg-[#080808]/80 backdrop-blur-xl border-b border-white/10">
 <div class="max-w-[1440px] mx-auto px-4 md:px-6 h-[64px] flex items-center justify-between gap-3">
 <div class="flex items-center gap-3">
@@ -40,8 +40,6 @@
 </div>
 
 <div class="max-w-[1440px] mx-auto px-4 md:px-6 py-6">
-
-<!-- STATS -->
 <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3">
 <div class="bg-[#111] border border-white/10 rounded-[20px] p-4"><p class="text-[10px] font-black tracking-widest text-white/30">TOTAL CHEFS</p><p id="statTotal" class="text-[26px] font-black mt-1">0</p></div>
 <div class="bg-[#111] border border-yellow-500/20 rounded-[20px] p-4"><p class="text-[10px] font-black tracking-widest text-yellow-400/60">PENDING REVIEW</p><p id="statPending" class="text-[26px] font-black mt-1 text-yellow-400">0</p></div>
@@ -53,7 +51,6 @@
 <div class="bg-[#111] border border-white/10 rounded-[20px] p-4"><p class="text-[10px] font-black tracking-widest text-orange-400/60">RECIPES</p><p id="statRecipesTotal" class="text-[26px] font-black mt-1 text-orange-400">0</p></div>
 </div>
 
-<!-- TABS -->
 <div class="mt-8 flex gap-2 overflow-x-auto pb-2">
 <button onclick="switchTab('review')" id="tabReview" class="shrink-0 px-5 py-2.5 rounded-full bg-[#FFD27A] text-black text-[13px] font-black flex items-center gap-2"><i class="fa-solid fa-clipboard-check"></i> Application Review <span id="tabPendingBadge" class="px-2 py-0.5 rounded-full bg-black text-[#FFD27A] text-[10px]">0</span></button>
 <button onclick="switchTab('chefs')" id="tabChefs" class="shrink-0 px-5 py-2.5 rounded-full bg-[#111] border border-white/10 text-white/60 text-[13px] font-bold flex items-center gap-2"><i class="fa-solid fa-users"></i> All Chefs</button>
@@ -85,7 +82,7 @@
 <div id="bannedTab" class="hidden"><div id="bannedList" class="mt-6 grid gap-4"></div></div>
 </div>
 
-<!-- MODALS -->
+<!-- MODALS SAME -->
 <div id="reviewModal" class="fixed inset-0 z-[200] hidden"><div class="absolute inset-0 bg-black/90 backdrop-blur-md" onclick="closeReviewModal()"></div>
 <div class="relative min-h-screen flex items-center justify-center p-3 md:p-6"><div class="bg-[#141414] border border-white/15 rounded-[28px] w-full max-w-[780px] max-h-[92vh] overflow-y-auto">
 <div class="sticky top-0 bg-[#141414]/95 backdrop-blur-xl border-b border-white/10 p-5 flex justify-between items-center z-10"><div><h3 class="font-black text-[18px]"><i class="fa-solid fa-clipboard-check text-[#FFD27A] mr-2"></i>Application Review</h3><p id="reviewId" class="text-[10px] font-mono text-white/30 mt-1"></p></div><button onclick="closeReviewModal()" class="w-9 h-9 rounded-full bg-[#222] flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button></div>
@@ -111,7 +108,7 @@
 <div class="mt-5 flex gap-2"><button onclick="closeBanModal()" class="flex-1 h-11 rounded-full bg-[#222] text-white">Cancel</button><button onclick="confirmBan()" class="flex-1 h-11 rounded-full bg-red-500 text-black font-black">Confirm Ban</button></div>
 </div></div></div>
 
-<div id="addModal" class="fixed inset-0 z-[100] hidden"><div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="closeAddMemberModal()"></div><div class="relative min-h-screen flex items-center justify-center p-4"><div class="bg-[#141414] border border-white/10 rounded-[28px] p-6 w-full max-w-[600px] max-h-[90vh] overflow-y-auto"><h3 class="font-black text-[18px]">Add Chef Directly — Founder + Auto Login</h3>
+<div id="addModal" class="fixed inset-0 z-[100] hidden"><div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="closeAddMemberModal()"></div><div class="relative min-h-screen flex items-center justify-center p-4"><div class="bg-[#141414] border border-white/10 rounded-[28px] p-6 w-full max-w-[600px] max-h-[90vh] overflow-y-auto"><h3 class="font-black text-[18px]">Add Chef Directly — Founder</h3>
 <div class="mt-5 grid grid-cols-1 md:grid-cols-2 gap-3">
 <input id="addName" placeholder="Full Name *" class="h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px]"/>
 <input id="addEmail" placeholder="Email * (will be login)" class="h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px]"/>
@@ -119,17 +116,15 @@
 <select id="addLevel" onchange="handleLevelChange()" class="h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px]"><option>Home Cook</option><option>Professional Chef</option><option>Founder Team</option></select>
 <div id="founderRoleDiv" class="hidden md:col-span-2 p-3 rounded-[16px] bg-[#FFD27A]/10 border border-[#FFD27A]/30"><select id="addFounderRole" class="w-full h-[44px] px-4 rounded-full bg-black border border-[#FFD27A]/50 outline-none text-[13px] font-bold"><option value="Founder">👑 Founder</option><option value="Co-Founder">🤝 Co-Founder</option></select></div>
 <input id="addPhotoUrl" placeholder="Profile Photo URL *" class="md:col-span-2 h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px]"/>
-<input id="addPassword" placeholder="Set Temp Password (default: Umbrella@123)" value="Umbrella@123" class="md:col-span-2 h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-[#FFD27A]/30 outline-none text-[13px]"/>
 </div>
-<p class="mt-3 text-[11px] text-white/30">Member will login at /member-login.html with this email & password. They can reset later.</p>
-<div class="mt-5 flex gap-2"><button onclick="closeAddMemberModal()" class="flex-1 h-11 rounded-full bg-[#222] text-white">Cancel</button><button onclick="confirmAddMember()" id="addChefBtn" class="flex-1 h-11 rounded-full bg-[#FFD27A] text-black font-black">Add + Create Login</button></div>
+<div class="mt-5 flex gap-2"><button onclick="closeAddMemberModal()" class="flex-1 h-11 rounded-full bg-[#222] text-white">Cancel</button><button onclick="confirmAddMember()" id="addChefBtn" class="flex-1 h-11 rounded-full bg-[#FFD27A] text-black font-black">Add Verified</button></div>
 </div></div></div>
 
 <script>
 var firebaseConfig = { apiKey: "AIzaSyBNNodl0fWwQm42KAublAcSuFO3RQ8fwOE", authDomain: "umbrellaedible.firebaseapp.com", projectId: "umbrellaedible", storageBucket: "umbrellaedible.firebasestorage.app", messagingSenderId: "705948520770", appId: "1:705948520770:web:30d2080cb4191b2881b8db" };
 firebase.initializeApp(firebaseConfig);
 var db = firebase.firestore();
-var auth = firebase.auth();
+var auth = firebase.auth(); // kept for member auth creation
 var allDocs=[]; var allRecipes=[]; var currentReviewId=null; var currentBanId=null; var currentActionId=null;
 
 function handleLevelChange(){ document.getElementById('founderRoleDiv').classList.toggle('hidden', document.getElementById('addLevel').value!=='Founder Team'); }
@@ -221,64 +216,51 @@ function unban(id){ db.collection('chef_applications').doc(id).update({status:'p
 function openBanModal(id,name){ currentBanId=id; document.getElementById('banName').textContent=name+' ('+id+')'; document.getElementById('banModal').classList.remove('hidden'); }
 function closeBanModal(){ document.getElementById('banModal').classList.add('hidden'); }
 function confirmBan(){ var reason=document.getElementById('banReason').value.trim(); var duration=document.getElementById('banDuration').value; if(!reason){ alert('Enter reason'); return; } var banUntil=null; var text=''; if(duration!=='permanent'){ var days=parseInt(duration); var until=new Date(); until.setDate(until.getDate()+days); banUntil=firebase.firestore.Timestamp.fromDate(until); text=days+' days'; } else text='Permanent'; db.collection('chef_applications').doc(currentBanId).update({status:'banned', banned:true, banReason:reason, banDuration:text, banUntil:banUntil||null, bannedAt: firebase.firestore.FieldValue.serverTimestamp(), verified:false}).then(()=>{ closeBanModal(); }); }
-
 function openActionModal(id){
   var d=allDocs.find(x=>x._id===id); if(!d) return; currentActionId=id;
   document.getElementById('actionName').textContent=d.name+' • '+d.email+' • '+(d.role||d.level);
   document.getElementById('actionButtons').innerHTML=`
-    <button onclick="setRole('Founder')" class="h-12 rounded-[14px] bg-[#FFD27A] text-black font-black text-[12px]"><i class="fa-solid fa-crown"></i> Set Founder</button>
-    <button onclick="setRole('Co-Founder')" class="h-12 rounded-[14px] bg-[#7C3AED] text-white font-black text-[12px]"><i class="fa-solid fa-handshake"></i> Set Co-Founder</button>
+    <button onclick="setRole('Founder')" class="h-12 rounded-[14px] bg-[#FFD27A] text-black font-black text-[12px]">👑 Set Founder</button>
+    <button onclick="setRole('Co-Founder')" class="h-12 rounded-[14px] bg-[#7C3AED] text-white font-black text-[12px]">🤝 Set Co-Founder</button>
     <button onclick="makeVIP()" class="h-12 rounded-[14px] bg-[#111] border border-purple-500/30 text-purple-300 font-bold text-[12px]">Make VIP</button>
     <button onclick="approve(currentActionId); closeActionModal();" class="h-12 rounded-[14px] bg-green-500 text-black font-black text-[12px]">Approve</button>
     <button onclick="openBanModal(currentActionId,'${d.name}'); closeActionModal();" class="h-12 rounded-[14px] bg-[#111] border border-red-500/30 text-red-400 font-bold text-[12px]">Ban</button>
-    <button onclick="resetPassword('${d.email}')" class="h-12 rounded-[14px] bg-[#111] border border-white/10 text-white font-bold text-[12px]">Reset Password</button>
     <button onclick="openReviewModal(currentActionId); closeActionModal();" class="h-12 rounded-[14px] bg-white text-black font-black text-[12px]">View App</button>
-    <button onclick="deleteDoc(currentActionId); closeActionModal();" class="h-12 rounded-[14px] bg-red-500 text-black font-black text-[12px]">Delete</button>
+    <button onclick="deleteDoc(currentActionId); closeActionModal();" class="h-12 rounded-[14px] bg-red-500 text-black font-black text-[12px] col-span-2">Delete Forever</button>
   `;
   document.getElementById('actionModal').classList.remove('hidden');
 }
 function closeActionModal(){ document.getElementById('actionModal').classList.add('hidden'); }
 function setRole(role){ db.collection('chef_applications').doc(currentActionId).update({role:role, founderRole:role, designation:role, level:'Founder Team', isVIP:true, vipBadge:role.toUpperCase(), status:'approved', verified:true}).then(()=>{ closeActionModal(); }); }
-function makeVIP(){ var b=prompt('Badge? Eg: VIP CHEF'); if(!b) return; db.collection('chef_applications').doc(currentActionId).update({isVIP:true, vipBadge:b.toUpperCase(), status:'approved', verified:true}).then(()=>{ closeActionModal(); }); }
-function resetPassword(email){ auth.sendPasswordResetEmail(email).then(()=>{ alert('Reset email sent to '+email); }).catch(e=>alert(e.message)); }
-
+function makeVIP(){ var b=prompt('Badge?'); if(!b) return; db.collection('chef_applications').doc(currentActionId).update({isVIP:true, vipBadge:b.toUpperCase(), status:'approved', verified:true}).then(()=>{ closeActionModal(); }); }
 function openAddMemberModal(){ document.getElementById('addModal').classList.remove('hidden'); }
 function closeAddMemberModal(){ document.getElementById('addModal').classList.add('hidden'); }
-
-// UPDATED - AUTO CREATES LOGIN
 function confirmAddMember(){
   var name=document.getElementById('addName').value.trim();
   var email=document.getElementById('addEmail').value.trim().toLowerCase();
   var location=document.getElementById('addLocation').value.trim();
   var level=document.getElementById('addLevel').value;
   var photo=document.getElementById('addPhotoUrl').value.trim();
-  var pass=document.getElementById('addPassword').value.trim()||'Umbrella@123';
-  if(!name||!email||!location){ alert('Name, Email, City required'); return; }
+  if(!name||!email||!location){ alert('Required'); return; }
   var role=''; if(level==='Founder Team'){ role=document.getElementById('addFounderRole').value; }
-  var data={ name:name, email:email, location:location, level:level, role:role||level, founderRole:role, designation:role||level, photoUrl:photo, status:'approved', verified:true, banned:false, createdAt: firebase.firestore.Timestamp.now(), isVIP: role?true:false, vipBadge: role?role.toUpperCase():null, hasLogin:false };
-  document.getElementById('addChefBtn').innerHTML='Creating...';
+  var data={ name:name, email:email, location:location, level:level, role:role||level, founderRole:role, designation:role||level, photoUrl:photo, status:'approved', verified:true, banned:false, createdAt: firebase.firestore.Timestamp.now(), isVIP: role?true:false, vipBadge: role?role.toUpperCase():null };
+  document.getElementById('addChefBtn').innerHTML='Adding...';
   db.collection('chef_applications').add(data).then(function(docRef){
-    var secondaryApp = firebase.initializeApp(firebaseConfig, 'Secondary'+Date.now());
-    secondaryApp.auth().createUserWithEmailAndPassword(email, pass).then(function(){
-      db.collection('chef_applications').doc(docRef.id).update({hasLogin:true});
-      secondaryApp.auth().signOut();
-      document.getElementById('addChefBtn').innerHTML='Add + Create Login';
-      alert('✅ Chef Added + Login Created\n\nEmail: '+email+'\nPassword: '+pass+'\nLogin: https://umbrellaedible-2ln.pages.dev/member-login.html');
-      closeAddMemberModal();
-    }).catch(function(e){
-      document.getElementById('addChefBtn').innerHTML='Add + Create Login';
-      if(e.code==='auth/email-already-in-use'){
-        db.collection('chef_applications').doc(docRef.id).update({hasLogin:true});
-        alert('✅ Chef Added (Login already existed for '+email+' with password: '+pass+')');
-        closeAddMemberModal();
-      } else {
-        alert('Chef added to database but auth failed: '+e.message+'\nGo to Firebase Console > Auth > Add user manually: '+email);
-        closeAddMemberModal();
-      }
-    });
+    // Also add to config/founders if founder
+    if(role==='Founder' || role==='Co-Founder'){
+      db.collection('config').doc('founders').get().then(function(doc){
+        var emails = doc.exists && doc.data().emails? doc.data().emails : [];
+        if(!emails.map(e=>e.toLowerCase()).includes(email)){
+          emails.push(email);
+          db.collection('config').doc('founders').set({emails:emails},{merge:true});
+        }
+      });
+    }
+    document.getElementById('addChefBtn').innerHTML='Add Verified';
+    alert('✅ Chef Added: '+name+' ('+email+')\nHe can now login with email only at /login.html if Founder, or /member-login.html if Chef');
+    closeAddMemberModal();
   });
 }
-
 function applyAll(){ renderReview(); renderChefs(); renderRecipes(); renderBanned(); }
 document.getElementById('searchReview').addEventListener('input',renderReview);
 document.getElementById('sortReview').addEventListener('change',renderReview);
@@ -288,33 +270,59 @@ document.getElementById('searchRecipes').addEventListener('input',renderRecipes)
 document.getElementById('filterRecipeStatus').addEventListener('change',renderRecipes);
 switchTab('review');
 
-// AUTH - FIXED URLS
-var ALLOWED_FOUNDERS = ["abhishek@umbrellaedible.com","abhishekganguly@umbrellaedible.com","umbrellaedible@gmail.com","abhishekganguly2006@gmail.com"];
-auth.onAuthStateChanged(function(user){
-  if(!user){ window.location.href='https://umbrellaedible-2ln.pages.dev/login.html'; return; }
-  document.getElementById('authEmail').textContent=user.email;
+// ============ NEW EMAIL-ONLY FOUNDER AUTH - SAME AS MEMBER LOGIN ============
+function checkFounderSession(){
+  var email = localStorage.getItem('umbrella_founder_email');
+  var loginTime = localStorage.getItem('umbrella_founder_login_time');
+  if(loginTime && (Date.now() - parseInt(loginTime)) > 7*24*60*60*1000){
+    localStorage.clear();
+    window.location.href='https://umbrellaedible-2ln.pages.dev/login.html';
+    return;
+  }
+  if(!email){
+    window.location.href='https://umbrellaedible-2ln.pages.dev/login.html';
+    return;
+  }
+  document.getElementById('authEmail').textContent=email;
   db.collection('config').doc('founders').get().then(function(doc){
-    var allowed = doc.exists && doc.data().emails? doc.data().emails : ALLOWED_FOUNDERS;
-    var isAllowed = allowed.map(e=>e.toLowerCase()).includes(user.email.toLowerCase());
-    if(!isAllowed){
-      if(!doc.exists){
-        db.collection('config').doc('founders').set({emails:[user.email]}).then(function(){
-          document.getElementById('authGuard').classList.add('hidden');
-          document.getElementById('founderEmailBadge').textContent=user.email;
-        });
+    var allowed = doc.exists && doc.data().emails? doc.data().emails.map(e=>e.toLowerCase()) : [];
+    db.collection('chef_applications').where('email','==',email).get().then(function(snap){
+      var isFounder = allowed.includes(email);
+      snap.forEach(function(d){
+        var data=d.data();
+        var role=(data.role||data.founderRole||'').toLowerCase();
+        if(role.includes('founder') || data.level==='Founder Team' || data.isVIP) isFounder=true;
+      });
+      if(!isFounder){
+        // First time founder auto-create config
+        if(!doc.exists){
+          db.collection('config').doc('founders').set({emails:[email]}).then(function(){
+            document.getElementById('authGuard').classList.add('hidden');
+            document.getElementById('founderEmailBadge').textContent=email+' • Founder';
+            document.getElementById('founderEmailBadge').classList.remove('hidden');
+          });
+        } else {
+          alert('Not authorized founder: '+email);
+          localStorage.clear();
+          window.location.href='https://umbrellaedible-2ln.pages.dev/login.html';
+        }
       } else {
-        alert('Not authorized: '+user.email);
-        auth.signOut();
-        window.location.href='https://umbrellaedible-2ln.pages.dev/login.html';
+        document.getElementById('authGuard').classList.add('hidden');
+        document.getElementById('founderEmailBadge').textContent=email+' • Founder';
+        document.getElementById('founderEmailBadge').classList.remove('hidden');
       }
-    } else {
-      document.getElementById('authGuard').classList.add('hidden');
-      document.getElementById('founderEmailBadge').textContent=user.email+' • Founder';
-      document.getElementById('founderEmailBadge').classList.remove('hidden');
-    }
+    });
   }).catch(function(){ document.getElementById('authGuard').classList.add('hidden'); });
-});
-function founderLogout(){ auth.signOut().then(function(){ window.location.href='https://umbrellaedible-2ln.pages.dev/login.html'; }); }
+}
+checkFounderSession();
+function founderLogout(){
+  localStorage.removeItem('umbrella_founder_email');
+  localStorage.removeItem('umbrella_founder_name');
+  localStorage.removeItem('umbrella_founder_id');
+  localStorage.removeItem('umbrella_founder_role');
+  localStorage.removeItem('umbrella_founder_login_time');
+  window.location.href='https://umbrellaedible-2ln.pages.dev/login.html';
+}
 </script>
 </body>
 </html>
