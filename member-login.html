@@ -1,100 +1,55 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Member Login — UMBRELLAedible</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<style>body{font-family:'Plus Jakarta Sans',sans-serif;background:#080808;color:#fff}</style>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 </head>
-<body class="min-h-screen flex items-center justify-center p-4">
-<div class="w-full max-w-[440px]">
-<div class="bg-[#111] border border-white/10 rounded-[32px] p-8">
+<body style="font-family:'Plus Jakarta Sans',sans-serif;background:#080808;color:#fff" class="min-h-screen flex items-center justify-center p-4">
+<div class="w-full max-w-[440px] bg-[#111] border border-white/10 rounded-[32px] p-8">
 <div class="w-12 h-12 rounded-full bg-[#FFD27A] text-black flex items-center justify-center mx-auto"><i class="fa-solid fa-utensils"></i></div>
 <h1 class="mt-5 text-center font-black text-[22px]">Member Login</h1>
-<p class="mt-2 text-center text-[12px] text-white/40">Login with email you registered with. Only approved chefs can login.</p>
-
+<p class="mt-2 text-center text-[11px] text-white/40">Only chefs added/approved by founder can login</p>
 <div class="mt-8 space-y-3">
-<input id="email" type="email" placeholder="Your registered email" class="w-full h-[48px] px-5 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px]"/>
-<div class="relative"><input id="password" type="password" placeholder="Password" class="w-full h-[48px] px-5 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px]"/>
-<button onclick="togglePass()" class="absolute right-4 top-1/2 -translate-y-1/2 text-white/30"><i class="fa-solid fa-eye"></i></button></div>
+<input id="email" type="email" placeholder="Registered email" class="w-full h-[48px] px-5 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px]"/>
+<input id="password" type="password" placeholder="Password" class="w-full h-[48px] px-5 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px]"/>
 <p id="error" class="hidden text-[12px] text-red-400 bg-red-500/10 border border-red-500/20 rounded-[14px] p-3"></p>
 <p id="success" class="hidden text-[12px] text-green-400 bg-green-500/10 border border-green-500/20 rounded-[14px] p-3"></p>
-
-<button onclick="login()" id="loginBtn" class="w-full h-[48px] rounded-full bg-white text-black font-black text-[13px] flex items-center justify-center gap-2"><i class="fa-solid fa-right-to-bracket"></i> Login</button>
-<button onclick="sendReset()" class="w-full text-[11px] text-white/30 hover:text-white/60">Forgot password? Reset via email</button>
-<div class="pt-4 border-t border-white/10 text-center">
-<p class="text-[11px] text-white/30">Not a chef yet? <a href="./become-chef.html" class="text-[#FFD27A] font-bold">Apply to become chef</a></p>
-<p class="text-[11px] text-white/20 mt-2">If you were added by founder directly, use same email + ask founder for password</p>
+<button onclick="login()" id="loginBtn" class="w-full h-[48px] rounded-full bg-white text-black font-black text-[13px]">Login</button>
+<button onclick="sendReset()" class="w-full text-[11px] text-white/30">Forgot password? Send reset link</button>
 </div>
 </div>
-</div>
-</div>
-
 <script>
 var firebaseConfig = { apiKey: "AIzaSyBNNodl0fWwQm42KAublAcSuFO3RQ8fwOE", authDomain: "umbrellaedible.firebaseapp.com", projectId: "umbrellaedible", storageBucket: "umbrellaedible.firebasestorage.app", messagingSenderId: "705948520770", appId: "1:705948520770:web:30d2080cb4191b2881b8db" };
 firebase.initializeApp(firebaseConfig);
-var auth = firebase.auth(); var db = firebase.firestore();
-
-function togglePass(){ var p=document.getElementById('password'); p.type=p.type==='password'?'text':'password'; }
-function showError(m){ var e=document.getElementById('error'); e.textContent=m; e.classList.remove('hidden'); document.getElementById('success').classList.add('hidden'); }
-function showSuccess(m){ var e=document.getElementById('success'); e.textContent=m; e.classList.remove('hidden'); document.getElementById('error').classList.add('hidden'); }
-
-auth.onAuthStateChanged(function(user){
-  if(user){
-    // Verify in chef_applications collection first
-    db.collection('chef_applications').where('email','==',user.email.toLowerCase()).get().then(function(snap){
-      if(snap.empty){ showError('Email not found in chef database. You must be added/approved by founder first.'); auth.signOut(); return; }
-      var data = snap.docs[0].data();
-      if(data.banned || data.status==='banned'){ showError('Your account is banned: '+(data.banReason||'')); auth.signOut(); return; }
-      if(data.status!=='approved'){ showError('Your application is still '+data.status+'. Wait for founder approval.'); auth.signOut(); return; }
-      // Save member session
-      localStorage.setItem('umbrella_member_email', user.email.toLowerCase());
-      localStorage.setItem('umbrella_member_id', snap.docs[0].id);
-      localStorage.setItem('umbrella_member_name', data.name);
-      window.location.href='./member-panel.html';
-    });
-  }
-});
-
+var auth=firebase.auth(), db=firebase.firestore();
+function showError(m){ document.getElementById('error').textContent=m; document.getElementById('error').classList.remove('hidden'); document.getElementById('success').classList.add('hidden'); }
+function showSuccess(m){ document.getElementById('success').textContent=m; document.getElementById('success').classList.remove('hidden'); document.getElementById('error').classList.add('hidden'); }
 function login(){
   var email=document.getElementById('email').value.trim().toLowerCase();
   var pass=document.getElementById('password').value;
-  if(!email||!pass){ showError('Enter email and password'); return; }
-
-  // FIRST CHECK FIREBASE FOR EMAIL
+  if(!email||!pass){ showError('Enter email & password'); return; }
   db.collection('chef_applications').where('email','==',email).get().then(function(snap){
-    if(snap.empty){ showError('This email is not registered. Apply as chef or ask founder to add you.'); return; }
-    var data=snap.docs[0].data();
-    if(data.banned || data.status==='banned'){ showError('Banned: '+(data.banReason||'Contact founder')); return; }
-    if(data.status==='pending'){ showError('Your application is pending review. Please wait for approval.'); return; }
-    if(data.status==='rejected'){ showError('Application rejected: '+(data.rejectionReason||'')); return; }
-    // If exists and approved, try Firebase Auth login
-    document.getElementById('loginBtn').innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Checking...';
-    auth.signInWithEmailAndPassword(email,pass).then(function(){
-      showSuccess('Login success! Redirecting...');
-    }).catch(function(err){
-      if(err.code==='auth/user-not-found'){
-        showError('Chef exists but no login created yet. Ask founder to create your login, or use Forgot Password to set password if founder added you.');
-      } else {
-        showError(err.message);
-      }
-      document.getElementById('loginBtn').innerHTML='<i class="fa-solid fa-right-to-bracket"></i> Login';
-    });
+    if(snap.empty){ showError('Email not found in chef database. Founder must add you first in admin panel.'); return; }
+    var d=snap.docs[0].data();
+    if(d.banned||d.status==='banned'){ showError('Banned: '+(d.banReason||'')); return; }
+    if(d.status!=='approved'){ showError('Your application is '+d.status+'. Wait for founder approval.'); return; }
+    document.getElementById('loginBtn').innerText='Checking...';
+    auth.signInWithEmailAndPassword(email,pass).then(function(){ window.location.href='./member-panel.html'; }).catch(function(e){ showError(e.message); document.getElementById('loginBtn').innerText='Login'; });
   });
 }
-
 function sendReset(){
   var email=document.getElementById('email').value.trim().toLowerCase();
-  if(!email){ showError('Enter your email first'); return; }
+  if(!email){ showError('Enter email'); return; }
   db.collection('chef_applications').where('email','==',email).get().then(function(snap){
-    if(snap.empty){ showError('Email not in database'); return; }
-    auth.sendPasswordResetEmail(email).then(function(){ showSuccess('Reset email sent to '+email+' — check inbox to set password'); }).catch(function(e){ showError(e.message); });
+    if(snap.empty){ showError('Not in database'); return; }
+    auth.sendPasswordResetEmail(email).then(function(){ showSuccess('Reset link sent to '+email); }).catch(function(e){ showError(e.message); });
   });
 }
 </script>
-</body>
-</html>
+</body></html>
