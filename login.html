@@ -1,5 +1,6 @@
 
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,11 +28,7 @@
 <p class="text-center text-[10px] text-white/20">No password needed</p>
 </div>
 
-<div class="mt-8 pt-6 border-t border-white/10">
-<p class="text-[10px] font-black tracking-widest text-white/30">AUTHORIZED FOUNDERS FROM FIREBASE</p>
-<div id="founderList" class="mt-3 space-y-2 text-[11px] text-white/50">Loading...</div>
-<button onclick="fixMyEmail()" class="mt-3 w-full h-9 rounded-full bg-[#222] border border-white/10 text-[11px] font-bold">🔧 Fix: Add my email to Firebase now</button>
-</div>
+
 </div>
 </div>
 
@@ -105,7 +102,7 @@ function login(){
     // Auto-add to Firebase for future
     db.collection('config').doc('founders').set({emails: SUPER_ADMINS}, {merge:true});
     showSuccess('✅ SUPER ADMIN verified! Redirecting...');
-    setTimeout(()=>{ window.location.href='https://umbrellaedible-2ln.pages.dev/admin.html'; }, 600);
+    setTimeout(()=>{ window.location.href='https://umbrellaedible-2ln.pages.dev/admin-panel.html'; }, 600);
     return;
   }
 
