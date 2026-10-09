@@ -279,7 +279,7 @@ var ALLOWED_FOUNDERS = ["abhishek@umbrellaedible.com","abhishekganguly@umbrellae
 var auth = firebase.auth();
 auth.onAuthStateChanged(function(user){
   if(!user){
-    window.location.href='./founder-login.html';
+    window.location.href='https://umbrellaedible-2ln.pages.dev/login.html';
     return;
   }
   document.getElementById('authEmail').textContent = user.email;
@@ -296,7 +296,7 @@ auth.onAuthStateChanged(function(user){
       } else {
         alert('Not authorized: '+user.email+'\nAsk main founder to add you in config/founders');
         auth.signOut();
-        window.location.href='./founder-login.html';
+        window.location.href='./https://umbrellaedible-2ln.pages.dev/login.html';
       }
     } else {
       document.getElementById('authGuard').classList.add('hidden');
@@ -308,7 +308,7 @@ auth.onAuthStateChanged(function(user){
     document.getElementById('founderEmailBadge').textContent = user.email;
   });
 });
-function founderLogout(){ auth.signOut().then(function(){ window.location.href='./founder-login.html'; }); }
+function founderLogout(){ auth.signOut().then(function(){ window.location.href='./https://umbrellaedible-2ln.pages.dev/login.html'; }); }
 </script>
 </body>
 </html>
