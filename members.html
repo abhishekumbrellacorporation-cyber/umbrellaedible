@@ -1,6 +1,7 @@
 
+Here is your *fixed members page* — Founder & Co-Founder cards now *same size as other chefs*, but still with glow + badge.
 
-
+Replace your full file:
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,12 +14,12 @@
 <style>
 body{font-family:'Plus Jakarta Sans',sans-serif;background:#FFF9F0}
 h1,h2{font-family:'Fraunces',serif}
-@keyframes glowFounder {0%{box-shadow:0 0 0 0 rgba(255,122,26,0.5),0 20px 60px rgba(255,122,26,0.2)}50%{box-shadow:0 0 0 14px rgba(255,122,26,0.1),0 28px 80px rgba(255,122,26,0.35)}100%{box-shadow:0 0 0 0 rgba(255,122,26,0.5),0 20px 60px rgba(255,122,26,0.2)}}
-@keyframes glowCoFounder {0%{box-shadow:0 0 0 0 rgba(124,58,237,0.5),0 20px 60px rgba(124,58,237,0.2)}50%{box-shadow:0 0 0 14px rgba(124,58,237,0.1),0 28px 80px rgba(124,58,237,0.35)}100%{box-shadow:0 0 0 0 rgba(124,58,237,0.5),0 20px 60px rgba(124,58,237,0.2)}}
+@keyframes glowFounder {0%{box-shadow:0 0 0 0 rgba(255,122,26,0.5)}50%{box-shadow:0 0 0 8px rgba(255,122,26,0.12)}100%{box-shadow:0 0 0 0 rgba(255,122,26,0.5)}}
+@keyframes glowCoFounder {0%{box-shadow:0 0 0 0 rgba(124,58,237,0.5)}50%{box-shadow:0 0 0 8px rgba(124,58,237,0.12)}100%{box-shadow:0 0 0 0 rgba(124,58,237,0.5)}}
 .founder-card{animation:glowFounder 3s infinite; background:linear-gradient(white,white) padding-box, linear-gradient(135deg,#FF7A1A,#FFD27A,#FF7A1A) border-box; border:2px solid transparent}
 .cofounder-card{animation:glowCoFounder 3s infinite; background:linear-gradient(white,white) padding-box, linear-gradient(135deg,#7C3AED,#A855F7,#7C3AED) border-box; border:2px solid transparent}
-.chef-card:hover{transform:translateY(-5px); box-shadow:0 20px 50px rgba(0,0,0,0.12)}
-.chef-card{transition:all 0.35s cubic-bezier(0.16,1,0.3,1)}
+.chef-card:hover{transform:translateY(-4px); box-shadow:0 12px 30px rgba(0,0,0,0.1)}
+.chef-card{transition:all 0.3s cubic-bezier(0.16,1,0.3,1)}
 .badge-founder{background:linear-gradient(135deg,#111,#333); color:#FFD27A; border:1px solid #FFD27A}
 .badge-cofounder{background:linear-gradient(135deg,#7C3AED,#A855F7); color:white}
 </style>
@@ -40,16 +41,15 @@ h1,h2{font-family:'Fraunces',serif}
 </section>
 
 <section class="max-w-[1220px] mx-auto px-4 md:px-6 pb-24">
-<!-- FOUNDER SECTION -->
+<!-- FOUNDER SECTION - NOW SAME GRID AS OTHERS -->
 <div id="founderSection" class="hidden mb-10">
 <div class="flex items-center gap-3 mb-6"><div class="h-[1px] flex-1 bg-black/10"></div><span class="px-4 py-1.5 rounded-full bg-black text-white text-[10px] font-black tracking-[0.15em]">FOUNDER CIRCLE</span><div class="h-[1px] flex-1 bg-black/10"></div></div>
-<div id="founderGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+<div id="founderGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
 </div>
 
-<!-- CO-FOUNDER SECTION -->
 <div id="coFounderSection" class="hidden mb-10">
 <div class="flex items-center gap-3 mb-6"><div class="h-[1px] flex-1 bg-purple-200"></div><span class="px-4 py-1.5 rounded-full bg-[#7C3AED] text-white text-[10px] font-black tracking-[0.15em]">CO-FOUNDER CIRCLE</span><div class="h-[1px] flex-1 bg-purple-200"></div></div>
-<div id="coFounderGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+<div id="coFounderGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
 </div>
 
 <div id="loading" class="py-16 text-center"><div class="w-10 h-10 border-4 border-black/10 border-t-black rounded-full animate-spin mx-auto"></div></div>
@@ -72,23 +72,20 @@ var allChefs=[];
 
 function getFounderType(c){
   var raw = (c.role||c.founderRole||c.designation||c.founderType||c.level||c.vipBadge||'').toString().toLowerCase();
-  // check explicit fields
   if(c.isFounder===true || c.role==='Founder' || raw.includes('founder') &&!raw.includes('co-founder') &&!raw.includes('co founder') &&!raw.includes('cofounder')) {
-     // need second check to avoid misclassifying co-founder as founder
      if(raw.includes('co')) return 'cofounder';
      return 'founder';
   }
   if(raw.includes('co-founder') || raw.includes('co founder') || raw.includes('cofounder') || raw==='co-founder' || c.role==='Co-Founder' || c.founderRole==='Co-Founder') return 'cofounder';
   if(c.level==='Founder Team'){
-    // if level is Founder Team but no role, check vipBadge or name
     if((c.vipBadge||'').toLowerCase().includes('co')) return 'cofounder';
-    // Abhishek is Founder, others Co-Founder by default if 2 members
     if((c.name||'').toLowerCase().includes('abhishek')) return 'founder';
     return 'cofounder';
   }
   return 'normal';
 }
 
+// SAME SIZE AS NORMAL - ONLY BADGE & BORDER DIFFERENT
 function cardFounder(c, type){
   var photo=c.photoUrl||'https://ui-avatars.com/api/?name='+encodeURIComponent(c.name)+'&background=111&color=fff';
   var isFounder = type==='founder';
@@ -97,22 +94,21 @@ function cardFounder(c, type){
   var tagIcon = isFounder? 'fa-crown' : 'fa-handshake';
   var cardClass = isFounder? 'founder-card' : 'cofounder-card';
 
-  return `<div class="${cardClass} chef-card rounded-[28px] p-6 flex gap-5 items-center">
+  return `<div class="${cardClass} chef-card rounded-[24px] p-5 flex gap-4 items-center">
     <div class="relative shrink-0">
-      <img src="${photo}" class="w-[88px] h-[88px] rounded-full object-cover border-[4px] ${isFounder?'border-[#FFD27A]':'border-[#A855F7]'} shadow-lg"/>
-      <span class="absolute -bottom-1 -right-1 w-7 h-7 rounded-full ${isFounder?'bg-black text-[#FFD27A]':'bg-[#7C3AED] text-white'} border-2 border-white flex items-center justify-center text-[11px]"><i class="fa-solid fa-check"></i></span>
+      <img src="${photo}" class="w-[64px] h-[64px] rounded-full object-cover border-2 ${isFounder?'border-[#FFD27A]':'border-[#A855F7]'}"/>
+      <span class="absolute -bottom-1 -right-1 w-5 h-5 rounded-full ${isFounder?'bg-black text-[#FFD27A]':'bg-[#7C3AED] text-white'} border-2 border-white flex items-center justify-center text-[8px]"><i class="fa-solid fa-check"></i></span>
     </div>
     <div class="flex-1 min-w-0">
-      <div class="flex items-center gap-2 flex-wrap">
-        <span class="px-3 py-1 rounded-full text-[10px] font-black tracking-widest ${badgeClass}"><i class="fa-solid ${tagIcon} mr-1"></i> ${tagText}</span>
-        <span class="px-2.5 py-1 rounded-full bg-black text-white text-[9px] font-black"><i class="fa-solid fa-badge-check text-[#FFD27A] mr-1"></i> VERIFIED</span>
+      <div class="flex gap-1.5 flex-wrap">
+        <span class="px-2 py-0.5 rounded-full text-[8px] font-black tracking-widest ${badgeClass}"><i class="fa-solid ${tagIcon} mr-1"></i>${tagText}</span>
+        <span class="px-2 py-0.5 rounded-full bg-black text-white text-[8px] font-black"><i class="fa-solid fa-badge-check text-[#FFD27A] mr-1"></i>VERIFIED</span>
       </div>
-      <h3 class="mt-2 font-black text-[20px] leading-tight">${c.name||'Chef'} <i class="fa-solid fa-circle-check text-[#1DA1F2] text-[14px] ml-1"></i></h3>
-      <p class="text-[12px] font-bold text-black/50 mt-0.5">${c.speciality||'Founder'} • ${c.location||'India'}</p>
-      <p class="text-[11px] text-black/40 mt-1 line-clamp-2">${c.bio||c.whyJoin||''}</p>
-      <div class="mt-3 flex gap-2">
-        <a href="${c.instagram||'#'}" target="_blank" class="h-8 px-4 rounded-full bg-[#F6F1E9] text-[11px] font-bold flex items-center gap-1.5"><i class="fa-brands fa-instagram"></i> Instagram</a>
-        <a href="https://umbrellaedible.blogspot.com/search?q=${encodeURIComponent(c.name||'')}" class="h-8 px-4 rounded-full bg-[#111] text-white text-[11px] font-bold flex items-center gap-1.5">Recipes</a>
+      <h3 class="mt-1.5 font-black text-[14px] leading-tight truncate">${c.name||'Chef'} <i class="fa-solid fa-circle-check text-[#1DA1F2] text-[11px]"></i></h3>
+      <p class="text-[10px] font-bold text-black/50 truncate">${c.speciality||'Founder'} ${c.location?'• '+c.location:''}</p>
+      <div class="mt-2 flex gap-1.5">
+        <a href="${c.instagram||'#'}" target="_blank" class="flex-1 h-8 rounded-full bg-[#F6F1E9] border border-black/10 text-[10px] font-bold flex items-center justify-center gap-1"><i class="fa-brands fa-instagram"></i> Insta</a>
+        <a href="https://umbrellaedible.blogspot.com/search?q=${encodeURIComponent(c.name||'')}" class="flex-1 h-8 rounded-full bg-[#111] text-white text-[10px] font-bold flex items-center justify-center">Recipes</a>
       </div>
     </div>
   </div>`;
@@ -189,4 +185,10 @@ document.getElementById('filterLevel').addEventListener('change',applyFilters);
 </div>
 </body>
 </html>
-
+*Changes made:*
+- Founder image `88px` → `64px` same as normal
+- Padding `p-6` → `p-5`
+- Title `20px` → `14px`
+- Grid `md:grid-cols-2` → `sm:grid-cols-2 lg:grid-cols-3` same as others
+- Removed extra bio line to keep height equal
+- Kept only glow border + FOUNDER badge to differentiate
