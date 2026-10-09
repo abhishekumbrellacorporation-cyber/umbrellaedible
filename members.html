@@ -11,18 +11,14 @@
 <style>
 body{font-family:'Plus Jakarta Sans',sans-serif;background:#FFF9F0}
 h1,h2{font-family:'Fraunces',serif}
-@keyframes founderGlow {
-  0%{box-shadow:0 0 0 0 rgba(124,58,237,0.4), 0 20px 60px rgba(124,58,237,0.15)}
-  50%{box-shadow:0 0 0 12px rgba(124,58,237,0.08), 0 25px 80px rgba(124,58,237,0.25)}
-  100%{box-shadow:0 0 0 0 rgba(124,58,237,0.4), 0 20px 60px rgba(124,58,237,0.15)}
-}
-.founder-card{animation:founderGlow 3s infinite; border:1.5px solid transparent; background:linear-gradient(white,white) padding-box, linear-gradient(135deg,#7C3AED,#FF7A1A,#FFD27A) border-box;}
-@keyframes shimmer {0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
-.shimmer{position:relative; overflow:hidden}
-.shimmer:after{content:''; position:absolute; top:0; left:0; width:100%; height:100%; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.4),transparent); animation:shimmer 2.5s infinite}
-.badge-modern{backdrop-filter:blur(12px); box-shadow:0 4px 16px rgba(0,0,0,0.12); letter-spacing:0.5px}
-.chef-card:hover{transform:translateY(-6px) scale(1.01); box-shadow:0 24px 60px rgba(0,0,0,0.12)}
-.chef-card{transition:all 0.4s cubic-bezier(0.16,1,0.3,1)}
+@keyframes glowFounder {0%{box-shadow:0 0 0 0 rgba(255,122,26,0.5),0 20px 60px rgba(255,122,26,0.2)}50%{box-shadow:0 0 0 14px rgba(255,122,26,0.1),0 28px 80px rgba(255,122,26,0.35)}100%{box-shadow:0 0 0 0 rgba(255,122,26,0.5),0 20px 60px rgba(255,122,26,0.2)}}
+@keyframes glowCoFounder {0%{box-shadow:0 0 0 0 rgba(124,58,237,0.5),0 20px 60px rgba(124,58,237,0.2)}50%{box-shadow:0 0 0 14px rgba(124,58,237,0.1),0 28px 80px rgba(124,58,237,0.35)}100%{box-shadow:0 0 0 0 rgba(124,58,237,0.5),0 20px 60px rgba(124,58,237,0.2)}}
+.founder-card{animation:glowFounder 3s infinite; background:linear-gradient(white,white) padding-box, linear-gradient(135deg,#FF7A1A,#FFD27A,#FF7A1A) border-box; border:2px solid transparent}
+.cofounder-card{animation:glowCoFounder 3s infinite; background:linear-gradient(white,white) padding-box, linear-gradient(135deg,#7C3AED,#A855F7,#7C3AED) border-box; border:2px solid transparent}
+.chef-card:hover{transform:translateY(-5px); box-shadow:0 20px 50px rgba(0,0,0,0.12)}
+.chef-card{transition:all 0.35s cubic-bezier(0.16,1,0.3,1)}
+.badge-founder{background:linear-gradient(135deg,#111,#333); color:#FFD27A; border:1px solid #FFD27A}
+.badge-cofounder{background:linear-gradient(135deg,#7C3AED,#A855F7); color:white}
 </style>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
@@ -30,37 +26,33 @@ h1,h2{font-family:'Fraunces',serif}
 <body class="antialiased text-[#111]">
 <header class="sticky top-0 z-50 bg-[#FFF9F0]/90 backdrop-blur-xl border-b border-black/10">
 <div class="max-w-[1220px] mx-auto px-4 md:px-6 h-[64px] flex items-center justify-between">
-<a href="https://umbrellaedible.blogspot.com" class="flex items-center gap-2"><div class="w-9 h-9 rounded-full bg-black text-white flex items-center justify-center"><i class="fa-solid fa-utensils text-[12px]"></i></div><span class="font-black text-[20px]" style="font-family:Fraunces">UMBRELLAedible</span><span class="ml-2 px-2.5 py-1 rounded-full bg-[#111] text-white text-[9px] font-bold">VERIFIED CHEFS</span></a>
-<div class="flex gap-2"><a href="https://umbrellaedible-2ln.pages.dev/membership.html" class="h-9 px-5 rounded-full bg-[#111] text-white flex items-center gap-2 text-[13px] font-bold hover:bg-black"><i class="fa-solid fa-crown text-[#FFD27A]"></i> Become a Chef</a></div>
+<a href="https://umbrellaedible.blogspot.com" class="flex items-center gap-2"><div class="w-9 h-9 rounded-full bg-black text-white flex items-center justify-center"><i class="fa-solid fa-utensils text-[12px]"></i></div><span class="font-black text-[20px]" style="font-family:Fraunces">UMBRELLAedible</span><span class="ml-2 px-2.5 py-1 rounded-full bg-[#111] text-white text-[9px] font-bold tracking-widest">VERIFIED</span></a>
+<a href="https://umbrellaedible-2ln.pages.dev/membership.html" class="h-9 px-5 rounded-full bg-[#111] text-white flex items-center gap-2 text-[13px] font-bold"><i class="fa-solid fa-crown text-[#FFD27A]"></i> Become a Chef</a>
 </div>
 </header>
 
-<section class="max-w-[1220px] mx-auto px-4 md:px-6 pt-12 pb-6">
-<div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
-<div><div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-black text-white text-[10px] font-bold tracking-widest"><span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span> LIVE VERIFIED COMMUNITY</div><h1 class="mt-4 text-[52px] md:text-[68px] font-black leading-[0.85] tracking-tight">Meet our<br><span class="text-[#FF7A1A]">Verified Chefs.</span></h1><p class="mt-4 text-[14px] text-black/60 max-w-[520px]">Every chef is manually verified for originality. Founder team pinned at top.</p></div>
-<div class="flex gap-3">
-<div class="bg-white border border-black/10 rounded-[20px] px-5 py-4 flex items-center gap-4 shadow-sm"><div class="w-11 h-11 rounded-full bg-[#111] text-white flex items-center justify-center"><i class="fa-solid fa-users"></i></div><div><p class="text-[10px] font-black tracking-widest opacity-40">TOTAL VERIFIED</p><p id="totalCount" class="font-black text-[22px] mt-0.5">0</p></div></div>
-<div class="bg-[#111] text-white rounded-[20px] px-5 py-4 flex items-center gap-4 shadow-[0_10px_30px_rgba(0,0,0,0.2)]"><div class="w-11 h-11 rounded-full bg-[#FFD8A8] text-black flex items-center justify-center"><i class="fa-solid fa-crown"></i></div><div><p class="text-[10px] font-black tracking-widest text-white/50">FOUNDER CIRCLE</p><p id="founderCount" class="font-black text-[22px] mt-0.5">0</p></div></div>
-</div>
-</div>
-<div class="mt-8 flex gap-3"><div class="flex-1 relative"><i class="fa-solid fa-search absolute left-5 top-1/2 -translate-y-1/2 text-black/30 text-[14px]"></i><input id="search" placeholder="Search chef, city, speciality..." class="w-full h-[50px] pl-12 pr-5 rounded-full bg-white border border-black/10 outline-none text-[14px] font-medium shadow-sm focus:border-black/20"/></div><select id="filterLevel" class="h-[50px] px-6 rounded-full bg-white border border-black/10 font-bold text-[13px] shadow-sm outline-none"><option value="">All Chefs</option><option value="founder">👑 Founder Team Only</option><option value="vip">💜 VIP Only</option><option>Home Cook</option><option>Professional Chef</option><option>Baker</option><option>Food Blogger</option></select></div>
+<section class="max-w-[1220px] mx-auto px-4 md:px-6 pt-10 pb-6">
+<h1 class="text-[48px] md:text-[62px] font-black leading-[0.85]">Meet our<br><span class="text-[#FF7A1A]">Verified Chefs.</span></h1>
+<div class="mt-6 flex gap-3"><div class="bg-white border rounded-[16px] px-4 py-3"><p class="text-[10px] font-black opacity-40 tracking-widest">TOTAL</p><p id="totalCount" class="font-black text-[18px]">0</p></div><div class="bg-[#111] text-white rounded-[16px] px-4 py-3"><p class="text-[10px] font-black text-white/50 tracking-widest">FOUNDERS</p><p id="founderCount" class="font-black text-[18px]">0</p></div></div>
+<div class="mt-6 flex gap-2"><input id="search" placeholder="Search..." class="flex-1 h-[46px] px-5 rounded-full bg-white border border-black/10 outline-none text-[13px]"/><select id="filterLevel" class="h-[46px] px-5 rounded-full bg-white border border-black/10 font-bold text-[13px]"><option value="">All</option><option value="founder">Founder Only</option><option value="cofounder">Co-Founder Only</option><option value="vip">VIP</option></select></div>
 </section>
 
 <section class="max-w-[1220px] mx-auto px-4 md:px-6 pb-24">
-
-<!-- FOUNDER TEAM PINNED SECTION -->
-<div id="founderSection" class="hidden mb-12">
-<div class="flex items-center gap-3 mb-5">
-<div class="h-[1px] flex-1 bg-gradient-to-r from-[#7C3AED] to-transparent"></div>
-<div class="flex items-center gap-2 px-4 py-2 rounded-full bg-[#7C3AED] text-white text-[11px] font-black tracking-widest"><i class="fa-solid fa-crown text-[#FFD27A]"></i> FOUNDER TEAM • PINNED</div>
-<div class="h-[1px] flex-1 bg-gradient-to-l from-[#7C3AED] to-transparent"></div>
-</div>
+<!-- FOUNDER SECTION -->
+<div id="founderSection" class="hidden mb-10">
+<div class="flex items-center gap-3 mb-6"><div class="h-[1px] flex-1 bg-black/10"></div><span class="px-4 py-1.5 rounded-full bg-black text-white text-[10px] font-black tracking-[0.15em]">FOUNDER CIRCLE</span><div class="h-[1px] flex-1 bg-black/10"></div></div>
 <div id="founderGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
 </div>
 
-<div id="loading" class="py-20 text-center"><div class="w-12 h-12 border-4 border-black/10 border-t-black rounded-full animate-spin mx-auto"></div><p class="mt-4 text-[13px] font-bold text-black/40">Loading verified chefs...</p></div>
-<div id="grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 hidden"></div>
-<div id="empty" class="hidden py-20 text-center bg-white border border-black/10 rounded-[32px]"><div class="w-16 h-16 rounded-full bg-[#F6F1E9] flex items-center justify-center mx-auto"><i class="fa-solid fa-utensils text-black/30"></i></div><h3 class="mt-4 font-black text-[18px]">No chefs found</h3><p class="text-[13px] text-black/50 mt-2">Try another search or filter</p></div>
+<!-- CO-FOUNDER SECTION -->
+<div id="coFounderSection" class="hidden mb-10">
+<div class="flex items-center gap-3 mb-6"><div class="h-[1px] flex-1 bg-purple-200"></div><span class="px-4 py-1.5 rounded-full bg-[#7C3AED] text-white text-[10px] font-black tracking-[0.15em]">CO-FOUNDER CIRCLE</span><div class="h-[1px] flex-1 bg-purple-200"></div></div>
+<div id="coFounderGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+</div>
+
+<div id="loading" class="py-16 text-center"><div class="w-10 h-10 border-4 border-black/10 border-t-black rounded-full animate-spin mx-auto"></div></div>
+<div id="grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 hidden"></div>
+<div id="empty" class="hidden py-16 text-center bg-white border rounded-[24px]"><h3 class="font-black">No chefs found</h3></div>
 </section>
 
 <script>
@@ -76,118 +68,112 @@ firebase.initializeApp(firebaseConfig);
 var db = firebase.firestore();
 var allChefs=[];
 
-function isFounder(c){ return c.level==='Founder Team' || c.isFounder===true; }
+function getFounderType(c){
+  var raw = (c.role||c.founderRole||c.designation||c.founderType||c.level||c.vipBadge||'').toString().toLowerCase();
+  // check explicit fields
+  if(c.isFounder===true || c.role==='Founder' || raw.includes('founder') &&!raw.includes('co-founder') &&!raw.includes('co founder') &&!raw.includes('cofounder')) {
+     // need second check to avoid misclassifying co-founder as founder
+     if(raw.includes('co')) return 'cofounder';
+     return 'founder';
+  }
+  if(raw.includes('co-founder') || raw.includes('co founder') || raw.includes('cofounder') || raw==='co-founder' || c.role==='Co-Founder' || c.founderRole==='Co-Founder') return 'cofounder';
+  if(c.level==='Founder Team'){
+    // if level is Founder Team but no role, check vipBadge or name
+    if((c.vipBadge||'').toLowerCase().includes('co')) return 'cofounder';
+    // Abhishek is Founder, others Co-Founder by default if 2 members
+    if((c.name||'').toLowerCase().includes('abhishek')) return 'founder';
+    return 'cofounder';
+  }
+  return 'normal';
+}
 
-function founderCardHTML(c){
-  var photo=c.photoUrl||'https://ui-avatars.com/api/?name='+encodeURIComponent(c.name||'Chef')+'&background=7C3AED&color=fff';
-  var sample=c.sampleImageUrl||'https://images.unsplash.com/photo-1490818387583-1baba5e638af?w=600';
-  return `<div class="founder-card chef-card bg-white rounded-[28px] overflow-hidden group">
-    <div class="relative h-[220px] overflow-hidden">
-      <img src="${sample}" class="w-full h-full object-cover group-hover:scale-105 transition duration-700" onerror="this.src='https://images.unsplash.com/photo-1490818387583-1baba5e638af?w=600'"/>
-      <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div>
-      <div class="absolute top-4 left-4 flex gap-2">
-        <span class="badge-modern shimmer px-3 py-1.5 rounded-full bg-[#7C3AED] text-white text-[10px] font-black tracking-widest"><i class="fa-solid fa-crown text-[#FFD27A] mr-1"></i> FOUNDER TEAM</span>
-        <span class="badge-modern px-3 py-1.5 rounded-full bg-white/90 text-black text-[10px] font-black"><i class="fa-solid fa-shield-check text-green-600 mr-1"></i> VERIFIED</span>
-      </div>
-      <div class="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/90 backdrop-blur flex items-center justify-center text-[#7C3AED]"><i class="fa-solid fa-star"></i></div>
-      <div class="absolute bottom-4 left-4 right-4 flex items-end justify-between">
-        <div class="flex gap-3 items-center">
-          <div class="relative"><img src="${photo}" class="w-14 h-14 rounded-full object-cover border-[3px] border-white shadow-lg"/><span class="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-[#7C3AED] border-2 border-white flex items-center justify-center text-[10px] text-white"><i class="fa-solid fa-check"></i></span></div>
-          <div><h3 class="font-black text-[18px] text-white leading-tight">${c.name||'Chef'} <i class="fa-solid fa-circle-check text-[#1DA1F2] ml-1"></i></h3><p class="text-[11px] text-white/70 font-bold tracking-wide">${c.speciality||'Founder'} • ${c.location||'India'}</p></div>
-        </div>
-        <span class="px-3 py-1 rounded-full bg-white text-black text-[10px] font-black">${c.experience||'Founder'}</span>
-      </div>
+function cardFounder(c, type){
+  var photo=c.photoUrl||'https://ui-avatars.com/api/?name='+encodeURIComponent(c.name)+'&background=111&color=fff';
+  var isFounder = type==='founder';
+  var badgeClass = isFounder? 'badge-founder' : 'badge-cofounder';
+  var tagText = isFounder? 'FOUNDER' : 'CO-FOUNDER';
+  var tagIcon = isFounder? 'fa-crown' : 'fa-handshake';
+  var cardClass = isFounder? 'founder-card' : 'cofounder-card';
+
+  return `<div class="${cardClass} chef-card rounded-[28px] p-6 flex gap-5 items-center">
+    <div class="relative shrink-0">
+      <img src="${photo}" class="w-[88px] h-[88px] rounded-full object-cover border-[4px] ${isFounder?'border-[#FFD27A]':'border-[#A855F7]'} shadow-lg"/>
+      <span class="absolute -bottom-1 -right-1 w-7 h-7 rounded-full ${isFounder?'bg-black text-[#FFD27A]':'bg-[#7C3AED] text-white'} border-2 border-white flex items-center justify-center text-[11px]"><i class="fa-solid fa-check"></i></span>
     </div>
-    <div class="p-5 flex gap-2">
-      <a href="${c.instagram||'#'}" target="_blank" class="flex-1 h-11 rounded-full bg-[#F6F1E9] border border-black/5 flex items-center justify-center gap-2 text-[12px] font-bold hover:bg-[#111] hover:text-white transition"><i class="fa-brands fa-instagram"></i> Instagram</a>
-      <a href="https://umbrellaedible.blogspot.com/search?q=${encodeURIComponent(c.name||'')}" target="_blank" class="flex-1 h-11 rounded-full bg-[#111] text-white flex items-center justify-center gap-2 text-[12px] font-black hover:bg-black transition"><i class="fa-solid fa-book-open"></i> Recipes</a>
+    <div class="flex-1 min-w-0">
+      <div class="flex items-center gap-2 flex-wrap">
+        <span class="px-3 py-1 rounded-full text-[10px] font-black tracking-widest ${badgeClass}"><i class="fa-solid ${tagIcon} mr-1"></i> ${tagText}</span>
+        <span class="px-2.5 py-1 rounded-full bg-black text-white text-[9px] font-black"><i class="fa-solid fa-badge-check text-[#FFD27A] mr-1"></i> VERIFIED</span>
+      </div>
+      <h3 class="mt-2 font-black text-[20px] leading-tight">${c.name||'Chef'} <i class="fa-solid fa-circle-check text-[#1DA1F2] text-[14px] ml-1"></i></h3>
+      <p class="text-[12px] font-bold text-black/50 mt-0.5">${c.speciality||'Founder'} • ${c.location||'India'}</p>
+      <p class="text-[11px] text-black/40 mt-1 line-clamp-2">${c.bio||c.whyJoin||''}</p>
+      <div class="mt-3 flex gap-2">
+        <a href="${c.instagram||'#'}" target="_blank" class="h-8 px-4 rounded-full bg-[#F6F1E9] text-[11px] font-bold flex items-center gap-1.5"><i class="fa-brands fa-instagram"></i> Instagram</a>
+        <a href="https://umbrellaedible.blogspot.com/search?q=${encodeURIComponent(c.name||'')}" class="h-8 px-4 rounded-full bg-[#111] text-white text-[11px] font-bold flex items-center gap-1.5">Recipes</a>
+      </div>
     </div>
   </div>`;
 }
 
-function normalCardHTML(c){
-  var photo=c.photoUrl||'https://ui-avatars.com/api/?name='+encodeURIComponent(c.name||'Chef')+'&background=111&color=fff';
-  var sample=c.sampleImageUrl||'https://images.unsplash.com/photo-1490818387583-1baba5e638af?w=600';
+function cardNormal(c){
+  var photo=c.photoUrl||'https://ui-avatars.com/api/?name='+encodeURIComponent(c.name)+'&background=111&color=fff';
   var isVIP=c.isVIP===true;
-  return `<div class="chef-card bg-white border ${isVIP?'border-purple-200':'border-black/10'} rounded-[24px] overflow-hidden group">
-   <div class="relative h-[190px] overflow-hidden"><img src="${sample}" class="w-full h-full object-cover group-hover:scale-105 transition duration-700" onerror="this.src='https://images.unsplash.com/photo-1490818387583-1baba5e638af?w=600'"/>
-   <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition"></div>
-   <div class="absolute top-3 left-3 flex gap-2">
-     <span class="badge-modern px-2.5 py-1 rounded-full bg-black/80 backdrop-blur text-white text-[9px] font-black tracking-widest"><i class="fa-solid fa-badge-check text-[#FFD27A] mr-1"></i> VERIFIED</span>
-     ${isVIP?`<span class="badge-modern px-2.5 py-1 rounded-full bg-gradient-to-r from-[#7C3AED] to-[#A855F7] text-white text-[9px] font-black tracking-widest"><i class="fa-solid fa-crown text-[#FFD27A] mr-1"></i> ${c.vipBadge||'VIP'}</span>`:''}
-     ${c.level && c.level!=='Founder Team'?`<span class="badge-modern px-2.5 py-1 rounded-full bg-white/90 text-black text-[9px] font-black">${c.level.toUpperCase()}</span>`:''}
-   </div>
-   <div class="absolute bottom-3 right-3 w-8 h-8 rounded-full bg-white/90 backdrop-blur flex items-center justify-center opacity-0 group-hover:opacity-100 transition"><i class="fa-solid fa-arrow-up-right-from-square text-[12px]"></i></div>
-   </div>
-   <div class="p-5">
-     <div class="flex gap-3">
-       <div class="relative shrink-0"><img src="${photo}" class="w-12 h-12 rounded-full object-cover border-2 ${isVIP?'border-purple-300':'border-black/10'}"/><span class="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-black text-white border-2 border-white flex items-center justify-center text-[9px]"><i class="fa-solid fa-check"></i></span></div>
-       <div class="flex-1 min-w-0"><h3 class="font-black text-[15px] leading-tight truncate">${c.name||'Chef'} <i class='fa-solid fa-circle-check text-[#1DA1F2] text-[12px]'></i></h3><p class="text-[11px] text-black/50 font-bold mt-0.5 truncate">${c.speciality||''} ${c.location?'• '+c.location:''}</p><div class="mt-2 flex items-center gap-2"><span class="text-[10px] px-2 py-1 rounded-full bg-[#F6F1E9] font-bold text-black/60"><i class="fa-solid fa-clock mr-1"></i>${c.cookTime||'Home Cook'}</span><span class="text-[10px] px-2 py-1 rounded-full bg-[#FFF1E0] font-bold text-black/60">${c.veg||'Veg'}</span></div></div>
-     </div>
-     <div class="mt-4 flex gap-2"><a href="${c.instagram||'#'}" target="_blank" class="flex-1 h-9 rounded-full bg-white border border-black/10 flex items-center justify-center gap-1.5 text-[11px] font-bold hover:bg-black hover:text-white transition"><i class="fa-brands fa-instagram"></i> Insta</a><a href="https://umbrellaedible.blogspot.com/search?q=${encodeURIComponent(c.name||'')}" target="_blank" class="flex-1 h-9 rounded-full bg-[#111] text-white flex items-center justify-center gap-1.5 text-[11px] font-bold hover:bg-black transition"><i class="fa-solid fa-book-open text-[11px]"></i> Recipes</a></div>
-   </div>
+  return `<div class="chef-card bg-white border ${isVIP?'border-purple-200':'border-black/10'} rounded-[24px] p-5 flex gap-4 items-center">
+    <div class="relative shrink-0">
+      <img src="${photo}" class="w-[64px] h-[64px] rounded-full object-cover border-2 ${isVIP?'border-purple-300':'border-black/10'}"/>
+      <span class="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-black text-white border-2 border-white flex items-center justify-center text-[8px]"><i class="fa-solid fa-check"></i></span>
+    </div>
+    <div class="flex-1 min-w-0">
+      <div class="flex gap-1.5 flex-wrap"><span class="px-2 py-0.5 rounded-full bg-black text-white text-[8px] font-black tracking-widest">VERIFIED</span>${isVIP?`<span class="px-2 py-0.5 rounded-full bg-[#7C3AED] text-white text-[8px] font-black">${c.vipBadge||'VIP'}</span>`:''}<span class="px-2 py-0.5 rounded-full bg-[#F6F1E9] text-[8px] font-bold">${c.level||''}</span></div>
+      <h3 class="mt-1.5 font-black text-[14px] leading-tight truncate">${c.name||'Chef'} <i class="fa-solid fa-circle-check text-[#1DA1F2] text-[11px]"></i></h3>
+      <p class="text-[10px] font-bold text-black/50 truncate">${c.speciality||''} ${c.location?'• '+c.location:''}</p>
+      <div class="mt-2 flex gap-1.5"><a href="${c.instagram||'#'}" target="_blank" class="flex-1 h-8 rounded-full bg-white border border-black/10 text-[10px] font-bold flex items-center justify-center gap-1"><i class="fa-brands fa-instagram"></i> Insta</a><a href="https://umbrellaedible.blogspot.com/search?q=${encodeURIComponent(c.name||'')}" class="flex-1 h-8 rounded-full bg-[#111] text-white text-[10px] font-bold flex items-center justify-center">Recipes</a></div>
+    </div>
   </div>`;
 }
 
 function render(list){
  var grid=document.getElementById('grid');
- var founderGrid=document.getElementById('founderGrid');
- var founderSection=document.getElementById('founderSection');
- var empty=document.getElementById('empty');
- if(!list.length){grid.classList.add('hidden');founderSection.classList.add('hidden');empty.classList.remove('hidden');return;}
+ var fGrid=document.getElementById('founderGrid');
+ var cfGrid=document.getElementById('coFounderGrid');
+ var fSec=document.getElementById('founderSection');
+ var cfSec=document.getElementById('coFounderSection');
 
- var founders=list.filter(isFounder);
- var others=list.filter(c=>!isFounder(c));
+ var founders=list.filter(c=>getFounderType(c)==='founder');
+ var cofounders=list.filter(c=>getFounderType(c)==='cofounder');
+ var others=list.filter(c=>getFounderType(c)==='normal');
 
- // Render Founders Pinned
- if(founders.length){
-   founderSection.classList.remove('hidden');
-   founderGrid.innerHTML=founders.map(founderCardHTML).join('');
- } else {
-   founderSection.classList.add('hidden');
- }
+ if(founders.length){fSec.classList.remove('hidden'); fGrid.innerHTML=founders.map(c=>cardFounder(c,'founder')).join('');} else fSec.classList.add('hidden');
+ if(cofounders.length){cfSec.classList.remove('hidden'); cfGrid.innerHTML=cofounders.map(c=>cardFounder(c,'cofounder')).join('');} else cfSec.classList.add('hidden');
 
- // Render Others
- if(others.length){
-   grid.innerHTML=others.map(normalCardHTML).join('');
-   grid.classList.remove('hidden');
- } else {
-   grid.classList.add('hidden');
-   if(!founders.length) empty.classList.remove('hidden');
-   else empty.classList.add('hidden');
- }
+ if(others.length){grid.innerHTML=others.map(cardNormal).join(''); grid.classList.remove('hidden');} else {grid.classList.add('hidden'); if(!founders.length &&!cofounders.length) document.getElementById('empty').classList.remove('hidden');}
  document.getElementById('loading').classList.add('hidden');
  document.getElementById('totalCount').textContent=list.length;
- document.getElementById('founderCount').textContent=founders.length;
+ document.getElementById('founderCount').textContent=founders.length+cofounders.length;
 }
 
 db.collection('chef_applications').where('status','==','approved').onSnapshot(function(snap){
- var list=[];
- snap.forEach(function(doc){var d=doc.data(); d.id=doc.id; if(d.banned) return; list.push(d);});
- list.sort(function(a,b){
-   // Founders first, then by time
-   if(isFounder(a) &&!isFounder(b)) return -1;
-   if(!isFounder(a) && isFounder(b)) return 1;
-   var at = a.createdAt? (a.createdAt.seconds||0) : 0;
-   var bt = b.createdAt? (b.createdAt.seconds||0) : 0;
-   return bt - at;
+ var list=[]; snap.forEach(function(doc){var d=doc.data(); d.id=doc.id; if(d.banned) return; list.push(d);});
+ list.sort((a,b)=>{
+   var order={founder:0, cofounder:1, normal:2};
+   var ta=getFounderType(a), tb=getFounderType(b);
+   if(order[ta]!==order[tb]) return order[ta]-order[tb];
+   return (b.createdAt?.seconds||0)-(a.createdAt?.seconds||0);
  });
- allChefs=list;
- document.getElementById('loading').classList.add('hidden');
- render(list);
-}, function(err){
- document.getElementById('loading').innerHTML = "<p style='color:red;font-weight:bold'>Firestore Error: "+err.message+"</p>";
+ allChefs=list; render(list);
 });
 
 function applyFilters(){
  var q=(document.getElementById('search').value||'').toLowerCase();
  var lvl=document.getElementById('filterLevel').value;
  var filtered=allChefs.filter(function(c){
-  var mSearch=!q||(c.name||'').toLowerCase().includes(q)||(c.location||'').toLowerCase().includes(q)||(c.speciality||'').toLowerCase().includes(q)||(c.vipBadge||'').toLowerCase().includes(q);
+  var type=getFounderType(c);
+  var mSearch=!q||(c.name||'').toLowerCase().includes(q)||(c.location||'').toLowerCase().includes(q)||(c.speciality||'').toLowerCase().includes(q);
   var mLevel=true;
-  if(lvl==='founder') mLevel=isFounder(c);
+  if(lvl==='founder') mLevel=type==='founder';
+  else if(lvl==='cofounder') mLevel=type==='cofounder';
   else if(lvl==='vip') mLevel=c.isVIP;
-  else if(lvl) mLevel=c.level===lvl;
   return mSearch&&mLevel;
  });
  render(filtered);
@@ -196,7 +182,7 @@ document.getElementById('search').addEventListener('input',applyFilters);
 document.getElementById('filterLevel').addEventListener('change',applyFilters);
 </script>
 
-<div class='footer wrap' style="text-align:center; width:100%; display:flex; justify-content:center; align-items:center; padding:28px 0; font-size:11px; color:#666; letter-spacing:0.3px;">
+<div class='footer wrap' style="text-align:center; width:100%; display:flex; justify-content:center; align-items:center; padding:24px 0; font-size:11px; color:#666;">
   Founded by <span style="color:#FF6A00; font-weight:800; margin:0 4px;">Abhishek Ganguly</span> - UMBRELLAedible 2026
 </div>
 </body>
