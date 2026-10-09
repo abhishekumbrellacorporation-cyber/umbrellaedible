@@ -1,6 +1,7 @@
 
 
-Fixed — *Removed policy bar* and *made recipes clickable* — now they open.
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,22 +12,23 @@ Fixed — *Removed policy bar* and *made recipes clickable* — now they open.
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,700;6..96,900&family=Plus+Jakarta+Sans:wght@400;500;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-:root{--gold:#C9A86A;--gold2:#F2D9A0;--bone:#F5F1E8;--ink:#0A0A0B;--paper:#F5F1E8}
+:root{--gold:#C9A86A;--gold2:#F2D9A0;--bone:#F5F1E8;--ink:#0A0A0B}
 body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--ink);color:var(--bone);-webkit-font-smoothing:antialiased}
 .serif{font-family:'Bodoni Moda',serif}
 .instrument{font-family:'Instrument Serif',serif}
 .gold-text{background:linear-gradient(100deg,var(--gold2),var(--gold),#E8C77A,var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.noise::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");opacity:0.03;pointer-events:none;z-index:9999}
-.hairline{height:1px;background:linear-gradient(90deg,transparent,rgba(201,168,106,0.3),transparent)}
-.card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);transition:0.3s;cursor:pointer;display:block;text-decoration:none}
-.card:hover{transform:translateY(-4px);border-color:rgba(201,168,106,0.25);box-shadow:0 20px 40px rgba(0,0,0,0.4)}
+.noise::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");opacity:0.03;pointer-events:none;z-index:9999}
+.gold-border{border:1px solid transparent;background:linear-gradient(var(--ink),var(--ink)) padding-box, linear-gradient(135deg,var(--gold2),var(--gold),var(--gold2)) border-box}
+.card:hover{transform:translateY(-4px);border-color:rgba(201,168,106,0.3)}
 </style>
 </head>
-<body class="noise">
+<body class="noise min-h-screen">
 
+<!-- HEADER FIXED - NO NESTED A -->
 <header class="sticky top-0 z-50 backdrop-blur-[24px] bg-[#0A0A0B]/80 border-b border-white/[0.06]">
-<div class="max-w-[1280px] mx-auto px-4 md:px-6 h-[72px] flex items-center justify-between gap-3">
-<a href="https://umbrellaedible.blogspot.com/" class="flex items-center gap-3 no-underline cursor-pointer">
+<div class="max-w-[1280px] mx-auto px-4 md:px-6 h-[72px] flex items-center justify-between">
+<a href="https://umbrellaedible.blogspot.com" class="flex items-center gap-3 no-underline">
+<div class="w-10 h-10 rounded-full bg-[#F5F1E8] text-black flex items-center justify-center shrink-0"><i class="fa-solid fa-utensils text-[13px]"></i></div>
 <div>
 <p class="serif font-black text-[16px] leading-none tracking-tight text-white">UMBRELLAedible</p>
 <p class="text-[8px] tracking-[0.22em] text-white/30 font-bold mt-[3px]">MAISON • MMXXVI</p>
@@ -34,73 +36,108 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--ink);color:var(
 <span class="hidden md:flex ml-3 px-3 py-1 rounded-full border border-[#C9A86A]/30 text-[#C9A86A] text-[9px] font-black tracking-widest">EXPLORE • LUXURY</span>
 </a>
 <div class="flex items-center gap-2">
-<a href="https://umbrellaedible-2ln.pages.dev/members.html" class="h-9 px-4 rounded-full bg-white/[0.06] border border-white/10 flex items-center gap-2 text-[12px] font-bold backdrop-blur hover:bg-white/[0.10] transition"><span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>Chefs</a>
-<a href="https://umbrellaedible-2ln.pages.dev/membership.html" class="h-9 px-5 rounded-full bg-[#F5F1E8] text-black flex items-center gap-2 text-[12px] font-black hover:bg-[#C9A86A] transition"><i class="fa-solid fa-crown text-[10px]"></i> Join</a>
+<a href="https://umbrellaedible-2ln.pages.dev/members" class="h-9 px-4 rounded-full bg-white/10 border border-white/10 flex items-center gap-2 text-[12px] font-bold"><span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>Chefs</a>
+<a href="https://courageous-travesseiro-b31e7e.netlify.app/" class="h-9 px-5 rounded-full bg-[#F5F1E8] text-black flex items-center gap-2 text-[12px] font-black hover:bg-[#C9A86A] transition"><i class="fa-solid fa-crown text-[10px]"></i> Join</a>
 </div>
 </div>
 </header>
 
-<main class="max-w-[1280px] mx-auto px-4 md:px-6 pt-12 pb-24">
-<div class="mb-10">
-<p class="text-[10px] tracking-[0.2em] text-[#C9A86A] font-bold mb-3">NO LOGIN TO READ • MAISON VERIFIED</p>
-<h1 class="serif font-[900] text-[48px] md:text-[72px] leading-[0.85] tracking-[-0.03em]">Explore<br><span class="gold-text instrument italic font-normal">Recipes.</span></h1>
-<p class="text-white/50 text-[14px] leading-6 max-w-[440px] mt-4">Curated luxury journal. Filter by taste, time, and technique. All recipes from verified chefs only.</p>
+<!-- HERO -->
+<div class="max-w-[1280px] mx-auto px-4 md:px-6 pt-12 pb-10">
+<div class="flex items-center gap-4 mb-6">
+<div class="h-[1px] w-12 bg-gradient-to-r from-transparent to-[#C9A86A]"></div>
+<p class="text-[11px] tracking-[0.22em] text-[#C9A86A] font-black">MAISON COLLECTION • MMXXVI</p>
+</div>
+<h1 class="serif font-black text-[42px] md:text-[68px] leading-[0.9] tracking-[-0.03em]">Cook. <span class="gold-text italic font-normal instrument">Share.</span> Belong.</h1>
+<p class="mt-4 text-[15px] text-white/60 max-w-[520px] leading-relaxed">Curated luxury recipes from verified Maison chefs. Click any recipe — opens here, no redirect to home.</p>
+<div class="mt-8 flex gap-3">
+<button class="h-11 px-6 rounded-full bg-[#F5F1E8] text-black font-black text-[13px] flex items-center gap-2"><i class="fa-solid fa-compass text-[11px]"></i> Explore Recipes</button>
+<a href="https://umbrellaedible.blogspot.com" class="h-11 px-6 rounded-full bg-white/[0.06] border border-white/[0.08] font-bold text-[13px] flex items-center gap-2"><i class="fa-solid fa-house text-[11px]"></i> Home</a>
+</div>
 </div>
 
-<div class="hairline mb-8"></div>
+<!-- GRID - ALL CLICKABLE -->
+<div class="max-w-[1280px] mx-auto px-4 md:px-6 pb-20">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
 
-<div class="flex flex-wrap gap-2 mb-8">
-<button class="px-5 h-9 rounded-full bg-[#F5F1E8] text-black text-[12px] font-black">All</button>
-<button class="px-5 h-9 rounded-full bg-white/[0.06] border border-white/10 text-white/70 text-[12px] font-bold hover:bg-white/[0.10]">Veg</button>
-<button class="px-5 h-9 rounded-full bg-white/[0.06] border border-white/10 text-white/70 text-[12px] font-bold hover:bg-white/[0.10]">Non-Veg</button>
-<button class="px-5 h-9 rounded-full bg-white/[0.06] border border-white/10 text-white/70 text-[12px] font-bold hover:bg-white/[0.10]">Dessert</button>
-<button class="px-5 h-9 rounded-full bg-white/[0.06] border border-white/10 text-white/70 text-[12px] font-bold hover:bg-white/[0.10]">Quick 15m</button>
+<!-- CARD 1 -->
+<div onclick="openRecipe('butter')" class="card cursor-pointer gold-border rounded-[22px] overflow-hidden bg-white/[0.03] transition-all duration-300">
+<div class="h-[190px] bg-gradient-to-br from-orange-900/30 to-black relative p-5 flex flex-col justify-between">
+<span class="px-3 py-1 rounded-full bg-[#C9A86A] text-black text-[10px] font-black tracking-widest w-fit">MAISON SIGNATURE</span>
+<i class="fa-solid fa-utensils text-[40px] text-white/10 absolute right-6 bottom-6"></i>
+</div>
+<div class="p-5">
+<h3 class="serif font-bold text-[19px]">Butter Chicken Maison</h3>
+<p class="text-[13px] text-white/50 mt-2 line-clamp-2">Tandoori chicken in silky tomato-cashew gravy, finished with gold dust.</p>
+<div class="mt-4 flex items-center gap-2 text-[11px] text-white/40"><i class="fa-regular fa-clock"></i> 45 min <span class="w-1 h-1 bg-white/20 rounded-full"></span> Chef Verified</div>
+</div>
 </div>
 
-<div class="grid md:grid-cols-3 gap-4">
-
-<a href="https://umbrellaedible.blogspot.com/" class="card rounded-[20px] overflow-hidden">
-<img src="https://images.unsplash.com/photo-1490818387583-1baba5e638af?w=600" class="w-full h-[200px] object-cover"/>
-<div class="p-4">
-<div class="flex gap-2 mb-3"><span class="text-[9px] font-bold px-2 py-1 rounded-full bg-white/[0.06] border border-white/10 text-white/50">15 MIN</span><span class="text-[9px] font-bold px-2 py-1 rounded-full border border-[#C9A86A]/20 text-[#F2D9A0]">VEG</span></div>
-<p class="serif font-bold text-[17px] leading-tight text-white">Truffle Mushroom Risotto</p>
-<p class="text-[12px] text-white/40 mt-1 line-clamp-2">Creamy arborio with wild forest notes...</p>
-<p class="text-[11px] text-[#C9A86A] font-bold mt-3 flex items-center gap-1">Open Recipe <i class="fa-solid fa-arrow-right text-[10px]"></i></p>
+<!-- CARD 2 -->
+<div onclick="openRecipe('truffle')" class="card cursor-pointer gold-border rounded-[22px] overflow-hidden bg-white/[0.03] transition-all duration-300">
+<div class="h-[190px] bg-gradient-to-br from-stone-800 to-black relative p-5">
+<span class="px-3 py-1 rounded-full bg-white/10 border border-white/10 text-[10px] font-black tracking-widest">LUXURY PASTA</span>
 </div>
-</a>
-
-<a href="https://umbrellaedible.blogspot.com/" class="card rounded-[20px] overflow-hidden">
-<img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600" class="w-full h-[200px] object-cover"/>
-<div class="p-4">
-<div class="flex gap-2 mb-3"><span class="text-[9px] font-bold px-2 py-1 rounded-full bg-white/[0.06] border border-white/10 text-white/50">30 MIN</span><span class="text-[9px] font-bold px-2 py-1 rounded-full border border-[#C9A86A]/20 text-[#F2D9A0]">CHEF SPECIAL</span></div>
-<p class="serif font-bold text-[17px] leading-tight text-white">Burrata & Heirloom Tomato</p>
-<p class="text-[12px] text-white/40 mt-1 line-clamp-2">Maison plating, olive dust...</p>
-<p class="text-[11px] text-[#C9A86A] font-bold mt-3 flex items-center gap-1">Open Recipe <i class="fa-solid fa-arrow-right text-[10px]"></i></p>
+<div class="p-5">
+<h3 class="serif font-bold text-[19px]">Black Truffle Pasta</h3>
+<p class="text-[13px] text-white/50 mt-2">Handmade tagliatelle, brown butter, 24-month parmesan, fresh truffle.</p>
+<div class="mt-4 flex items-center gap-2 text-[11px] text-white/40"><i class="fa-regular fa-clock"></i> 25 min</div>
 </div>
-</a>
-
-<a href="https://umbrellaedible.blogspot.com/" class="card rounded-[20px] overflow-hidden">
-<img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=600" class="w-full h-[200px] object-cover"/>
-<div class="p-4">
-<div class="flex gap-2 mb-3"><span class="text-[9px] font-bold px-2 py-1 rounded-full bg-white/[0.06] border border-white/10 text-white/50">45 MIN</span><span class="text-[9px] font-bold px-2 py-1 rounded-full border border-[#C9A86A]/20 text-[#F2D9A0]">DESSERT</span></div>
-<p class="serif font-bold text-[17px] leading-tight text-white">Gold Leaf Tiramisu</p>
-<p class="text-[12px] text-white/40 mt-1 line-clamp-2">Espresso soaked luxury...</p>
-<p class="text-[11px] text-[#C9A86A] font-bold mt-3 flex items-center gap-1">Open Recipe <i class="fa-solid fa-arrow-right text-[10px]"></i></p>
 </div>
-</a>
+
+<!-- CARD 3 -->
+<div onclick="openRecipe('tiramisu')" class="card cursor-pointer gold-border rounded-[22px] overflow-hidden bg-white/[0.03] transition-all duration-300">
+<div class="h-[190px] bg-gradient-to-br from-amber-900/30 to-black relative p-5">
+<span class="px-3 py-1 rounded-full bg-white/10 border border-white/10 text-[10px] font-black tracking-widest">DESSERT</span>
+</div>
+<div class="p-5">
+<h3 class="serif font-bold text-[19px]">Maison Tiramisu</h3>
+<p class="text-[13px] text-white/50 mt-2">Espresso-soaked savoiardi, mascarpone cloud, cocoa veil.</p>
+<div class="mt-4 flex items-center gap-2 text-[11px] text-white/40"><i class="fa-regular fa-clock"></i> 4 hrs chill</div>
+</div>
+</div>
 
 </div>
-</main>
+</div>
 
-<footer class="border-t border-white/[0.06] py-8 text-center text-[11px] text-white/30 tracking-wide">
-Founded by <span class="text-[#F2D9A0] font-bold">Abhishek Ganguly</span> — MAISON UMBRELLAedible • MMXXVI
-</footer>
+<!-- RECIPE MODAL - NO REDIRECT -->
+<div id="recipeModal" class="fixed inset-0 z-[999] hidden">
+<div class="absolute inset-0 bg-black/80 backdrop-blur-[16px]" onclick="closeRecipe()"></div>
+<div class="relative max-w-[680px] mx-auto mt-[6vh] bg-[#121214] border border-white/10 rounded-[24px] overflow-hidden shadow-[0_20px_80px_rgba(0,0,0,0.6)]">
+<div class="h-[220px] bg-gradient-to-br from-[#C9A86A]/20 to-black p-8 flex flex-col justify-end">
+<p class="text-[10px] tracking-[0.22em] text-[#C9A86A] font-black">MAISON VERIFIED RECIPE</p>
+<h2 id="mTitle" class="serif font-black text-[34px] leading-[0.9] mt-3">Recipe</h2>
+</div>
+<div class="p-8">
+<p id="mDesc" class="text-[14px] leading-relaxed text-white/70">Loading...</p>
+<div class="mt-8 flex gap-3">
+<button onclick="closeRecipe()" class="h-11 px-6 rounded-full bg-[#F5F1E8] text-black font-black text-[12px]">Close</button>
+<a href="https://umbrellaedible.blogspot.com" class="h-11 px-6 rounded-full bg-white/10 border border-white/10 font-bold text-[12px] flex items-center justify-center">Go to Home Blog</a>
+</div>
+</div>
+<button onclick="closeRecipe()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/10 flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+</div>
+</div>
+
+<script>
+const data={
+ butter:{title:"Butter Chicken Maison",desc:"Ingredients: Tandoori chicken, tomato-cashew gravy, butter, cream, kasuri methi. Method: 1. Marinate chicken overnight. 2. Char in tandoor. 3. Make makhani gravy with tomatoes + cashews. 4. Finish with butter + gold leaf. Served only by verified Maison chefs."},
+ truffle:{title:"Black Truffle Pasta",desc:"Ingredients: Fresh tagliatelle, black truffle, brown butter, 24M parmesan. Method: Cook pasta al dente, brown butter until nutty, toss pasta, shave truffle tableside."},
+ tiramisu:{title:"Maison Tiramisu",desc:"Ingredients: Savoiardi, espresso, mascarpone, cocoa. Chill 4 hours. Luxury plating with gold dust."}
+};
+function openRecipe(id){
+ const r=data[id]; document.getElementById('mTitle').innerText=r.title;
+ document.getElementById('mDesc').innerText=r.desc;
+ document.getElementById('recipeModal').classList.remove('hidden');
+ document.body.style.overflow='hidden';
+}
+function closeRecipe(){
+ document.getElementById('recipeModal').classList.add('hidden');
+ document.body.style.overflow='';
+}
+</script>
 
 </body>
 </html>
-*What I fixed:*
-1. Removed that bottom policy pill bar completely
-2. Changed `<div class="card">` to `<a href="..." class="card">` — now whole card is clickable link to your blogspot
-3. Added `cursor-pointer` + `Open Recipe →` so users know it's clickable
 
-If you want each card to open its own post URL, just replace the 3 `href="https://umbrellaedible.blogspot.com/"` with your actual post links.
+
