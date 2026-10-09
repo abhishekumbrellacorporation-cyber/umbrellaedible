@@ -1,0 +1,120 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Member Panel — UMBRELLAedible</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>body{font-family:'Plus Jakarta Sans',sans-serif;background:#080808;color:#fff}</style>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+</head>
+<body class="antialiased">
+
+<div id="authGuard" class="fixed inset-0 z-[999] bg-[#080808] flex items-center justify-center"><div class="text-center"><div class="w-12 h-12 border-4 border-white/10 border-t-white rounded-full animate-spin mx-auto"></div><p class="mt-4 text-[12px] font-bold text-white/40">Checking membership...</p></div></div>
+
+<div class="max-w-[1200px] mx-auto px-4 md:px-6 py-6">
+<!-- HEADER -->
+<div class="flex items-center justify-between gap-3">
+<div class="flex items-center gap-3"><img id="memberPhoto" src="" class="w-12 h-12 rounded-full object-cover border-2 border-[#FFD27A]/30"/><div><p id="memberName" class="font-black text-[16px] leading-none">Loading...</p><p id="memberEmail" class="text-[11px] text-white/40 mt-1"></p></div><span id="memberBadge" class="hidden ml-2 px-3 py-1 rounded-full bg-[#FFD27A] text-black text-[10px] font-black"></span></div>
+<div class="flex items-center gap-2"><a href="./members.html" target="_blank" class="h-9 px-4 rounded-full bg-[#111] border border-white/10 text-[12px] font-bold">Members</a><button onclick="logout()" class="h-9 w-9 rounded-full bg-[#111] border border-white/10 flex items-center justify-center"><i class="fa-solid fa-right-from-bracket text-[12px]"></i></button></div>
+</div>
+
+<!-- STATS -->
+<div class="mt-8 grid grid-cols-3 gap-3">
+<div class="bg-[#111] border border-white/10 rounded-[20px] p-4"><p class="text-[10px] font-black text-white/30 tracking-widest">MY RECIPES</p><p id="statMyRecipes" class="text-[22px] font-black mt-1">0</p></div>
+<div class="bg-[#111] border border-white/10 rounded-[20px] p-4"><p class="text-[10px] font-black text-white/30 tracking-widest">APPROVED</p><p id="statApproved" class="text-[22px] font-black mt-1 text-green-400">0</p></div>
+<div class="bg-[#111] border border-white/10 rounded-[20px] p-4"><p class="text-[10px] font-black text-white/30 tracking-widest">PENDING</p><p id="statPending" class="text-[22px] font-black mt-1 text-yellow-400">0</p></div>
+</div>
+
+<!-- UPLOAD -->
+<div class="mt-8 bg-[#111] border border-white/10 rounded-[28px] p-6">
+<h2 class="font-black text-[18px] flex items-center gap-2"><i class="fa-solid fa-plus text-[#FFD27A]"></i> Upload New Recipe</h2>
+<div class="mt-5 grid grid-cols-1 md:grid-cols-2 gap-3">
+<input id="rTitle" placeholder="Recipe Title *" class="h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px]"/>
+<input id="rCuisine" placeholder="Cuisine (e.g., Indian, Italian)" class="h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px]"/>
+<input id="rImage" placeholder="Recipe Image URL *" class="md:col-span-2 h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px]"/>
+<input id="rTime" placeholder="Cook Time (e.g., 45 mins)" class="h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px]"/>
+<input id="rDiff" placeholder="Difficulty (Easy/Medium/Hard)" class="h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px]"/>
+<select id="rVeg" class="h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px]"><option>Veg</option><option>Non-Veg</option><option>Veg (Egg)</option></select>
+<input id="rServings" placeholder="Servings (e.g., 4 people)" class="h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px]"/>
+<textarea id="rIngredients" placeholder="Ingredients (one per line) *" class="md:col-span-2 h-[100px] p-4 rounded-[16px] bg-[#0a0a0a] border border-white/10 outline-none text-[13px] resize-none"></textarea>
+<textarea id="rSteps" placeholder="Full Steps / Method *" class="md:col-span-2 h-[140px] p-4 rounded-[16px] bg-[#0a0a0a] border border-white/10 outline-none text-[13px] resize-none"></textarea>
+</div>
+<button onclick="uploadRecipe()" id="uploadBtn" class="mt-5 w-full h-[48px] rounded-full bg-[#FFD27A] text-black font-black text-[13px] flex items-center justify-center gap-2"><i class="fa-solid fa-cloud-arrow-up"></i> Upload Recipe</button>
+<p class="mt-2 text-[11px] text-white/30 text-center">Your recipe will go to founder for approval before showing on Explore</p>
+</div>
+
+<!-- MY RECIPES -->
+<div class="mt-10">
+<h2 class="font-black text-[16px]">My Uploaded Recipes</h2>
+<div id="myRecipes" class="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+</div>
+</div>
+
+<script>
+var firebaseConfig = { apiKey: "AIzaSyBNNodl0fWwQm42KAublAcSuFO3RQ8fwOE", authDomain: "umbrellaedible.firebaseapp.com", projectId: "umbrellaedible", storageBucket: "umbrellaedible.firebasestorage.app", messagingSenderId: "705948520770", appId: "1:705948520770:web:30d2080cb4191b2881b8db" };
+firebase.initializeApp(firebaseConfig);
+var auth = firebase.auth(); var db = firebase.firestore();
+var memberData=null; var memberId=null;
+
+auth.onAuthStateChanged(function(user){
+  if(!user){ window.location.href='./member-login.html'; return; }
+  db.collection('chef_applications').where('email','==',user.email.toLowerCase()).get().then(function(snap){
+    if(snap.empty){ alert('Not a member'); auth.signOut(); window.location.href='./member-login.html'; return; }
+    memberData=snap.docs[0].data(); memberId=snap.docs[0].id;
+    if(memberData.banned){ alert('Banned: '+(memberData.banReason||'')); auth.signOut(); return; }
+    if(memberData.status!=='approved'){ alert('Your status is '+memberData.status+' — need approval'); auth.signOut(); return; }
+    // Show profile
+    document.getElementById('memberName').textContent=memberData.name;
+    document.getElementById('memberEmail').textContent=memberData.email+' • '+(memberData.role||memberData.level||'Chef');
+    document.getElementById('memberPhoto').src=memberData.photoUrl||'https://ui-avatars.com/api/?name='+encodeURIComponent(memberData.name);
+    if(memberData.role||memberData.founderRole){ document.getElementById('memberBadge').textContent=memberData.role||memberData.founderRole; document.getElementById('memberBadge').classList.remove('hidden'); }
+    if(memberData.isVIP && memberData.vipBadge){ document.getElementById('memberBadge').textContent=memberData.vipBadge; document.getElementById('memberBadge').classList.remove('hidden'); document.getElementById('memberBadge').className='ml-2 px-3 py-1 rounded-full bg-[#7C3AED] text-white text-[10px] font-black'; }
+    document.getElementById('authGuard').classList.add('hidden');
+    loadMyRecipes(user.email);
+  });
+});
+
+function loadMyRecipes(email){
+  db.collection('member_recipes').where('chefEmail','==',email.toLowerCase()).orderBy('createdAt','desc').onSnapshot(function(snap){
+    var total=0, approved=0, pending=0, html='';
+    snap.forEach(function(doc){ var r=doc.data(); r._id=doc.id; total++; if(r.status==='approved') approved++; if(r.status==='pending') pending++;
+      html+=`<div class="bg-[#111] border border-white/10 rounded-[20px] overflow-hidden"><img src="${r.imageUrl}" class="w-full h-[160px] object-cover"/><div class="p-4"><div class="flex items-center gap-2"><h3 class="font-bold text-[13px] flex-1">${r.title}</h3><span class="px-2 py-0.5 rounded-full ${r.status==='approved'?'bg-green-500 text-black':'bg-yellow-500 text-black'} text-[9px] font-black uppercase">${r.status}</span></div><p class="text-[11px] text-white/40 mt-1">${r.cuisine||''} • ${r.cookTime||''}</p><button onclick="db.collection('member_recipes').doc('${r._id}').delete()" class="mt-3 h-8 px-3 rounded-full bg-[#222] text-white/60 text-[11px]">Delete</button></div></div>`;
+    });
+    document.getElementById('statMyRecipes').textContent=total;
+    document.getElementById('statApproved').textContent=approved;
+    document.getElementById('statPending').textContent=pending;
+    document.getElementById('myRecipes').innerHTML = html || '<div class="col-span-3 py-12 text-center bg-[#111] border border-white/10 rounded-[20px] text-white/30 text-[13px]">No recipes yet — upload your first!</div>';
+  });
+}
+
+function uploadRecipe(){
+  var title=document.getElementById('rTitle').value.trim();
+  var image=document.getElementById('rImage').value.trim();
+  var ingredients=document.getElementById('rIngredients').value.trim();
+  var steps=document.getElementById('rSteps').value.trim();
+  if(!title||!image||!ingredients||!steps){ alert('Title, Image URL, Ingredients, Steps required'); return; }
+  document.getElementById('uploadBtn').innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Uploading...';
+  var data={
+    title:title, imageUrl:image, cuisine:document.getElementById('rCuisine').value.trim(),
+    cookTime:document.getElementById('rTime').value.trim(), difficulty:document.getElementById('rDiff').value.trim(),
+    veg:document.getElementById('rVeg').value, servings:document.getElementById('rServings').value.trim(),
+    ingredients:ingredients, steps:steps,
+    chefEmail:auth.currentUser.email.toLowerCase(), chefName:memberData.name, chefPhoto:memberData.photoUrl||'',
+    chefId:memberId, status:'pending', createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    isVIP: memberData.isVIP||false, vipBadge: memberData.vipBadge||null, role: memberData.role||null
+  };
+  db.collection('member_recipes').add(data).then(function(){
+    document.getElementById('uploadBtn').innerHTML='<i class="fa-solid fa-check"></i> Uploaded! Pending Approval';
+    setTimeout(function(){ document.getElementById('uploadBtn').innerHTML='<i class="fa-solid fa-cloud-arrow-up"></i> Upload Recipe'; }, 2000);
+    document.getElementById('rTitle').value=''; document.getElementById('rImage').value=''; document.getElementById('rIngredients').value=''; document.getElementById('rSteps').value='';
+  });
+}
+
+function logout(){ auth.signOut().then(function(){ localStorage.clear(); window.location.href='./member-login.html'; }); }
+</script>
+</body>
+</html>
