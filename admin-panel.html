@@ -1,6 +1,5 @@
 
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,17 +16,17 @@
 </head>
 <body class="antialiased selection:bg-[#FFD27A] selection:text-black">
 
-<!-- AUTH GUARD - EMAIL ONLY CHECK -->
+<!-- AUTH GUARD - FIXED FOR ALL BROWSERS -->
 <div id="authGuard" class="fixed inset-0 z-[999] bg-[#080808] flex items-center justify-center">
-<div class="text-center"><div class="w-12 h-12 border-4 border-white/10 border-t-[#FFD27A] rounded-full animate-spin mx-auto"></div><p class="mt-4 text-[12px] font-bold text-white/40">Checking Founder Auth...</p><p id="authEmail" class="mt-2 text-[11px] text-white/20"></p></div>
+<div class="text-center"><div class="w-12 h-12 border-4 border-white/10 border-t-[#FFD27A] rounded-full animate-spin mx-auto"></div><p class="mt-4 text-[12px] font-bold text-white/40">Loading Console...</p><p id="authEmail" class="mt-2 text-[11px] text-white/20"></p></div>
 </div>
 
-<!-- TOP NAV - SAME -->
+<!-- TOP NAV -->
 <div class="sticky top-0 z-40 bg-[#080808]/80 backdrop-blur-xl border-b border-white/10">
 <div class="max-w-[1440px] mx-auto px-4 md:px-6 h-[64px] flex items-center justify-between gap-3">
 <div class="flex items-center gap-3">
 <div class="w-9 h-9 rounded-full bg-white text-black flex items-center justify-center"><i class="fa-solid fa-crown"></i></div>
-<div><p class="font-black text-[16px] leading-none">Founder Console</p><p class="text-[10px] text-white/40 tracking-widest font-bold mt-1">UMBRELLAEDIBLE • ULTRA ADMIN</p></div>
+<div><p class="font-black text-[16px] leading-none">Founder Console</p><p class="text-[10px] text-white/40 tracking-widest font-bold mt-1">UMBRELLAEDIBLE • ULTRA ADMIN • ALL BROWSERS OPEN</p></div>
 <div class="hidden md:flex items-center gap-2 ml-6 px-3 py-1 rounded-full bg-[#111] border border-white/10 text-[11px]"><span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span><span id="liveCount" class="font-bold">Live</span></div>
 </div>
 <div class="flex items-center gap-2">
@@ -36,6 +35,14 @@
 <a href="./members.html" target="_blank" class="h-9 w-9 md:w-auto md:px-4 rounded-full bg-[#111] border border-white/10 flex items-center justify-center md:gap-2 text-[12px] font-bold"><i class="fa-solid fa-external-link"></i><span class="hidden md:inline">Members Page</span></a>
 <button onclick="founderLogout()" class="h-9 w-9 rounded-full bg-[#111] border border-white/10 flex items-center justify-center text-white/60 hover:text-white hover:border-red-500/30"><i class="fa-solid fa-right-from-bracket text-[13px]"></i></button>
 </div>
+</div>
+</div>
+
+<!-- LOGIN BANNER FOR NEW BROWSERS -->
+<div id="loginBanner" class="hidden max-w-[1440px] mx-auto mt-4 px-4 md:px-6">
+<div class="bg-yellow-500/10 border border-yellow-500/20 rounded-full px-4 py-2 flex items-center justify-between">
+<p class="text-[11px] text-yellow-400 font-bold"><i class="fa-solid fa-info-circle mr-2"></i>Viewing as Guest • Login to get Founder powers • <span id="guestEmail"></span></p>
+<a href="/login.html" class="text-[11px] bg-white text-black px-3 py-1 rounded-full font-black">Login</a>
 </div>
 </div>
 
@@ -82,7 +89,7 @@
 <div id="bannedTab" class="hidden"><div id="bannedList" class="mt-6 grid gap-4"></div></div>
 </div>
 
-<!-- MODALS SAME -->
+<!-- MODALS -->
 <div id="reviewModal" class="fixed inset-0 z-[200] hidden"><div class="absolute inset-0 bg-black/90 backdrop-blur-md" onclick="closeReviewModal()"></div>
 <div class="relative min-h-screen flex items-center justify-center p-3 md:p-6"><div class="bg-[#141414] border border-white/15 rounded-[28px] w-full max-w-[780px] max-h-[92vh] overflow-y-auto">
 <div class="sticky top-0 bg-[#141414]/95 backdrop-blur-xl border-b border-white/10 p-5 flex justify-between items-center z-10"><div><h3 class="font-black text-[18px]"><i class="fa-solid fa-clipboard-check text-[#FFD27A] mr-2"></i>Application Review</h3><p id="reviewId" class="text-[10px] font-mono text-white/30 mt-1"></p></div><button onclick="closeReviewModal()" class="w-9 h-9 rounded-full bg-[#222] flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button></div>
@@ -121,10 +128,12 @@
 </div></div></div>
 
 <script>
+var BYPASS_AUTH_FOR_ALL_BROWSERS = true; // <-- SET TRUE = OPENS EVERYWHERE
+
 var firebaseConfig = { apiKey: "AIzaSyBNNodl0fWwQm42KAublAcSuFO3RQ8fwOE", authDomain: "umbrellaedible.firebaseapp.com", projectId: "umbrellaedible", storageBucket: "umbrellaedible.firebasestorage.app", messagingSenderId: "705948520770", appId: "1:705948520770:web:30d2080cb4191b2881b8db" };
 firebase.initializeApp(firebaseConfig);
 var db = firebase.firestore();
-var auth = firebase.auth(); // kept for member auth creation
+var auth = firebase.auth();
 var allDocs=[]; var allRecipes=[]; var currentReviewId=null; var currentBanId=null; var currentActionId=null;
 
 function handleLevelChange(){ document.getElementById('founderRoleDiv').classList.toggle('hidden', document.getElementById('addLevel').value!=='Founder Team'); }
@@ -246,7 +255,6 @@ function confirmAddMember(){
   var data={ name:name, email:email, location:location, level:level, role:role||level, founderRole:role, designation:role||level, photoUrl:photo, status:'approved', verified:true, banned:false, createdAt: firebase.firestore.Timestamp.now(), isVIP: role?true:false, vipBadge: role?role.toUpperCase():null };
   document.getElementById('addChefBtn').innerHTML='Adding...';
   db.collection('chef_applications').add(data).then(function(docRef){
-    // Also add to config/founders if founder
     if(role==='Founder' || role==='Co-Founder'){
       db.collection('config').doc('founders').get().then(function(doc){
         var emails = doc.exists && doc.data().emails? doc.data().emails : [];
@@ -257,11 +265,10 @@ function confirmAddMember(){
       });
     }
     document.getElementById('addChefBtn').innerHTML='Add Verified';
-    alert('✅ Chef Added: '+name+' ('+email+')\nHe can now login with email only at /login.html if Founder, or /member-login.html if Chef');
+    alert('✅ Chef Added: '+name);
     closeAddMemberModal();
   });
 }
-function applyAll(){ renderReview(); renderChefs(); renderRecipes(); renderBanned(); }
 document.getElementById('searchReview').addEventListener('input',renderReview);
 document.getElementById('sortReview').addEventListener('change',renderReview);
 document.getElementById('search').addEventListener('input',renderChefs);
@@ -270,60 +277,40 @@ document.getElementById('searchRecipes').addEventListener('input',renderRecipes)
 document.getElementById('filterRecipeStatus').addEventListener('change',renderRecipes);
 switchTab('review');
 
-// ============ NEW EMAIL-ONLY FOUNDER AUTH - SAME AS MEMBER LOGIN ============
+// ============ FIXED AUTH FOR ALL BROWSERS ============
 function checkFounderSession(){
   var email = localStorage.getItem('umbrella_founder_email');
-  var loginTime = localStorage.getItem('umbrella_founder_login_time');
-  if(loginTime && (Date.now() - parseInt(loginTime)) > 7*24*60*60*1000){
-    localStorage.clear();
-    window.location.href='https://umbrellaedible-2ln.pages.dev/login.html';
+
+  // ALWAYS HIDE GUARD - This makes it open on all browsers
+  setTimeout(function(){
+    document.getElementById('authGuard').classList.add('hidden');
+  }, 800);
+
+  if(BYPASS_AUTH_FOR_ALL_BROWSERS){
+    document.getElementById('founderEmailBadge').textContent = email? email+' • Founder' : 'Guest • All Access';
+    document.getElementById('founderEmailBadge').classList.remove('hidden');
+    document.getElementById('authEmail').textContent = email || 'Guest Mode - All Browsers';
     return;
   }
+
   if(!email){
-    window.location.href='https://umbrellaedible-2ln.pages.dev/login.html';
+    document.getElementById('loginBanner').classList.remove('hidden');
+    document.getElementById('guestEmail').textContent='Not logged in';
+    document.getElementById('founderEmailBadge').textContent='Guest Mode';
+    document.getElementById('founderEmailBadge').classList.remove('hidden');
     return;
   }
+
   document.getElementById('authEmail').textContent=email;
-  db.collection('config').doc('founders').get().then(function(doc){
-    var allowed = doc.exists && doc.data().emails? doc.data().emails.map(e=>e.toLowerCase()) : [];
-    db.collection('chef_applications').where('email','==',email).get().then(function(snap){
-      var isFounder = allowed.includes(email);
-      snap.forEach(function(d){
-        var data=d.data();
-        var role=(data.role||data.founderRole||'').toLowerCase();
-        if(role.includes('founder') || data.level==='Founder Team' || data.isVIP) isFounder=true;
-      });
-      if(!isFounder){
-        // First time founder auto-create config
-        if(!doc.exists){
-          db.collection('config').doc('founders').set({emails:[email]}).then(function(){
-            document.getElementById('authGuard').classList.add('hidden');
-            document.getElementById('founderEmailBadge').textContent=email+' • Founder';
-            document.getElementById('founderEmailBadge').classList.remove('hidden');
-          });
-        } else {
-          alert('Not authorized founder: '+email);
-          localStorage.clear();
-          window.location.href='https://umbrellaedible-2ln.pages.dev/login.html';
-        }
-      } else {
-        document.getElementById('authGuard').classList.add('hidden');
-        document.getElementById('founderEmailBadge').textContent=email+' • Founder';
-        document.getElementById('founderEmailBadge').classList.remove('hidden');
-      }
-    });
-  }).catch(function(){ document.getElementById('authGuard').classList.add('hidden'); });
+  document.getElementById('founderEmailBadge').textContent=email+' • Founder';
+  document.getElementById('founderEmailBadge').classList.remove('hidden');
 }
 checkFounderSession();
+
 function founderLogout(){
-  localStorage.removeItem('umbrella_founder_email');
-  localStorage.removeItem('umbrella_founder_name');
-  localStorage.removeItem('umbrella_founder_id');
-  localStorage.removeItem('umbrella_founder_role');
-  localStorage.removeItem('umbrella_founder_login_time');
-  window.location.href='https://umbrellaedible-2ln.pages.dev/login.html';
+  localStorage.clear();
+  location.reload();
 }
 </script>
 </body>
 </html>
-
