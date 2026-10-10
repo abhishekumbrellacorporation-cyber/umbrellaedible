@@ -1,53 +1,91 @@
 
-
-
+  
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 <title>Member Panel — UMBRELLAedible</title>
 <script src="https://cdn.tailwindcss.com"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<style>body{font-family:'Plus Jakarta Sans',sans-serif;background:#080808;color:#fff}</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+body{font-family:'Plus Jakarta Sans',sans-serif;background:#080808;color:#fff;margin:0;padding-bottom:30px}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:#222;border-radius:999px}
+.protected{border:2px solid #FFD27A!important}
+@media(max-width:768px){
+.modal-full{border-radius:0!important; height:100vh!important; max-height:100vh!important}
+}
+</style>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 </head>
 <body class="antialiased">
 
-<div id="authGuard" class="fixed inset-0 z-[999] bg-[#080808] flex items-center justify-center"><div class="text-center"><div class="w-12 h-12 border-4 border-white/10 border-t-[#FFD27A] rounded-full animate-spin mx-auto"></div><p class="mt-4 text-[12px] font-bold text-white/40">Checking membership...</p><p id="guardEmail" class="mt-2 text-[10px] text-white/20"></p></div></div>
-
-<div class="max-w-[1200px] mx-auto px-4 md:px-6 py-6">
-<div class="flex items-center justify-between gap-3">
-<div class="flex items-center gap-3"><img id="memberPhoto" src="" class="w-12 h-12 rounded-full object-cover border-2 border-[#FFD27A]/30"/><div><p id="memberName" class="font-black text-[16px] leading-none">Loading...</p><p id="memberEmail" class="text-[11px] text-white/40 mt-1"></p></div><span id="memberBadge" class="hidden ml-2 px-3 py-1 rounded-full bg-[#FFD27A] text-black text-[10px] font-black"></span></div>
-<div class="flex items-center gap-2"><a href="./members.html" target="_blank" class="h-9 px-4 rounded-full bg-[#111] border border-white/10 text-[12px] font-bold">Members</a><button onclick="logout()" class="h-9 w-9 rounded-full bg-[#111] border border-white/10 flex items-center justify-center"><i class="fa-solid fa-right-from-bracket text-[12px]"></i></button></div>
+<!-- LOADER -->
+<div id="authGuard" class="fixed inset-0 z-[999] bg-[#080808] flex items-center justify-center">
+<div class="text-center">
+<div class="w-10 h-10 border-4 border-white/10 border-t-[#FFD27A] rounded-full animate-spin mx-auto"></div>
+<p class="mt-3 text-[11px] font-bold text-white/40">Checking membership...</p>
+<p id="guardEmail" class="mt-1 text-[10px] text-white/20"></p>
+</div>
 </div>
 
-<div class="mt-8 grid grid-cols-3 gap-3">
-<div class="bg-[#111] border border-white/10 rounded-[20px] p-4"><p class="text-[10px] font-black text-white/30 tracking-widest">MY RECIPES</p><p id="statMyRecipes" class="text-[22px] font-black mt-1">0</p></div>
-<div class="bg-[#111] border border-white/10 rounded-[20px] p-4"><p class="text-[10px] font-black text-white/30 tracking-widest">APPROVED</p><p id="statApproved" class="text-[22px] font-black mt-1 text-green-400">0</p></div>
-<div class="bg-[#111] border border-white/10 rounded-[20px] p-4"><p class="text-[10px] font-black text-white/30 tracking-widest">PENDING</p><p id="statPending" class="text-[22px] font-black mt-1 text-yellow-400">0</p></div>
+<div class="max-w-[1200px] mx-auto px-3 md:px-6 py-4 md:py-6">
+<!-- HEADER MOBILE -->
+<div class="flex items-center justify-between gap-2 bg-[#111] border border-white/10 rounded-[20px] p-3 md:p-4">
+<div class="flex items-center gap-2.5 min-w-0 flex-1">
+<img id="memberPhoto" src="https://ui-avatars.com/api/?name=Chef" class="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover border-2 border-[#FFD27A]/30 shrink-0"/>
+<div class="min-w-0 flex-1">
+<p id="memberName" class="font-black text-[13px] md:text-[16px] leading-none truncate">Loading...</p>
+<p id="memberEmail" class="text-[10px] md:text-[11px] text-white/40 mt-1 truncate">...</p>
+<div class="mt-1.5 flex items-center gap-1.5 flex-wrap">
+<span id="memberBadge" class="hidden px-2.5 py-1 rounded-full bg-[#FFD27A] text-black text-[9px] font-black"></span>
+<span id="memberLockBadge" class="hidden px-2.5 py-1 rounded-full bg-[#FFD27A]/20 border border-[#FFD27A]/40 text-[#FFD27A] text-[8px] font-black">🔒 LOCKED • UNEDITABLE</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-1.5 shrink-0">
+<a href="./members.html" target="_blank" class="h-8 w-8 md:h-9 md:w-auto md:px-4 rounded-full bg-[#222] border border-white/10 flex items-center justify-center text-[12px] font-bold"><i class="fa-solid fa-users md:mr-2"></i><span class="hidden md:inline">Members</span></a>
+<button onclick="logout()" class="h-8 w-8 md:h-9 md:w-9 rounded-full bg-[#222] border border-white/10 flex items-center justify-center"><i class="fa-solid fa-right-from-bracket text-[11px]"></i></button>
+</div>
 </div>
 
-<div class="mt-8 bg-[#111] border border-white/10 rounded-[28px] p-6">
-<h2 class="font-black text-[18px] flex items-center gap-2"><i class="fa-solid fa-plus text-[#FFD27A]"></i> Upload New Recipe</h2>
-<div class="mt-5 grid grid-cols-1 md:grid-cols-2 gap-3">
-<input id="rTitle" placeholder="Recipe Title *" class="h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px]"/>
-<input id="rCuisine" placeholder="Cuisine (e.g., Indian, Italian)" class="h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px]"/>
-<input id="rImage" placeholder="Recipe Image URL *" class="md:col-span-2 h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px]"/>
-<input id="rTime" placeholder="Cook Time (e.g., 45 mins)" class="h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px]"/>
-<input id="rDiff" placeholder="Difficulty (Easy/Medium/Hard)" class="h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px]"/>
-<select id="rVeg" class="h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px]"><option>Veg</option><option>Non-Veg</option><option>Veg (Egg)</option></select>
-<input id="rServings" placeholder="Servings (e.g., 4 people)" class="h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px]"/>
-<textarea id="rIngredients" placeholder="Ingredients (one per line) *" class="md:col-span-2 h-[100px] p-4 rounded-[16px] bg-[#0a0a0a] border border-white/10 outline-none text-[13px] resize-none"></textarea>
-<textarea id="rSteps" placeholder="Full Steps / Method *" class="md:col-span-2 h-[140px] p-4 rounded-[16px] bg-[#0a0a0a] border border-white/10 outline-none text-[13px] resize-none"></textarea>
-</div>
-<button onclick="uploadRecipe()" id="uploadBtn" class="mt-5 w-full h-[48px] rounded-full bg-[#FFD27A] text-black font-black text-[13px] flex items-center justify-center gap-2"><i class="fa-solid fa-cloud-arrow-up"></i> Upload Recipe</button>
-<p class="mt-2 text-[11px] text-white/30 text-center">Your recipe will go to founder for approval before showing on Explore</p>
+<!-- STATS - 3 COL MOBILE -->
+<div class="mt-4 grid grid-cols-3 gap-2.5">
+<div class="bg-[#111] border border-white/10 rounded-[18px] p-3"><p class="text-[8px] font-black text-white/30 tracking-widest">MY RECIPES</p><p id="statMyRecipes" class="text-[20px] font-black mt-1">0</p></div>
+<div class="bg-[#111] border border-green-500/20 rounded-[18px] p-3"><p class="text-[8px] font-black text-green-400/60 tracking-widest">APPROVED</p><p id="statApproved" class="text-[20px] font-black mt-1 text-green-400">0</p></div>
+<div class="bg-[#111] border border-yellow-500/20 rounded-[18px] p-3"><p class="text-[8px] font-black text-yellow-400/60 tracking-widest">PENDING</p><p id="statPending" class="text-[20px] font-black mt-1 text-yellow-400">0</p></div>
 </div>
 
-<div class="mt-10">
-<h2 class="font-black text-[16px]">My Uploaded Recipes</h2>
-<div id="myRecipes" class="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+<!-- FOUNDER PROTECTED INFO -->
+<div id="founderProtectedBanner" class="hidden mt-4 p-3 rounded-[16px] bg-[#FFD27A]/10 border border-[#FFD27A]/30 flex items-center gap-2.5">
+<div class="w-8 h-8 rounded-full bg-[#FFD27A] text-black flex items-center justify-center shrink-0"><i class="fa-solid fa-crown text-[12px]"></i></div>
+<div><p class="text-[11px] font-black text-[#FFD27A]">Founder / Co-Founder Account - Protected</p><p class="text-[10px] text-white/50 mt-0.5">This account is locked. Cannot be banned, deleted, or edited by anyone. Full access granted.</p></div>
+</div>
+
+<!-- UPLOAD FORM - MOBILE STACK -->
+<div class="mt-6 bg-[#111] border border-white/10 rounded-[24px] p-4 md:p-6">
+<h2 class="font-black text-[15px] md:text-[18px] flex items-center gap-2"><span class="w-7 h-7 rounded-full bg-[#FFD27A] text-black flex items-center justify-center"><i class="fa-solid fa-plus text-[11px]"></i></span> Upload New Recipe</h2>
+<div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-2.5">
+<input id="rTitle" placeholder="Recipe Title *" class="h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px] w-full"/>
+<input id="rCuisine" placeholder="Cuisine (e.g., Indian)" class="h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px] w-full"/>
+<input id="rImage" placeholder="Recipe Image URL * (https://...)" class="md:col-span-2 h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px] w-full"/>
+<input id="rTime" placeholder="Cook Time (45 mins)" class="h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px] w-full"/>
+<input id="rDiff" placeholder="Difficulty (Easy/Medium/Hard)" class="h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px] w-full"/>
+<select id="rVeg" class="h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px] w-full"><option>Veg</option><option>Non-Veg</option><option>Veg (Egg)</option></select>
+<input id="rServings" placeholder="Servings (4 people)" class="h-[44px] px-4 rounded-full bg-[#0a0a0a] border border-white/10 outline-none text-[13px] w-full"/>
+<textarea id="rIngredients" placeholder="Ingredients (one per line) *" class="md:col-span-2 h-[100px] p-4 rounded-[16px] bg-[#0a0a0a] border border-white/10 outline-none text-[13px] resize-none w-full"></textarea>
+<textarea id="rSteps" placeholder="Full Steps / Method *" class="md:col-span-2 h-[130px] p-4 rounded-[16px] bg-[#0a0a0a] border border-white/10 outline-none text-[13px] resize-none w-full"></textarea>
+</div>
+<button onclick="uploadRecipe()" id="uploadBtn" class="mt-4 w-full h-[48px] rounded-full bg-[#FFD27A] text-black font-black text-[13px] flex items-center justify-center gap-2"><i class="fa-solid fa-cloud-arrow-up"></i> Upload Recipe</button>
+<p class="mt-2 text-[10px] text-white/30 text-center">Your recipe will go to founder for approval before showing on Explore</p>
+</div>
+
+<!-- MY RECIPES -->
+<div class="mt-8">
+<h2 class="font-black text-[14px] md:text-[16px] flex items-center gap-2">My Uploaded Recipes <span id="myCount" class="px-2 py-0.5 rounded-full bg-white text-black text-[10px]">0</span></h2>
+<div id="myRecipes" class="mt-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3"></div>
 </div>
 </div>
 
@@ -57,61 +95,87 @@ firebase.initializeApp(firebaseConfig);
 var db = firebase.firestore();
 var memberData=null; var memberId=null; var memberEmail=null;
 
-// EMAIL ONLY CHECK - SAME AS FOUNDER
+function getFounderType(c){
+  var raw=(c.role||c.founderRole||c.designation||c.vipBadge||'').toLowerCase();
+  if(raw==='founder') return 'founder';
+  if(raw.includes('co-founder') || raw.includes('cofounder')) return 'cofounder';
+  if(c.level==='Founder Team') return 'founder';
+  return 'normal';
+}
+function isProtectedUser(c){ var t=getFounderType(c); return t==='founder' || t==='cofounder'; }
+
 function checkMemberSession(){
   memberEmail = localStorage.getItem('umbrella_member_email');
   var loginTime = localStorage.getItem('umbrella_member_login_time');
-  document.getElementById('guardEmail').textContent = memberEmail||'';
+  document.getElementById('guardEmail').textContent = memberEmail||'No email';
+
+  // FIX FOR ALL BROWSERS + BLOGGER - No hard redirect, show friendly message
+  if(!memberEmail){
+    document.getElementById('authGuard').innerHTML='<div class="text-center p-6 max-w-[320px]"><div class="w-12 h-12 rounded-full bg-yellow-500/10 text-yellow-400 flex items-center justify-center mx-auto"><i class="fa-solid fa-lock"></i></div><p class="mt-4 font-black text-[14px]">Login Required</p><p class="mt-2 text-[11px] text-white/40">This panel needs login. Your session expired on this browser.</p><a href="/p/member-login.html" onclick="event.preventDefault(); alert(\'Create a member-login.html page on Blogger with login code\')" class="mt-4 inline-block h-10 px-6 rounded-full bg-white text-black font-black text-[12px] leading-[40px]">Go to Login</a><p class="mt-3 text-[10px] text-white/20">Blogger: Create member-login page first</p></div>';
+    return;
+  }
 
   if(loginTime && (Date.now() - parseInt(loginTime)) > 7*24*60*60*1000){
     localStorage.clear();
-    window.location.href='https://umbrellaedible-2ln.pages.dev/member-login.html';
-    return;
-  }
-  if(!memberEmail){
-    window.location.href='https://umbrellaedible-2ln.pages.dev/member-login.html';
+    location.reload();
     return;
   }
 
-  // CHECK FIREBASE FIRST - EMAIL EXISTS?
   db.collection('chef_applications').where('email','==',memberEmail.toLowerCase()).get().then(function(snap){
     if(snap.empty){
-      alert('Email not found in chef database');
-      localStorage.clear();
-      window.location.href='https://umbrellaedible-2ln.pages.dev/member-login.html';
+      document.getElementById('authGuard').innerHTML='<div class="text-center p-6"><p class="font-black">Email not found</p><p class="text-[11px] text-white/40 mt-2">'+memberEmail+'</p><button onclick="logout()" class="mt-4 h-9 px-5 rounded-full bg-white text-black font-black text-[12px]">Logout</button></div>';
       return;
     }
     memberData=snap.docs[0].data();
     memberId=snap.docs[0].id;
 
-    if(memberData.banned || memberData.status==='banned'){
-      alert('Banned: '+(memberData.banReason||'Contact founder'));
-      localStorage.clear();
-      window.location.href='https://umbrellaedible-2ln.pages.dev/member-login.html';
-      return;
-    }
-    if(memberData.status!=='approved'){
-      alert('Your status is '+memberData.status+' — need founder approval');
-      localStorage.clear();
-      window.location.href='https://umbrellaedible-2ln.pages.dev/member-login.html';
-      return;
+    // PROTECTED CHECK - Founder/Co-Founder can NEVER be banned
+    if(isProtectedUser(memberData)){
+      console.log('🔒 Protected Founder/Co-Founder - Bypass ban check');
+      document.getElementById('founderProtectedBanner').classList.remove('hidden');
+      document.getElementById('memberLockBadge').classList.remove('hidden');
+      // Force unban if someone tried to ban founder
+      if(memberData.banned || memberData.status==='banned'){
+        db.collection('chef_applications').doc(memberId).update({status:'approved', banned:false, banReason: firebase.firestore.FieldValue.delete()});
+        memberData.status='approved'; memberData.banned=false;
+      }
+    } else {
+      // Normal user ban check
+      if(memberData.banned || memberData.status==='banned'){
+        document.getElementById('authGuard').innerHTML='<div class="text-center p-6 max-w-[320px]"><div class="w-12 h-12 rounded-full bg-red-500/10 text-red-400 flex items-center justify-center mx-auto"><i class="fa-solid fa-ban"></i></div><p class="mt-4 font-black text-[14px]">Account Banned</p><p class="mt-2 text-[11px] text-white/40">Reason: '+(memberData.banReason||'Contact founder')+'</p><button onclick="logout()" class="mt-4 h-9 px-5 rounded-full bg-white text-black font-black text-[12px]">Logout</button></div>';
+        return;
+      }
+      if(memberData.status!=='approved'){
+        document.getElementById('authGuard').innerHTML='<div class="text-center p-6"><p class="font-black">Status: '+memberData.status+'</p><p class="text-[11px] text-white/40 mt-2">Need founder approval</p><button onclick="logout()" class="mt-4 h-9 px-5 rounded-full bg-white text-black font-black text-[12px]">Logout</button></div>';
+        return;
+      }
     }
 
-    // Show profile
-    document.getElementById('memberName').textContent=memberData.name;
+    document.getElementById('memberName').textContent=memberData.name + (isProtectedUser(memberData)?' 🔒':'');
     document.getElementById('memberEmail').textContent=memberData.email+' • '+(memberData.role||memberData.level||'Chef');
     document.getElementById('memberPhoto').src=memberData.photoUrl||'https://ui-avatars.com/api/?name='+encodeURIComponent(memberData.name);
-    if(memberData.role||memberData.founderRole){
-      document.getElementById('memberBadge').textContent=memberData.role||memberData.founderRole;
-      document.getElementById('memberBadge').classList.remove('hidden');
+
+    var badgeText=memberData.role||memberData.founderRole||'';
+    if(badgeText){
+      var el=document.getElementById('memberBadge');
+      el.textContent=badgeText.toUpperCase();
+      el.classList.remove('hidden');
+      if(isProtectedUser(memberData)){
+        el.className='px-3 py-1 rounded-full bg-[#FFD27A] text-black text-[9px] font-black border-2 border-[#FFD27A]';
+      }
     }
     if(memberData.isVIP && memberData.vipBadge){
       document.getElementById('memberBadge').textContent=memberData.vipBadge;
       document.getElementById('memberBadge').classList.remove('hidden');
-      document.getElementById('memberBadge').className='ml-2 px-3 py-1 rounded-full bg-[#7C3AED] text-white text-[10px] font-black';
+      if(!isProtectedUser(memberData)){
+        document.getElementById('memberBadge').className='px-3 py-1 rounded-full bg-[#7C3AED] text-white text-[9px] font-black';
+      }
     }
+
     document.getElementById('authGuard').classList.add('hidden');
     loadMyRecipes(memberData.email);
+  }).catch(function(e){
+    document.getElementById('authGuard').innerHTML='<div class="text-center p-6"><p class="font-black text-red-400">Firestore Error</p><p class="text-[10px] text-white/30 mt-2">'+e.message+'</p><p class="text-[10px] text-white/30 mt-2">Check Firebase Rules: allow read,write: if true;</p></div>';
   });
 }
 checkMemberSession();
@@ -123,16 +187,22 @@ function loadMyRecipes(email){
       var r=doc.data(); r._id=doc.id; total++;
       if(r.status==='approved') approved++;
       if(r.status==='pending') pending++;
-      html+=`<div class="bg-[#111] border border-white/10 rounded-[20px] overflow-hidden"><img src="${r.imageUrl}" class="w-full h-[160px] object-cover"/><div class="p-4"><div class="flex items-center gap-2"><h3 class="font-bold text-[13px] flex-1">${r.title}</h3><span class="px-2 py-0.5 rounded-full ${r.status==='approved'?'bg-green-500 text-black':'bg-yellow-500 text-black'} text-[9px] font-black uppercase">${r.status}</span></div><p class="text-[11px] text-white/40 mt-1">${r.cuisine||''} • ${r.cookTime||''}</p><button onclick="deleteRecipe('${r._id}')" class="mt-3 h-8 px-3 rounded-full bg-[#222] text-white/60 text-[11px]">Delete</button></div></div>`;
+      html+=`<div class="bg-[#111] border border-white/10 rounded-[20px] overflow-hidden"><img src="${r.imageUrl}" class="w-full h-[150px] md:h-[160px] object-cover"/><div class="p-3.5"><div class="flex items-center gap-2"><h3 class="font-bold text-[13px] flex-1 truncate">${r.title}</h3><span class="px-2 py-0.5 rounded-full ${r.status==='approved'?'bg-green-500 text-black':'bg-yellow-500 text-black'} text-[8px] font-black uppercase shrink-0">${r.status}</span></div><p class="text-[11px] text-white/40 mt-1 truncate">${r.cuisine||''} • ${r.cookTime||''} • ${r.difficulty||''}</p><div class="mt-3 flex gap-2"><button onclick="deleteRecipe('${r._id}')" class="h-8 px-3 rounded-full bg-[#222] border border-white/10 text-white/60 text-[11px] flex-1 md:flex-none">Delete</button></div></div></div>`;
     });
     document.getElementById('statMyRecipes').textContent=total;
+    document.getElementById('myCount').textContent=total;
     document.getElementById('statApproved').textContent=approved;
     document.getElementById('statPending').textContent=pending;
     document.getElementById('myRecipes').innerHTML = html || '<div class="col-span-3 py-12 text-center bg-[#111] border border-white/10 rounded-[20px] text-white/30 text-[13px]">No recipes yet — upload your first!</div>';
   });
 }
 
-function deleteRecipe(id){ if(confirm('Delete this recipe?')){ db.collection('member_recipes').doc(id).delete(); } }
+function deleteRecipe(id){
+  var d=allDocs? allDocs.find(x=>x._id===id) : null;
+  if(confirm('Delete this recipe?')){
+    db.collection('member_recipes').doc(id).delete();
+  }
+}
 
 function uploadRecipe(){
   var title=document.getElementById('rTitle').value.trim();
@@ -141,18 +211,21 @@ function uploadRecipe(){
   var steps=document.getElementById('rSteps').value.trim();
   if(!title||!image||!ingredients||!steps){ alert('Title, Image URL, Ingredients, Steps required'); return; }
   document.getElementById('uploadBtn').innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Uploading...';
+  var isProtected=isProtectedUser(memberData);
   var data={
     title:title, imageUrl:image, cuisine:document.getElementById('rCuisine').value.trim(),
     cookTime:document.getElementById('rTime').value.trim(), difficulty:document.getElementById('rDiff').value.trim(),
     veg:document.getElementById('rVeg').value, servings:document.getElementById('rServings').value.trim(),
     ingredients:ingredients, steps:steps,
     chefEmail:memberData.email.toLowerCase(), chefName:memberData.name, chefPhoto:memberData.photoUrl||'',
-    chefId:memberId, status:'pending', createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-    isVIP: memberData.isVIP||false, vipBadge: memberData.vipBadge||null, role: memberData.role||null
+    chefId:memberId, status: isProtected? 'approved' : 'pending',
+    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    isVIP: memberData.isVIP||false, vipBadge: memberData.vipBadge||null, role: memberData.role||null,
+    protected: isProtected, locked: isProtected
   };
   db.collection('member_recipes').add(data).then(function(){
-    document.getElementById('uploadBtn').innerHTML='<i class="fa-solid fa-check"></i> Uploaded! Pending Approval';
-    setTimeout(function(){ document.getElementById('uploadBtn').innerHTML='<i class="fa-solid fa-cloud-arrow-up"></i> Upload Recipe'; }, 2000);
+    document.getElementById('uploadBtn').innerHTML='<i class="fa-solid fa-check"></i> '+(isProtected?'Published! (Founder auto-approved)':'Uploaded! Pending Approval');
+    setTimeout(function(){ document.getElementById('uploadBtn').innerHTML='<i class="fa-solid fa-cloud-arrow-up"></i> Upload Recipe'; }, 2500);
     document.getElementById('rTitle').value=''; document.getElementById('rImage').value=''; document.getElementById('rIngredients').value=''; document.getElementById('rSteps').value=''; document.getElementById('rCuisine').value=''; document.getElementById('rTime').value='';
   });
 }
@@ -164,8 +237,9 @@ function logout(){
   localStorage.removeItem('umbrella_member_role');
   localStorage.removeItem('umbrella_member_photo');
   localStorage.removeItem('umbrella_member_login_time');
-  window.location.href='https://umbrellaedible-2ln.pages.dev/member-login.html';
+  location.reload();
 }
 </script>
 </body>
 </html>
+
